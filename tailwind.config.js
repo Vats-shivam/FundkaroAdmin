@@ -12,8 +12,11 @@ export default {
       },
       fontFamily:{
         primaryFont: "Urbanist",
+      },
+      boxShadow: {
+        primaryShadow: '0px 0px 12px 0px #0000001A',
+        dashboardshadow: '0px 2px 4px 0px #0000001A'
       }
-
     },
   },
   plugins: [],
