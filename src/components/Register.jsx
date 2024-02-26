@@ -55,7 +55,7 @@ function Register(props) {
             <input type="checkbox" id="rememberMe" />
             <label htmlFor="rememberMe">Remember me</label>
           </div>
-          <a href="">Forgot Password?</a>
+          <Link to='../user/forget' className='text-blue-500'>Forget Password</Link>
         </div>
         <div className='flex text-lg m-2'>
           <p>Already registered?</p>
