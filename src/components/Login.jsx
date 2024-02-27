@@ -34,7 +34,7 @@ function Login(props) {
     // }
   };
   return (
-    <div className={`p-1 flex flex-col w-[25%] h-full ${props.loginStyles}`}>
+    <div className={`p-1 flex flex-col w-[25%] h-full min-h-[35rem] ${props.loginStyles}`}>
       <div className='p-2 bg-transparent'>
         <h1 className='text-white font-extrabold text-4xl'>Welcome</h1>
         <p className='text-white font-normal text-2xl'>Login to your Account</p>

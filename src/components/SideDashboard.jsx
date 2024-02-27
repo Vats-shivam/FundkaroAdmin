@@ -21,13 +21,18 @@ function SideDashboard() {
     }
 
     return (
-        <div className="absolute shadow-primaryShadow h-full max-h-screen pt-8 w-64 top-18 pr-4 pl-2">
+        <div className="absolute shadow-primaryShadow h-[93%] pt-8 w-64 top-18 pr-4 pl-2 flex flex-col justify-evenly">
             <div>
                 {items.map((item) => {
-                    return <div className="text-left font-primaryFont p-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA]"><Link to={'/user/dashboard'+item.link}><img className="inline-block pr-2 h-6 w-6 -mt-1" src={item.img}></img>{item.label}</Link></div>
+                    return <div className="text-left font-primaryFont p-4 m-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA]">
+                        <Link to={'/user/dashboard' + item.link}>
+                            <img className="inline-block pr-2 h-6 w-6 -mt-1" src={item.img}></img>
+                            {item.label}
+                        </Link>
+                    </div>
                 })}
             </div>
-            <div className="relative -bottom-32">
+            <div className="">
                 <div className="text-left -ml-1 pt-4 pl-5 text-[#4169E1]"><Link to='/user/profile'><img className="inline-block pr-2 h-7 w-7" src={VectorProfile}></img>My Profile</Link></div>
                 <div onClick={Logout} className="text-left -ml-1 pt-4 pl-5 text-[#4169E1] -mt-2 cursor-pointer"><img className="inline-block pr-2 h-7 w-7" src={VectorLogout}></img>Logout</div>
             </div>
