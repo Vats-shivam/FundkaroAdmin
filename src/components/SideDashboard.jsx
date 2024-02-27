@@ -21,10 +21,15 @@ function SideDashboard() {
     }
 
     return (
-        <div className="flex flex-col fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2">
-            <div>
+        <div className="fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2">
+            <div className="mt-10">
                 {items.map((item) => {
-                    return <div className="text-left font-primaryFont p-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA]"><Link to={'/user/dashboard'+item.link}><img className="inline-block pr-2 h-6 w-6 -mt-1" src={item.img}></img>{item.label}</Link></div>
+                    return <div className="relative w-full text-left font-primaryFont p-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA]">
+                        <Link to={'/user/dashboard' + item.link}>
+                            <img className="inline-block pr-2 h-6 w-6 -mt-1" src={item.img}></img>
+                            {item.label}
+                        </Link>
+                    </div>
                 })}
             </div>
             <div className="fixed bottom-16">
