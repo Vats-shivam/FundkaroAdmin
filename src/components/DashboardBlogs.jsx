@@ -3,13 +3,13 @@ import blogimg from '../assets/blog-null.png';
 import blograte from '../assets/blograte.svg';
 
 
-function Blogs() {
+function DashboardBlogs() {
     const navigate = useNavigate();
     const blogitems = [
         { id:1,title: "Post 1",rating:3, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
         { id:2,title: "Post 2",rating:3, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
         { id:3,title: "Post 3",rating:3, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
-        { id:4,title: "Post 4",rating:3, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
+        { id:4,title: "Post 4",rating:5, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
         { id:5,title: "Post 5",rating:3, date: "01-01-2020", content: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit aliquam etiam erat velit scelerisque in. Nisi vitae suscipit tellus mauris a diam maecenas sed enim. Odio tempor orci dapibus ultrices. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere.", img: blogimg, author: "xyz", profession: "manager" },
     ];
 
@@ -21,7 +21,7 @@ function Blogs() {
         <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Blogs- Know about more</h2>
         {blogitems.map((blog) => {
             return (
-                <div id_no={blog.id} onClick={() => HandleBlogPost(blog.id)} className="mx-auto px-4 py-4 mt-2 mb-8 ml-4 rounded-xl bg-[#F7F7F7] shadow-blogshadow cursor-pointer hover:bg-[#EAEAEA]">
+                <div key={blog.id} onClick={() => HandleBlogPost(blog.id)} className="mx-auto w-[90%] px-4 py-4 mt-2 mb-8 rounded-xl bg-[#F7F7F7] shadow-blogshadow cursor-pointer hover:bg-[#EAEAEA]">
                     <div className='flex flex-wrap gap-x-5'>
                     <div className="mb-4 ">
                         <img
@@ -35,7 +35,6 @@ function Blogs() {
                             {blog.author} - {blog.profession}
                         </p>
                         <p className="text-gray-600 -mb-1 inline-block">
-
                             {Array.apply(null, {length: blog.rating}).map(()=>{
                                 return(<img className='inline-block mr-0.5' src={blograte}/>)
                             })}
@@ -51,4 +50,4 @@ function Blogs() {
     </div>)
 }
 
-export default Blogs;
+export default DashboardBlogs;

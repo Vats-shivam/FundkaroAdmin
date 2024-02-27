@@ -3,7 +3,7 @@ import HomeLoan from '../assets/HomeLoan.svg';
 import PersonalLoan from '../assets/PersonalLoan.svg';
 import InsurancePolicy from '../assets/InsurancePolicy.svg';
 import EmiCalculator from './EmiCalculator';
-import Blogs from './Blogs';
+import DashboardBlogs from './DashboardBlogs';
 
 function DashboardHome() {
 
@@ -22,7 +22,7 @@ function DashboardHome() {
     return;
   }
   return (
-    <div className='ml-2 mr-2'>
+    <div className='sm:ml-2 sm:mr-2 mr-6'>
       <section id="d-home">
       <h2 className="mt-4 mb-3 text-2xl bg-clip-text flex justify-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Home</h2>
       </section>
@@ -46,7 +46,7 @@ function DashboardHome() {
 
       <section id="d-res">
         <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Resources</h2>
-        <Blogs/>
+        <DashboardBlogs/>
       </section>
 
       <section id="d-ref">
