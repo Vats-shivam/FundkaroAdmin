@@ -1,0 +1,7 @@
+.nav-item:has(.active) {
+    background: #E4EAFA;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
