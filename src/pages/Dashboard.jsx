@@ -4,13 +4,12 @@ import { useState } from 'react';
 import { useRef } from 'react';
 
 function Dashboard({children}) {
-  const [Open, setOpen] = useState(true);
-  const windowSize = useRef([window.innerWidth, window.innerHeight]);
+  const [Open, setOpen] = useState((window.innerWidth > 600) ? true : false);
   return (
     <div className='h-screen w-screen'>
       <NameNavbar Open={Open} setOpen={setOpen}/>
       <SideDashboard Open={Open}/>
-      <div className={'mt-20 font-primaryFont '+ (Open && windowSize[0] > 600 ? 'ml-72 slide-in' : 'slide-out')}>
+      <div className={'mt-20 font-primaryFont '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
           {children}
     </div>
   </div>

@@ -15,7 +15,8 @@ export default {
       },
       boxShadow: {
         primaryShadow: '0px 0px 12px 0px #0000001A',
-        dashboardshadow: '0px 2px 4px 0px #0000001A'
+        dashboardshadow: '0px 2px 4px 0px #0000001A',
+        blogshadow:'0px 6px 12px 0px #0000001A',
       }
     },
   },

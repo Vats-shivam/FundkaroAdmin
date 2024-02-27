@@ -63,7 +63,7 @@ const EmiCalculator = () => {
   }
 
   return (
-    <div id="d-tools" className="flex justify-center container mx-auto mt-8 font-fontPrimary">
+    <div id="d-tools" className="flex justify-center container mx-auto font-fontPrimary">
       <div className="bg-[#4169E1] max-w-[90%] shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className='flex flex-wrap bg-white rounded pt-2 pb-2 pl-4 pr-8'>
         <h2 className="text-2xl bg-clip-text inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">EMI Calculator</h2>
