@@ -3,7 +3,7 @@ import SideDashboard from '../components/SideDashboard';
 
 function Dashboard({children}) {
   return (
-    <div>
+    <div className='h-screen w-screen'>
       <NameNavbar/>
       <SideDashboard/>
       <div className='ml-72 mt-20 font-primaryFont'>
