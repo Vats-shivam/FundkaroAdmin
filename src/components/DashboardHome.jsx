@@ -21,7 +21,7 @@ function DashboardHome() {
     return;
   }
   return (
-    <div>
+    <div className='ml-2 mr-2'>
       <section id="d-home">
         Home
       </section>

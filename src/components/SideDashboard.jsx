@@ -21,7 +21,7 @@ function SideDashboard(props) {
     }
 
     return (
-        props.Open ? (<div className="z-10 fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-transform duration-300">
+        props.Open ? (<div className="z-10 bg-white fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-transform duration-300">
             <div className="mt-10">
                 {items.map((item,index) => {
                     return (
