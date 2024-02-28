@@ -74,7 +74,7 @@ function Login(props) {
           />
         </div>
         <div className="flex justify-between m-2">
-          <div className="w-1/3">
+          <div className="w-[40%]">
             <input type="checkbox" id="rememberMe" className="m-1"/>
             <label htmlFor="rememberMe">Remember me</label>
           </div>
@@ -83,7 +83,7 @@ function Login(props) {
           </Link>
         </div>
         <div className="flex text-lg m-2">
-          <p>New Here?</p>
+          <p className="mr-2">New Here?</p>
           <Link to="../user/register" className="text-blue-500">
             Register now
           </Link>

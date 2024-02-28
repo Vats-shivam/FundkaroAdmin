@@ -47,14 +47,14 @@ function Register(props) {
           <input type="text" placeholder="Confirm Password" value={user.confPass} onChange={(e) => { setUser((prev) => { return { ...prev, confPass: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
         </div>
         <div className='flex justify-between m-2'>
-          <div className="w-1/3">
+          <div className="w-[40%]">
             <input type="checkbox" id="rememberMe" className="m-1" />
             <label htmlFor="rememberMe">Remember me</label>
           </div>
           <Link to='../user/forget' className='text-blue-500'>Forget Password</Link>
         </div>
         <div className='flex text-lg m-2'>
-          <p>Already registered?</p>
+          <p className="mr-2">Already registered?</p>
           <Link to='../user/login' className='text-blue-500'>Login now</Link>
         </div>
         <button type='submit' className=' m-2 border border-blue-500 rounded-xl p-3 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary'>REGISTER</button>
