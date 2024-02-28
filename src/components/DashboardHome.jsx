@@ -4,6 +4,7 @@ import PersonalLoan from '../assets/PersonalLoan.svg';
 import InsurancePolicy from '../assets/InsurancePolicy.svg';
 import EmiCalculator from './EmiCalculator';
 import DashboardBlogs from './DashboardBlogs';
+import DashboardReferals from './DashBoardReferals';
 
 function DashboardHome() {
 
@@ -26,7 +27,7 @@ function DashboardHome() {
       <section id="d-home">
       <h2 className="mt-4 mb-3 text-2xl bg-clip-text flex justify-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Home</h2>
       </section>
-      <section id="d-loanmaster pt-24">
+      <section id="d-loanmaster" className='pt-24'>
       <h2 className="flex mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Loan Master</h2>
         <div className='flex flex-col items-center flex-wrap'>
           <div className='text-2xl'>Evaluate rates from different lenders in a matter of minutes.</div>
@@ -50,7 +51,8 @@ function DashboardHome() {
       </section>
 
       <section id="d-ref">
-      <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Refferal</h2>
+      <h2 className="flex pt-8 pb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Refferal</h2>
+      <DashboardReferals/>
       </section>
     </div>
   )
