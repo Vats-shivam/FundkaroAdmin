@@ -1,28 +1,32 @@
+
 import React from 'react'
 import heroImg from "../assets/heroImg.png"
 import Login from '../components/Login'
 import {Toaster} from 'react-hot-toast'
+
 // import { Outlet } from 'react-router-dom'
 
-function AuthPage({children}) {
+function AuthPage({ children }) {
   return (
-    <div className='w-screen h-screen'>
-    <div className='w-full flex flex-col h-2/5 bg-gradient-to-r from-darkPrimary to-lightPrimary'>
-      <div className="w-1/2 title text-white text-[3rem] font-primaryFont font-bold relative left-[5rem] top-[1rem]">fundka₹o</div>
-      <div className="w-1/2 title text-white text-[2rem] font-primaryFont font-normal relative left-[5rem] top-[1rem]">Multiple loan choice Instant benefits</div>
-
+    <div className="w-full h-full relative">
+      <div className="w-full flex flex-col bg-gradient-to-r from-darkPrimary to-lightPrimary pb-[16rem] relative px-16 pt-6">
+        <div className="w-full title text-white text-[2.5rem] font-primaryFont font-bold relative">
+          fundka₹o
+        </div>
+        <div className="w-full title text-white text-[1.5rem] font-primaryFont font-normal ">
+          Multiple loan choice Instant benefits
+        </div>
+      </div>
+      <div className="grid grid-cols-1 xl:grid-cols-7 xl:gap-[1rem] w-full px-32 xl:px-0 absolute inset-0 top-[40%]">
+        <div className="hidden xl:block col-span-4 2xl:pl-20">
+          <img src={heroImg} alt="heroImg" className="w-[42rem]" />
+        </div>
+        <div className="flex flex-row justify-center items-center w-full col-span-1 xl:col-span-3 px-40 xl:pr-20 xl:px-0 2xl:px-20 pb-16">
+          {children}
+        </div>
+      </div>
     </div>
-    <div className='h-3/5 w-full flex justify-between'>
-      <Toaster position="top-center" />
-        <img src={heroImg} alt="heroImg" className='relative bottom-[14rem] left-[5rem] w-[42rem]' />
-        {/* <Outlet />
-        {} */}
-        {children}
-
-        
-    </div>
-  </div>
-  )
+  );
 }
 
-export default AuthPage
+export default AuthPage;
