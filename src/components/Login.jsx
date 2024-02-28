@@ -3,35 +3,28 @@ import { Link } from 'react-router-dom';
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.svg";
-
+import axios from 'axios';
+import {toast} from 'react-hot-toast';
 function Login(props) {
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({ username: "", password: "" })
+  const [user, setUser] = useState({ email: "", password: "" })
   const handleSubmit = async (event) => {
-    // event.preventDefault();
-    // // navigate('/dashboard');
-
-    // try {
-    //   const response = await fetch('http://localhost:5000/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(user)
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error('Login failed');
-    //   }
-
-    //   const userData = await response.json();
-
-    //   // props.setUserData(userData.user);
-    //   // navigate("/dashboard")
-    // } catch (error) {
-    //   console.error('Error during login:', error);
-    //   // Handle login failure
-    // }
+    event.preventDefault();
+    // console.log("hi");
+    const {email,password} = user;
+    try{
+      const {data} = await axios.post('/user/login',{
+        email,password
+      })
+      if(data.error){
+        toast.error(data.error);
+      }
+      if(data.status){
+        toast.success("Login Successful");
+      }
+    }catch(error){
+      console.log(error);
+    }   
   };
   return (
     <div className={`hidden md:flex p-1  flex-col w-[25%] h-full min-h-[35rem] min-w-[20rem] ${props.loginStyles}`}>
@@ -41,7 +34,7 @@ function Login(props) {
       </div>
       <form onSubmit={handleSubmit} className='bg-white border-solid border-black shadow-2xl py-20 px-8 flex flex-col justify-around h-full rounded-3xl'>
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
-          <input type="text" placeholder="Username" value={user.username} onChange={(e) => { setUser((prev) => { return { ...prev, username: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
+          <input type="text" placeholder="email" value={user.email} onChange={(e) => { setUser((prev) => { return { ...prev, email: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
         </div>
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
           <input type={hidePassword ? "password" : "text"} placeholder="Password" value={user.password} onChange={(e) => { setUser((prev) => { return { ...prev, password: e.target.value } }) }} className='w-[90%] py-4 px-3 placeholder-blue-500 focus:outline-none' />

@@ -4,19 +4,23 @@ import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.svg";
 import axios from 'axios';
-
+import {toast} from 'react-hot-toast'
 function Register(props) {
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" ,confPass:""})
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("hi");
     const {email,password,confPass} = user;
     try{
       const {data} = await axios.post('/user/register',{
         email,password,confPass
       })
       if(data.error){
-        console.log(data.error);
+        toast.error(data.error);
+      }
+      if(data.status){
+        toast.success("User is registered");
       }
     }catch(error){
       console.log(error);

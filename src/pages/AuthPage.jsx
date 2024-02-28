@@ -1,6 +1,7 @@
 import React from 'react'
 import heroImg from "../assets/heroImg.png"
 import Login from '../components/Login'
+import {Toaster} from 'react-hot-toast'
 // import { Outlet } from 'react-router-dom'
 
 function AuthPage({children}) {
@@ -12,10 +13,12 @@ function AuthPage({children}) {
 
     </div>
     <div className='h-3/5 w-full flex justify-between'>
+      <Toaster position="top-center" />
         <img src={heroImg} alt="heroImg" className='relative bottom-[14rem] left-[5rem] w-[42rem]' />
         {/* <Outlet />
         {} */}
         {children}
+
         
     </div>
   </div>
