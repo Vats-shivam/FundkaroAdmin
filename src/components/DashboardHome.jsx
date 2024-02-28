@@ -3,6 +3,7 @@ import HomeLoan from '../assets/HomeLoan.svg';
 import PersonalLoan from '../assets/PersonalLoan.svg';
 import InsurancePolicy from '../assets/InsurancePolicy.svg';
 import EmiCalculator from './EmiCalculator';
+import DashboardBlogs from './DashboardBlogs';
 
 function DashboardHome() {
 
@@ -21,12 +22,13 @@ function DashboardHome() {
     return;
   }
   return (
-    <div>
+    <div className='sm:ml-2 sm:mr-2 mr-6'>
       <section id="d-home">
-        Home
+      <h2 className="mt-4 mb-3 text-2xl bg-clip-text flex justify-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Home</h2>
       </section>
-      <section id="d-loanmaster">
-        <div className='flex flex-col items-center flex-wrap pt-24'>
+      <section id="d-loanmaster pt-24">
+      <h2 className="flex mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Loan Master</h2>
+        <div className='flex flex-col items-center flex-wrap'>
           <div className='text-2xl'>Evaluate rates from different lenders in a matter of minutes.</div>
           <div className='text-2l font-bold text-[#4169E1]'>Select a product to assess your customized rates.</div>
         </div>
@@ -38,15 +40,17 @@ function DashboardHome() {
       </section>
 
       <section id="d-tools">
+      <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Tools</h2>
         <EmiCalculator />
       </section>
 
       <section id="d-res">
-        Resources
+        <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Resources</h2>
+        <DashboardBlogs/>
       </section>
 
       <section id="d-ref">
-        Refferal
+      <h2 className="flex mt-4 mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Refferal</h2>
       </section>
     </div>
   )

@@ -1,6 +1,9 @@
-import React from "react";
-import heroImg from "../assets/heroImg.png";
-import Login from "../components/Login";
+
+import React from 'react'
+import heroImg from "../assets/heroImg.png"
+import Login from '../components/Login'
+import {Toaster} from 'react-hot-toast'
+
 // import { Outlet } from 'react-router-dom'
 
 function AuthPage({ children }) {

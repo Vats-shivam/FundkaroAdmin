@@ -3,31 +3,28 @@ import { Link } from "react-router-dom";
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.svg";
-
+import axios from 'axios';
+import {toast} from 'react-hot-toast';
 function Login(props) {
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [user, setUser] = useState({ email: "", password: "" })
   const handleSubmit = async (event) => {
-    // event.preventDefault();
-    // // navigate('/dashboard');
-    // try {
-    //   const response = await fetch('http://localhost:5000/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(user)
-    //   });
-    //   if (!response.ok) {
-    //     throw new Error('Login failed');
-    //   }
-    //   const userData = await response.json();
-    //   // props.setUserData(userData.user);
-    //   // navigate("/dashboard")
-    // } catch (error) {
-    //   console.error('Error during login:', error);
-    //   // Handle login failure
-    // }
+    event.preventDefault();
+    // console.log("hi");
+    const {email,password} = user;
+    try{
+      const {data} = await axios.post('/user/login',{
+        email,password
+      })
+      if(data.error){
+        toast.error(data.error);
+      }
+      if(data.status){
+        toast.success("Login Successful");
+      }
+    }catch(error){
+      console.log(error);
+    }   
   };
   return (
     <div className={`flex flex-col w-full h-full ${props.loginStyles}`}>

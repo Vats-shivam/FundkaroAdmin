@@ -1,14 +1,18 @@
-import { useState } from "react";
-import "./App.css";
-import AuthPage from "./pages/AuthPage";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import NoPage from "./pages/NoPage";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Forget from "./components/Forget";
-import Dashboard from "./pages/Dashboard";
-import DashboardHome from "./components/DashboardHome";
+import { useState } from 'react'
+import './App.css'
+import AuthPage from './pages/AuthPage'
+import Login from './components/Login';
+import Register from './components/Register';
+import NoPage from './pages/NoPage';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import Forget from './components/Forget';
+import Dashboard from './pages/Dashboard';
+import DashboardHome from './components/DashboardHome';
+import axios from 'axios';
 
+
+axios.defaults.baseURL='http://localhost:8000';
+axios.defaults.withCredentials=true;
 function App() {
   return (
     <>

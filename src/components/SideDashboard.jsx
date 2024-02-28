@@ -5,7 +5,8 @@ import VectorLoanMaster from "../assets/VectorLoanMaster.svg"
 import VectorRefferal from "../assets/VectorRef.svg"
 import VectorProfile from "../assets/VectorProfile.svg"
 import VectorLogout from "../assets/VectorLogout.svg"
-import { Link } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
+import { Link as RouteLink } from "react-router-dom";
 
 function SideDashboard(props) {
     const items = [
@@ -21,12 +22,12 @@ function SideDashboard(props) {
     }
 
     return (
-        props.Open ? (<div className="z-10 fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-transform duration-300">
+        props.Open ? (<div className="z-10 bg-white fixed top-8 shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-transform duration-300">
             <div className="mt-10">
                 {items.map((item,index) => {
                     return (
                         <div key={index} className="nav-item relative cursor-pointer w-full text-left font-primaryFont p-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA] transition duration-1000 ease-out-in">
-                            <Link 
+                            <ScrollLink 
                                 activeClass="active"
                                 spy={true}
                                 smooth={true}
@@ -36,13 +37,13 @@ function SideDashboard(props) {
 
                                 <img className="inline-block pr-2 h-6 w-6 -mt-1" src={item.img} alt={item.label}></img>
                                 {item.label}
-                            </Link>
+                            </ScrollLink>
                         </div>
                     );
                 })}
             </div>
             <div className="fixed bottom-16">
-                <div className="text-left -ml-1 pt-4 pl-5 text-[#4169E1]"><Link to='/user/profile'><img className="inline-block pr-2 h-7 w-7" src={VectorProfile} alt="Profile"></img>My Profile</Link></div>
+                <div><RouteLink className="text-left -ml-1 pt-4 pl-5 text-[#4169E1] cursor-pointer" to='/user/profile'><img className="inline-block pr-2 h-7 w-7" src={VectorProfile} alt="Profile"></img>My Profile</RouteLink></div>
                 <div onClick={Logout} className="text-left -ml-1 pt-4 pl-5 text-[#4169E1] -mt-2 cursor-pointer"><img className="inline-block pr-2 h-7 w-7" src={VectorLogout} alt="Logout"></img>Logout</div>
             </div>
         </div>):(<div></div>)
