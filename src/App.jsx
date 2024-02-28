@@ -10,7 +10,6 @@ import Dashboard from './pages/Dashboard';
 import DashboardHome from './components/DashboardHome';
 import axios from 'axios';
 
-
 axios.defaults.baseURL='http://localhost:8000';
 axios.defaults.withCredentials=true;
 function App() {
@@ -31,7 +30,7 @@ function App() {
             element={
               <AuthPage>
                 <Register
-                  loginStyles={"relative bottom-[14rem] right-[15rem]"}
+                  loginStyles={""}
                 />
               </AuthPage>
             }

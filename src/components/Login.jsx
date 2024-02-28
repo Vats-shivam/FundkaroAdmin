@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
-import google from "../assets/google.svg";
+import google from "../assets/google.png";
 import axios from 'axios';
 import {toast} from 'react-hot-toast';
 function Login(props) {
@@ -34,16 +34,16 @@ function Login(props) {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="bg-white border-solid border-black shadow-2xl py-20 px-8 flex flex-col justify-around h-full rounded-3xl"
+        className="bg-white border-solid border-black shadow-2xl py-12 px-8 flex flex-col justify-around h-full rounded-3xl"
       >
         <div className="flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2">
           <input
             type="text"
-            placeholder="Username"
-            value={user.username}
+            placeholder="Email"
+            value={user.email}
             onChange={(e) => {
               setUser((prev) => {
-                return { ...prev, username: e.target.value };
+                return { ...prev, email: e.target.value };
               });
             }}
             className="py-4 px-3 w-full  placeholder-blue-500 focus:outline-none"
@@ -74,8 +74,8 @@ function Login(props) {
           />
         </div>
         <div className="flex justify-between m-2">
-          <div className="w-1/3 flex justify-between items-center">
-            <input type="checkbox" id="rememberMe" />
+          <div className="w-1/3">
+            <input type="checkbox" id="rememberMe" className="m-1"/>
             <label htmlFor="rememberMe">Remember me</label>
           </div>
           <Link to="../user/forget" className="text-blue-500">
@@ -95,8 +95,8 @@ function Login(props) {
           LOGIN
         </button>
         <span className="m-2 ">Or</span>
-        <div className="border m-2 border-blue-500 h-14 rounded-xl p-1 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center">
-          <img src={google} alt="google-sign-in" width={"20%"} />
+        <div className="border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center">
+          <img src={google} alt="google-sign-in" width={"8%"} />
           Sign in with Google
         </div>
       </form>

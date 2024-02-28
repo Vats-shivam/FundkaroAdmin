@@ -21,7 +21,8 @@ function AuthPage({ children }) {
         <div className="hidden xl:block col-span-4 2xl:pl-20">
           <img src={heroImg} alt="heroImg" className="w-[42rem]" />
         </div>
-        <div className="flex flex-row justify-center items-center w-full col-span-1 xl:col-span-3 px-40 xl:pr-20 xl:px-0 2xl:px-20 pb-16">
+        <div className="flex flex-row justify-center items-center w-full col-span-1 xl:col-span-3 px-36 xl:pr-20 xl:px-0 2xl:px-36 pb-16">
+          <Toaster position='top-center'/>
           {children}
         </div>
       </div>
