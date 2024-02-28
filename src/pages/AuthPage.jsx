@@ -5,7 +5,7 @@ import Login from '../components/Login'
 
 function AuthPage({children}) {
   return (
-    <div className='w-screen h-screen min-h-[50rem]'>
+    <div className='w-screen h-screen'>
     <div className='w-full flex flex-col h-2/5 bg-gradient-to-r from-darkPrimary to-lightPrimary'>
       <div className="w-1/2 title text-white text-[3rem] font-primaryFont font-bold relative left-[5rem] top-[1rem]">fundka₹o</div>
       <div className="w-1/2 title text-white text-[2rem] font-primaryFont font-normal relative left-[5rem] top-[1rem]">Multiple loan choice Instant benefits</div>

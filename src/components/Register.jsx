@@ -3,45 +3,34 @@ import { Link } from 'react-router-dom';
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.svg";
+import axios from 'axios';
 
 function Register(props) {
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({ username: "", password: "" })
+  const [user, setUser] = useState({ email: "", password: "" ,confPass:""})
   const handleSubmit = async (event) => {
-    // event.preventDefault();
-    // // navigate('/dashboard');
-
-    // try {
-    //   const response = await fetch('http://localhost:5000/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(user)
-    //   });
-
-    //   if (!response.ok) {
-    //     throw new Error('Login failed');
-    //   }
-
-    //   const userData = await response.json();
-
-    //   // props.setUserData(userData.user);
-    //   // navigate("/dashboard")
-    // } catch (error) {
-    //   console.error('Error during login:', error);
-    //   // Handle login failure
-    // }
+    event.preventDefault();
+    const {email,password,confPass} = user;
+    try{
+      const {data} = await axios.post('/user/register',{
+        email,password,confPass
+      })
+      if(data.error){
+        console.log(data.error);
+      }
+    }catch(error){
+      console.log(error);
+    }   
   };
   return (
-    <div className={`p-1 flex flex-col w-[25%] h-full min-h-[35rem] ${props.loginStyles}`}>
+    <div className={`p-4 flex flex-col w-[25%] h-full min-h-[35rem] min-w-[20rem] ${props.loginStyles}`}>
       <div className='p-2 bg-transparent'>
         <h1 className='text-white font-extrabold text-4xl'>Welcome</h1>
         <p className='text-white font-normal text-2xl'>Register to your Account</p>
       </div>
       <form onSubmit={handleSubmit} className='bg-white border-solid border-black shadow-2xl py-20 px-8 flex flex-col justify-around h-full rounded-3xl'>
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
-          <input type="text" placeholder="Username" value={user.username} onChange={(e) => { setUser((prev) => { return { ...prev, username: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
+          <input type="email" placeholder="Username" value={user.email} onChange={(e) => { setUser((prev) => { return { ...prev, email: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
         </div>
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
           <input type={hidePassword ? "password" : "text"} placeholder="Password" value={user.password} onChange={(e) => { setUser((prev) => { return { ...prev, password: e.target.value } }) }} className='w-[90%] py-4 px-3 placeholder-blue-500 focus:outline-none' />
