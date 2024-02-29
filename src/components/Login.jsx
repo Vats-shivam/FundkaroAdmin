@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.png";
 import axios from 'axios';
 import {toast} from 'react-hot-toast';
 function Login(props) {
+  const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })
   const handleSubmit = async (event) => {
@@ -14,13 +15,21 @@ function Login(props) {
     const {email,password} = user;
     try{
       const {data} = await axios.post('/user/login',{
-        email,password
+        email,
+        password
       })
       if(data.error){
         toast.error(data.error);
       }
+      else{
+        setUser({ email: "", password: "" })
+      }
       if(data.status){
         toast.success("Login Successful");
+        //if emailVerified
+        navigate('/user/dashboard');
+        //else
+        //navigate(/user/email/verify-otp)
       }
     }catch(error){
       console.log(error);

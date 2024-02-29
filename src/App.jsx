@@ -9,12 +9,13 @@ import Forget from './components/Forget';
 import Dashboard from './pages/Dashboard';
 import DashboardHome from './components/DashboardHome';
 import axios from 'axios';
-
+import { UserContextProvider } from './context/userContext';
 axios.defaults.baseURL='http://localhost:8000';
 axios.defaults.withCredentials=true;
 function App() {
   return (
     <>
+    <UserContextProvider>
       <BrowserRouter>
         <Routes>
           <Route
@@ -70,6 +71,7 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter>
+      </UserContextProvider>
     </>
   );
 }
