@@ -5,29 +5,33 @@ import hidden from "../assets/hidden.svg";
 import google from "../assets/google.png";
 import axios from 'axios';
 import { toast } from 'react-hot-toast'
-
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
 
 function Register(props) {
   const navigate = useNavigate()
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({ email: "", phone: "", password: "", confPass: "" })
+  const [user, setUser] = useState({ email: "", phone: "", password: "", confPass: "", referrer: "" })
+  const {currentuser, setCurrentUser} =useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
-    const { email, phone, password, confPass } = user;
+    const { email, phone, password, confPass, referrer } = user;
     try {
       const { data } = await axios.post('/user/register', {
-        email, phone, password, confPass
+        email, phone, password, confPass, referrer
       })
       console.log(data);
       if (data.error) {
         toast.error(data.error);
       }
       else {
-        setUser({ email: "", phone: "", password: "", confPass: "" });
+        setUser({ email: "", phone: "", password: "", confPass: "", referrer: "" });
       }
       if (data.status) {
         toast.success("User is registered");
+        setCurrentUser({email:email, phone:phone, referrer:referrer, refferal_code: data.refferal_code})
+        console.log(currentuser)
         //if email verified
         navigate('/user/dashboard');
         //else
