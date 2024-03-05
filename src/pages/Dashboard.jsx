@@ -7,6 +7,7 @@ import { UserContext } from '../context/userContext';
 function Dashboard({children}) {
   const [Open, setOpen] = useState((window.innerWidth > 600) ? true : false);
   const {user} = useContext(UserContext)
+  // console.log(user);
   return (
     <div>
       
