@@ -8,9 +8,12 @@ import VectorLogout from "../assets/VectorLogout.svg"
 import { Link as ScrollLink } from "react-scroll";
 import { Link as RouteLink ,useNavigate} from "react-router-dom";
 import axios from "axios";
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
 
 function SideDashboard(props) {
     const navigate= useNavigate();
+    const {currentuser, setCurrentUser} =useContext(UserContext);
     const items = [
         { label: "Home", id: "d-home", link: "", img: VectorHome },
         { label: "Loan Master", id: "d-loanmaster", link: "/loanmaster", img: VectorTools },
@@ -22,7 +25,8 @@ function SideDashboard(props) {
     const Logout = async () => {
         try {
             // Send logout request to backend
-            await axios.get('/logout');
+            //await axios.get('/logout');
+            setCurrentUser({email:"", phone:"", referrer:"", refferal_code: ""});
             // Clear token from local storage or cookies if needed (optional)
             // localStorage.removeItem('token');
             // Redirect to login page or any other page

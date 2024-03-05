@@ -5,10 +5,14 @@ import hidden from "../assets/hidden.svg";
 import google from "../assets/google.png";
 import axios from 'axios';
 import {toast} from 'react-hot-toast';
+import { useContext } from 'react';
+import { UserContext } from '../context/userContext';
+
 function Login(props) {
   const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })
+  const {currentuser, setCurrentUser} =useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
@@ -27,6 +31,8 @@ function Login(props) {
       if(data.status){
         toast.success("Login Successful");
         //if emailVerified
+        setCurrentUser({email:email, phone:data.phone, referrer:data.referrer, refferal_code: data.refferal_code})
+        console.log(currentuser);
         navigate('/user/dashboard');
         //else
         //navigate(/user/email/verify-otp)

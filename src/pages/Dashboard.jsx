@@ -6,8 +6,7 @@ import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 function Dashboard({children}) {
   const [Open, setOpen] = useState((window.innerWidth > 600) ? true : false);
-  const {user} = useContext(UserContext)
-  // console.log(user);
+  const {currentuser} = useContext(UserContext)
   return (
     <div>
       
@@ -16,7 +15,7 @@ function Dashboard({children}) {
       <SideDashboard Open={Open}/>
       <div className={'mt-20 font-primaryFont '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
           {children}
-          {user&& (<h2>{user.email}</h2>)}
+          {currentuser&& (<h2>{currentuser.email}</h2>)}
     </div>
   </div>
   );

@@ -4,9 +4,9 @@ import { createContext, useEffect, useState } from "react";
 export const UserContext = createContext({})
 
 export function UserContextProvider({children}){
-  const [user,setUser] = useState(null);
+  const [currentuser,setCurrentUser] = useState({email:"", phone:"", referrer:"", refferal_code: ""});
   useEffect(()=>{
-    if(!user){
+    if(!currentuser){
       axios.get('/profile').then(({data})=>{
         setUser(data)
         // console.log(data);
@@ -14,7 +14,7 @@ export function UserContextProvider({children}){
     }
   },[]);
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContext.Provider value={{currentuser, setCurrentUser}}>
     {children}
     </UserContext.Provider>
   )
