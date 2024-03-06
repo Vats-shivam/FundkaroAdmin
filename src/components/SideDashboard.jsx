@@ -43,6 +43,7 @@ return (
                 return (
                     <ScrollLink
                         activeClass="active"
+                        key={item.id}
                         spy={true}
                         smooth={true}
                         offset={-100}

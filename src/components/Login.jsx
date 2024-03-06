@@ -31,8 +31,8 @@ function Login(props) {
       if(data.status){
         toast.success("Login Successful");
         //if emailVerified
-        setCurrentUser({email:email, phone:data.phone, referrer:data.referrer, refferal_code: data.refferal_code})
-        console.log(currentuser);
+        setCurrentUser(data['user']);
+        console.log(data);
         navigate('/user/dashboard');
         //else
         //navigate(/user/email/verify-otp)

@@ -30,7 +30,7 @@ function Register(props) {
       }
       if (data.status) {
         toast.success("User is registered");
-        setCurrentUser({email:email, phone:phone, referrer:referrer, refferal_code: data.refferal_code})
+        setCurrentUser(data['user']);
         console.log(currentuser)
         //if email verified
         navigate('/user/dashboard');
