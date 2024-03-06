@@ -9,6 +9,8 @@ import Forget from './components/Forget';
 import Dashboard from './pages/Dashboard';
 import DashboardHome from './components/DashboardHome';
 import Profile from './pages/Profile';
+import ShowProfile from './components/ShowProfile';
+import EditProfile from './components/EditProfile';
 import axios from 'axios';
 import { UserContextProvider } from './context/userContext';
 axios.defaults.baseURL='http://localhost:8000';
@@ -57,6 +59,15 @@ function App() {
             path={"/user/profile"}
             element={
               <Profile ShowBackarrow={true}>
+                <ShowProfile/>
+              </Profile>
+            }
+          />
+          <Route
+            path={"/user/profile/edit"}
+            element={
+              <Profile ShowBackarrow={true}>
+                <EditProfile/>
               </Profile>
             }
           />

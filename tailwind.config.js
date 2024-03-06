@@ -17,6 +17,7 @@ export default {
         primaryShadow: '0px 0px 12px 0px #0000001A',
         dashboardshadow: '0px 2px 4px 0px #0000001A',
         blogshadow:'0px 6px 12px 0px #0000001A',
+        profileshadow: '5px 4px 17px 0px #00000040'
       }
     },
   },

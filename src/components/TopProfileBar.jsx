@@ -29,11 +29,11 @@ function TopProfileBar() {
                     <img className="rounded-full h-[90px] w-[90px]" src="https://res.cloudinary.com/drfokf5ix/image/upload/v1709286872/profile_placeholder.png"></img>
                     <div className="flex flex-wrap flex-col line-[36px]">
                         <div className="text-[30px] font-semibold">
-                            {currentuserdetail.name}
+                            {currentuserdetail.name?currentuserdetail.name:'Full name'}
                         </div>
                         <div className="text-[14px] line-[16.8px]">
-                            <p>+91 {currentuser.phone}</p>
-                            <p>{currentuser.email}</p>
+                            <p>+91 {currentuser.phone?currentuser.phone:'xxxxxxxxxx'}</p>
+                            <p>{currentuser.email?currentuser.email:'xxxxxxxxxx@xxxxx.xxx'}</p>
                         </div>
                     </div>
                 </div>

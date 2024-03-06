@@ -13,7 +13,7 @@ function Dashboard(props) {
       <Toaster position="top-center" />
       <NameNavbar Open={Open} setOpen={setOpen} ShowBackarrow={props.ShowBackarrow ? true : false}/>
       <SideDashboard Open={Open}/>
-      <div className={'mt-20 font-primaryFont '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
+      <div className={'mt-20 font-primaryFont transition-all duration-1000 '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
           {props.children}
           {currentuser&& (<h2>{currentuser.email}</h2>)}
     </div>

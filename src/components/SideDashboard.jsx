@@ -37,7 +37,7 @@ function SideDashboard(props) {
     };
 
     return (
-        props.Open ? (<div className="z-10 bg-white fixed top-8 right-full shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-transform duration-100 translate-x-full">
+        <div className={"z-10 bg-white fixed top-8 right-full shadow-primaryShadow h-screen pt-8 w-64 pr-4 pl-2 transition-all duration-1000 linear "+(props.Open?"translate-x-full":'')}>
             <div className="mt-10">
                 {items.map((item, index) => {
                     return (
@@ -62,7 +62,7 @@ function SideDashboard(props) {
                 <div><RouteLink className="text-left -ml-1 pt-4 pl-5 text-[#4169E1] cursor-pointer" to='/user/profile'><img className="inline-block pr-2 h-7 w-7" src={VectorProfile} alt="Profile"></img>My Profile</RouteLink></div>
                 <div onClick={Logout} className="text-left -ml-1 pt-4 pl-5 text-[#4169E1] -mt-2 cursor-pointer"><img className="inline-block pr-2 h-7 w-7" src={VectorLogout} alt="Logout"></img>Logout</div>
             </div>
-        </div>) : (<div></div>)
+        </div>
     );
 }
 

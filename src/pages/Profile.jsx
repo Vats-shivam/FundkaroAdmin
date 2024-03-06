@@ -11,7 +11,7 @@ function Profile(props) {
       <Toaster position="top-center" />
       <NameNavbar Open={Open} setOpen={setOpen} ShowBackarrow={props.ShowBackarrow ? true : false}/>
       <TopProfileBar />
-      <div className={'mt-20 font-primaryFont '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
+      <div className='mt-5 font-primaryFont'>
           {props.children}
     </div>
   </div>
