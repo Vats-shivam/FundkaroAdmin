@@ -11,27 +11,28 @@ import { UserContext } from '../context/userContext';
 function Register(props) {
   const navigate = useNavigate()
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({ email: "", phone: "", password: "", confPass: "", referrer: "" })
-  const {currentuser, setCurrentUser} =useContext(UserContext);
+  const [user, setUser] = useState({ name: "",email: "", phone: "", password: "", confPass: "", referrer: "" })
+  const {setCurrentUserDetail, setCurrentUser} =useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
-    const { email, phone, password, confPass, referrer } = user;
+    const { name, email, phone, password, confPass, referrer } = user;
     try {
       const { data } = await axios.post('/user/register', {
-        email, phone, password, confPass, referrer
+        name, email, phone, password, confPass, referrer
       })
       console.log(data);
       if (data.error) {
         toast.error(data.error);
       }
       else {
-        setUser({ email: "", phone: "", password: "", confPass: "", referrer: "" });
+        setUser({ name: "",email: "", phone: "", password: "", confPass: "", referrer: "" });
       }
       if (data.status) {
         toast.success("User is registered");
         setCurrentUser(data['user']);
-        console.log(currentuser)
+        setCurrentUserDetail(data['userdetail']);
+        //console.log(currentuser)
         //if email verified
         navigate('/user/dashboard');
         //else
@@ -48,6 +49,9 @@ function Register(props) {
         <p className='text-white font-normal text-2xl'>Register to your Account</p>
       </div>
       <form onSubmit={handleSubmit} className='bg-white border-solid border-black shadow-2xl py-8 px-8 flex flex-col justify-around h-full rounded-3xl'>
+      <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
+          <input type="text" placeholder="Full Name" value={user.name} onChange={(e) => { setUser((prev) => { return { ...prev, name: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
+        </div>        
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
           <input type="email" placeholder="Email" value={user.email} onChange={(e) => { setUser((prev) => { return { ...prev, email: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
         </div>

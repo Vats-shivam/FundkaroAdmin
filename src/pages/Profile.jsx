@@ -1,24 +1,21 @@
 import NameNavbar from '../components/NameNavbar';
-import SideDashboard from '../components/SideDashboard';
 import { useState } from 'react';
-import { Toaster } from 'react-hot-toast'
-import { useContext } from 'react';
-import { UserContext } from '../context/userContext';
-function Dashboard(props) {
+import { Toaster } from 'react-hot-toast';
+import TopProfileBar from '../components/TopProfileBar';
+
+function Profile(props) {
   const [Open, setOpen] = useState((window.innerWidth > 600) ? true : false);
-  const {currentuser} = useContext(UserContext)
   return (
     <div>
       
       <Toaster position="top-center" />
       <NameNavbar Open={Open} setOpen={setOpen} ShowBackarrow={props.ShowBackarrow ? true : false}/>
-      <SideDashboard Open={Open}/>
+      <TopProfileBar />
       <div className={'mt-20 font-primaryFont '+ (Open && (window.innerWidth > 600) ? 'ml-72 slide-in' : 'slide-out')}>
           {props.children}
-          {currentuser&& (<h2>{currentuser.email}</h2>)}
     </div>
   </div>
   );
 }
 
-export default Dashboard;
+export default Profile;

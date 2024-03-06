@@ -12,7 +12,7 @@ function Login(props) {
   const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })
-  const {currentuser, setCurrentUser} =useContext(UserContext);
+  const {setCurrentUserDetail, setCurrentUser} =useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
@@ -32,6 +32,7 @@ function Login(props) {
         toast.success("Login Successful");
         //if emailVerified
         setCurrentUser(data['user']);
+        setCurrentUserDetail(data['userdetail']);
         console.log(data);
         navigate('/user/dashboard');
         //else

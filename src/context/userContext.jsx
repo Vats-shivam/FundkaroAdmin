@@ -5,6 +5,7 @@ export const UserContext = createContext({})
 
 export function UserContextProvider({children}){
   const [currentuser,setCurrentUser] = useState({email:"", phone:"", referrer:"", refferal_code: ""});
+  const [currentuserdetail, setCurrentUserDetail] = useState({name: "",panNo: "",aadharNo: "",internalRating: 0,photo: 'https://res.cloudinary.com/drfokf5ix/image/upload/v1709286872/profile_placeholder.png', dob: null,isPanVerified: false,cibilScore: null});
   useEffect(()=>{
     if(!currentuser){
       axios.get('/profile').then(({data})=>{
@@ -14,7 +15,7 @@ export function UserContextProvider({children}){
     }
   },[]);
   return (
-    <UserContext.Provider value={{currentuser, setCurrentUser}}>
+    <UserContext.Provider value={{currentuser, setCurrentUser, currentuserdetail, setCurrentUserDetail }}>
     {children}
     </UserContext.Provider>
   )

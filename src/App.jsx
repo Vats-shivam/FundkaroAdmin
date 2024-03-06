@@ -8,6 +8,7 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Forget from './components/Forget';
 import Dashboard from './pages/Dashboard';
 import DashboardHome from './components/DashboardHome';
+import Profile from './pages/Profile';
 import axios from 'axios';
 import { UserContextProvider } from './context/userContext';
 axios.defaults.baseURL='http://localhost:8000';
@@ -53,20 +54,11 @@ function App() {
             }
           />
           <Route
-            path={"/user/dashboard/loanmaster"}
-            element={<Dashboard></Dashboard>}
-          />
-          <Route
-            path={"/user/dashboard/tools"}
-            element={<Dashboard></Dashboard>}
-          />
-          <Route
-            path={"/user/dashboard/resources"}
-            element={<Dashboard></Dashboard>}
-          />
-          <Route
-            path={"/user/dashboard/refferal"}
-            element={<Dashboard></Dashboard>}
+            path={"/user/profile"}
+            element={
+              <Profile ShowBackarrow={true}>
+              </Profile>
+            }
           />
           <Route path="*" element={<NoPage />} />
         </Routes>
