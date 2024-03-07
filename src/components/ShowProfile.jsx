@@ -3,6 +3,7 @@ import { UserContext } from '../context/userContext';
 import { useNavigate } from "react-router-dom";
 import Edit from "../assets/Edit.svg";
 import Settings from "../assets/Settings.svg";
+import moment from 'moment-timezone';
 
 function ShowProfile() {
     const navigate = useNavigate();
@@ -10,6 +11,17 @@ function ShowProfile() {
 
     function EditInfo() {
         navigate('/user/profile/edit');
+    }
+
+    function HandleDate(dob) {
+        if (!dob) {
+            return "not-set";
+        }
+        const formattedDate = moment(dob).format('DD-MM-YYYY');
+        if (!moment(formattedDate, 'DD-MM-YYYY', true).isValid()) {
+            return "not-set";
+        }
+        return formattedDate;
     }
 
     return (<div>
@@ -24,15 +36,15 @@ function ShowProfile() {
                         Name :
                     </div>
                     <div className='float-right'>
-                        {currentuserdetail.name && currentuserdetail.name!='' ? currentuserdetail.name:"not set"}
+                        {currentuserdetail.name && currentuserdetail.name != '' ? currentuserdetail.name : "not set"}
                     </div>
                 </div>
                 <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
                     <div className='float-left text-[#4169E1]'>
-                        Phone No : 
+                        Phone No :
                     </div>
                     <div className='float-right'>
-                    {currentuser.phone && currentuser.phone!='' ? currentuser.phone:"not set"}
+                        {currentuser.phone && currentuser.phone != '' ? currentuser.phone : "not set"}
                     </div>
                 </div>
                 <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
@@ -40,7 +52,7 @@ function ShowProfile() {
                         Email ID :
                     </div>
                     <div className='float-right'>
-                    {currentuser.email && currentuser.email!='' ? currentuser.email:"not set"}
+                        {currentuser.email && currentuser.email != '' ? currentuser.email : "not set"}
                     </div>
                 </div>
             </div>
@@ -48,26 +60,26 @@ function ShowProfile() {
             <div className='flex flex-col'>
                 <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
                     <div className='float-left text-[#4169E1]'>
-                    Aadhar card number :
+                        Aadhar card number :
                     </div>
                     <div className='float-right'>
-                    {currentuserdetail.aadharNo && currentuserdetail.aadharNo!='' ? currentuserdetail.aadharNo:"not set"}
+                        {currentuserdetail.aadharNo && currentuserdetail.aadharNo != '' ? currentuserdetail.aadharNo : "not set"}
                     </div>
                 </div>
                 <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
                     <div className='float-left text-[#4169E1]'>
-                    PAN card number :           
+                        PAN card number :
                     </div>
                     <div className='float-right'>
-                    {currentuserdetail.panNo && currentuserdetail.panNo!='' ? currentuserdetail.panNo:"not set"}
+                        {currentuserdetail.panNo && currentuserdetail.panNo != '' ? currentuserdetail.panNo : "not set"}
                     </div>
                 </div>
                 <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
                     <div className='float-left text-[#4169E1]'>
-                    Date of Birth :
+                        Date of Birth :
                     </div>
                     <div className='float-right'>
-                    {currentuserdetail.dob && currentuserdetail.dob!='' ? currentuserdetail.dob:"not set"}
+                        {currentuserdetail.dob && currentuserdetail.dob != '' ? HandleDate(currentuserdetail.dob) : "not set"}
                     </div>
                 </div>
             </div>

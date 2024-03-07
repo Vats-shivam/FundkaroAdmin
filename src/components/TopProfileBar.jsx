@@ -2,6 +2,7 @@ import VectorLogout from "../assets/VectorLogout.svg";
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function TopProfileBar() {
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ function TopProfileBar() {
     const Logout = async () => {
         try {
             // Send logout request to backend
-            //await axios.get('/logout');
+            await axios.get('/logout');
             setCurrentUser({ email: "", phone: "", referrer: "", refferal_code: "" });
             // Clear token from local storage or cookies if needed (optional)
             // localStorage.removeItem('token');

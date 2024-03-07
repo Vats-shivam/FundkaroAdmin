@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js';
 import { useState } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function EditProfile() {
     Chart.register(ArcElement);
     const navigate = useNavigate();
     const [user, setUser] = useState({ panNo: "", aadharNo: "", dob: "22-02-1999" })
-    const { currentuser, currentuserdetail } = useContext(UserContext);
+    const { currentuser, currentuserdetail, setCurrentUserDetail } = useContext(UserContext);
 
     var completed = 0;
     var imcompleted = 0;
@@ -66,10 +68,30 @@ function EditProfile() {
         maintainAspectRatio: false,
     }
 
-    function UpdateInfo() {
-        //Update Info
-
-        navigate('/user/profile');
+    async function UpdateInfo(e) {
+        const { panNo, aadharNo, dob } = user;
+        try {
+            const { data } = await axios.post('/edit/profile', {
+                panNo, aadharNo, dob
+            })
+            console.log(data);
+            if (data.error) {
+                toast.error(data.error);
+            }
+            else {
+                setUser({ panNo: "", aadharNo: "", dob: "22-02-1999" });
+            }
+            if (data.status) {
+                toast.success("Profile Edited Successfully");
+                setCurrentUserDetail((prev) => { return { ...prev, panNo: panNo, aadharNo: aadharNo, dob: dob } })
+                navigate('/user/profile');
+                //else
+                //navigate('/user/email/verify-otp);
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Internal Error");
+        }
     }
 
     return (<div className='w-full overflow-x-hidden'>
@@ -100,7 +122,7 @@ function EditProfile() {
                             <input type="date" placeholder="22-02-1999" value={user.dob} onChange={(e) => { setUser((prev) => { return { ...prev, dob: e.target.value } }) }} className='py-2 px-2 w-full  placeholder-500 focus:outline-none' />
                         </div>
                     </div>
-                    <div className='float-right mt-[28px]'>
+                    <div className='float-right mt-[28.5px]'>
                         <button onClick={UpdateInfo} type='submit' className='transition-all duration-1000 border hover:bg-white hover:text-[#4169E1] border border-[#4169E1] bg-[#4169E1] text-white rounded-[8px] px-8 py-2 focus:outline-none'>Verify</button>
                     </div>
                 </div>

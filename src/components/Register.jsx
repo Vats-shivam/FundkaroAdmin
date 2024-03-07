@@ -39,6 +39,7 @@ function Register(props) {
         //navigate('/user/email/verify-otp);
       }
     } catch (error) {
+      toast.error("Internal Error");
       console.log(error);
     }
   };

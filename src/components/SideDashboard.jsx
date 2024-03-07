@@ -25,7 +25,7 @@ function SideDashboard(props) {
     const Logout = async () => {
         try {
             // Send logout request to backend
-            //await axios.get('/logout');
+            await axios.get('/logout');
             setCurrentUser({ email: "", phone: "", referrer: "", refferal_code: "" });
             // Clear token from local storage or cookies if needed (optional)
             // localStorage.removeItem('token');
