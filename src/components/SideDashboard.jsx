@@ -41,8 +41,9 @@ function SideDashboard(props) {
             <div className="mt-10">
                 {items.map((item, index) => {
                     return (
-                        <div key={index} className="nav-item relative cursor-pointer w-full text-left font-primaryFont p-4 font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA] transition duration-1000 ease-out-in">
+                        <div key={index} className="flex flex-wrap nav-item overflow-x-hidden relative cursor-pointer w-full text-left font-primaryFont font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA] transition duration-1000 ease-out-in">
                             <ScrollLink
+                                className="w-[100%] h-[100%] p-4"
                                 key={item.id}
                                 activeClass="active"
                                 spy={true}
