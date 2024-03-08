@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function AddLoan() {
+function AddLoan({ nextStep, handleInputData, loanData }) {
   const [formData, setFormData] = useState({
     loanVendor: '',
     interestRate: '',
@@ -22,6 +22,8 @@ function AddLoan() {
     e.preventDefault();
     // Handle form submission here, you can send the data to your backend or do something else with it
     console.log(formData);
+    handleInputData(formData);
+    nextStep();
   };
 
   const handleInputChange = (e) => {
@@ -56,14 +58,14 @@ function AddLoan() {
   return (
     <div className="bg-gray-100 p-8 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Details Form</h2>
-      <form className="w-full max-w-lg mx-auto" onSubmit={handleFormSubmit}>
+      <form className="w-full max-w-lg mx-auto grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
         <div className="mb-4">
           <label htmlFor="imageOrSvg" className="block text-gray-700 font-semibold mb-2">Image or SVG:</label>
           <input
             type="file"
             id="imageOrSvg"
             name="imageOrSvg"
-            accept="image/*,.svg" // This will allow both image and SVG files
+            accept="image/*,.svg"
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
@@ -128,7 +130,7 @@ function AddLoan() {
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-6 col-span-2">
           <label htmlFor="selectedOffer" className="block text-gray-700 font-semibold mb-2">Select Offer:</label>
           <select
             id="selectedOffer"
@@ -144,7 +146,7 @@ function AddLoan() {
             ))}
           </select>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 col-span-2">
           <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category:</label>
           <select
             id="category"
@@ -161,13 +163,13 @@ function AddLoan() {
           </select>
         </div>
         {formData.category === 'newCategory' && (
-          <div className="mb-4">
+          <div className="mb-4 col-span-2">
             <label htmlFor="newCategory" className="block text-gray-700 font-semibold mb-2">New Category:</label>
             <input
               type="text"
               id="newCategory"
               name="newCategory"
-              value={category}
+              value={formData.newCategory}
               onChange={handleNewCategoryChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -181,7 +183,7 @@ function AddLoan() {
             </button>
           </div>
         )}
-        <div className="text-center">
+        <div className="col-span-2 text-center">
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">Submit</button>
         </div>
       </form>
