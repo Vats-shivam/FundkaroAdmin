@@ -1,44 +1,56 @@
 import { useState } from "react"
+import { useRef } from "react";
 
 function CreateBlog(props) {
     const [bold, SetBold] = useState(false);
     const [h1, SetH1] = useState(false);
     const [h2, SetH2] = useState(false);
+    const contentRef = useRef();
 
     function HandleBold() {
         SetBold(!bold);
         if (bold) {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::' })
         } else {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::[BOLD]' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::[BOLD]' })
         }
+        contentRef.current.focus();
     }
     function HandleH1() {
         SetH1(!h1);
         if (h1) {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::' })
         } else {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::[H1]' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::[H1]' })
         }
+        contentRef.current.focus();
     }
     function HandleH2() {
         SetH2(!h2);
         if (h2) {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::' })
         } else {
-            props.SetBlog({ ...props.blog, content: props.blog.content + ' ::[H2]' })
+            props.SetBlog({ ...props.blog, content: props.blog.content + '::[H2]' })
         }
+        contentRef.current.focus();
     }
+
     function HandleBR() {
         props.SetBlog({ ...props.blog, content: props.blog.content + '::[BR]::' + "\n" })
+        contentRef.current.focus();
     }
     function HandleIMG(e) {
         const img = URL.createObjectURL(e.target.files[0]);
-        props.SetBlog({ ...props.blog, content: props.blog.content + `::[IMG <src>${img}<src> <height>100px<height> <width>100px<width>]::` + "\n" })
+        props.SetBlog({ ...props.blog, content: props.blog.content + `::[IMG <src>${img}<src> <height>500px<height> <width>500px<width>]::` + "\n" })
+        const contentphotos=props.contentPhotos
+        contentphotos.push({id:img,photo:e.target.files[0]});
+        props.SetContentPhotos(contentphotos);
+        console.log(props.contentPhotos);
+        contentRef.current.focus();
     }
     return (
         <div className="flex flex-wrap flex-col justify-center items-center max-w-full">
-            <div className="flex flex-wrap flex-col items-center w-[800px]">
+            <div className="flex flex-wrap flex-col items-center w-[100%]">
                 <div className="flex flex-wrap gap-x-5">
                     <div className="inputWrapper hover:bg-blue-500 hover:text-white font-semibold my-2 p-3 border-[2px] border-blue-500 rounded-[5px] font-semibold text-blue-500">
                         Select Front Cover Image
@@ -49,7 +61,7 @@ function CreateBlog(props) {
                             accept="image/*"
                             onChange={(e) => {
                                 props.SetBlog((prev) => {
-                                    return { ...prev, photo: URL.createObjectURL(e.target.files[0]) }
+                                    return { ...prev, photosrc: URL.createObjectURL(e.target.files[0]), photo:e.target.files[0] }
                                 })
                             }}
                             className="fileInput my-2 p-1 border-[2px] rounded-xl border-blue-500"
@@ -72,29 +84,29 @@ function CreateBlog(props) {
                         }}></input>
                     </div>
                 </div>
-                <div>
+                {/* <div>
                     {props.blog.photo}
-                </div>
+                </div> */}
                 <label className="text-blue-500 font-semibold">Title</label>
-                <input className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.title} onChange={(e) => {
+                <input required className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.title} onChange={(e) => {
                     props.SetBlog((prev) => {
                         return { ...prev, title: e.target.value }
                     })
                 }}></input>
                 <label className="text-blue-500 font-semibold">Author</label>
-                <input className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.author} onChange={(e) => {
+                <input required className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.author} onChange={(e) => {
                     props.SetBlog((prev) => {
                         return { ...prev, author: e.target.value }
                     })
                 }}></input>
                 <label className="text-blue-500 font-semibold">Profession</label>
-                <input className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.profession} onChange={(e) => {
+                <input required className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.profession} onChange={(e) => {
                     props.SetBlog((prev) => {
                         return { ...prev, profession: e.target.value }
                     })
                 }}></input>
                 <label className="text-blue-500 font-semibold">Description</label>
-                <input className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.description} onChange={(e) => {
+                <input required className="px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full" type="text" value={props.blog.description} onChange={(e) => {
                     props.SetBlog((prev) => {
                         return { ...prev, description: e.target.value }
                     })
@@ -106,16 +118,15 @@ function CreateBlog(props) {
                     <button className="my-2 p-1 hover:bg-blue-500 hover:text-white border-[2px] font-semibold rounded-xl border-blue-500 text-blue-500" onClick={HandleH2}>{!h2 ? 'Start H2' : 'Stop H2'}</button>
                     <div className="hover:bg-blue-500 hover:text-white inputWrapper font-semibold my-2 p-1 border-[2px] rounded-xl border-blue-500 text-blue-500">
                         IMG
-                        <input type="file" className="fileInput my-2 p-1 border-[2px] rounded-xl" onChange={HandleIMG}></input>
+                        <input type="file" accept="image/*" className="fileInput my-2 p-1 border-[2px] rounded-xl" onChange={HandleIMG}></input>
                     </div>
                     <button className="my-2 p-1 hover:bg-blue-500 hover:text-white font-semibold border-[2px] rounded-xl border-blue-500 text-blue-500" onClick={HandleBR}>Break Line</button>
                 </div>
-                <textarea className=" px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full h-[350px] overflow-y-scroll align-flex-start" type="textbox" value={props.blog.content} onChange={(e) => {
+                <textarea required ref={contentRef} className=" px-1 border-[2px] border-blue-500 rounded-[5px] font-semibold w-full h-[350px] overflow-y-scroll align-flex-start" type="textbox" value={props.blog.content} onChange={(e) => {
                     props.SetBlog((prev) => {
                         return { ...prev, content: e.target.value }
                     })
                 }} />
-                <button className="my-2 p-2 rounded-[5px] hover:bg-blue-500 hover:text-white border-[2px] font-semibold font-normal border-blue-500 text-blue-500 w-full">Submit</button>
             </div>
         </div>
     )
