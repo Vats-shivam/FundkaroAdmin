@@ -1,34 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
 import google from "../assets/google.png";
 import axios from 'axios';
-import {toast} from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
+// import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 
 function Login(props) {
   const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })
-  const {setCurrentUserDetail, setCurrentUser} =useContext(UserContext);
+  const {currentUser, setCurrentUserDetail, setCurrentUser } = useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
-    const {email,password} = user;
-    try{
-      const {data} = await axios.post('/user/login',{
+    const { email, password } = user;
+    try {
+      const { data } = await axios.post('/user/login', {
         email,
         password
       })
-      if(data.error){
+      if (data.error) {
         toast.error(data.error);
       }
-      else{
+      else {
         setUser({ email: "", password: "" })
       }
-      if(data.status){
+      if (data.status) {
         toast.success("Login Successful");
         //if emailVerified
         setCurrentUser(data['user']);
@@ -38,10 +40,21 @@ function Login(props) {
         //else
         //navigate(/user/email/verify-otp)
       }
-    }catch(error){
+    } catch (error) {
       console.log(error);
-    }   
+    }
   };
+const login = useGoogleLogin({
+  onSuccess: async (credentialResponse) => {
+    const {data: {given_name, family_name, picture, email, email_verified}} = await axios.get("https://openidconnect.googleapis.com/v1/userinfo", {
+      params: {
+       access_token: credentialResponse.access_token,
+      }
+    })
+    console.log(data);
+  },
+});
+  // useEffect(autoLogin,[])
   return (
     <div className={`flex flex-col w-full h-full ${props.loginStyles}`}>
       <div className="p-2 bg-transparent">
@@ -91,7 +104,7 @@ function Login(props) {
         </div>
         <div className="flex justify-between m-2">
           <div className="w-[40%]">
-            <input type="checkbox" id="rememberMe" className="m-1"/>
+            <input type="checkbox" id="rememberMe" className="m-1" />
             <label htmlFor="rememberMe">Remember me</label>
           </div>
           <Link to="../user/forget" className="text-blue-500">
@@ -111,10 +124,19 @@ function Login(props) {
           LOGIN
         </button>
         <span className="m-2 ">Or</span>
-        <div className="border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center">
+        <div className="border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center" onClick={login}>
           <img src={google} alt="google-sign-in" width={"8%"} />
           Sign in with Google
         </div>
+        {/* <GoogleLogin
+          onSuccess={credentialResponse => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+          useOneTap
+        />; */}
       </form>
     </div>
   );

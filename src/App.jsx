@@ -13,6 +13,7 @@ import ShowProfile from './components/ShowProfile';
 import EditProfile from './components/EditProfile';
 import Admin from './pages/Admin'
 import AdminBlogs from './components/AdminBlogs';
+import VerifyOtp from './components/VerifyOtp';
 import axios from 'axios';
 import { UserContextProvider } from './context/userContext';
 import AdminLoanMaster from './components/AdminLoanMaster';
@@ -44,6 +45,14 @@ function App() {
                   <Register
                     loginStyles={""}
                   />
+                </AuthPage>
+              }
+            />
+            <Route
+              path={"/user/register/verify-otp"}
+              element={
+                <AuthPage>
+                  <VerifyOtp/>
                 </AuthPage>
               }
             />
