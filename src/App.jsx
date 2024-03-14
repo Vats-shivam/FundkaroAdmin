@@ -20,6 +20,7 @@ import AdminLoanMaster from './components/AdminLoanMaster';
 import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
+import UserLoanMaster from './components/UserLoanMaster';
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 
@@ -69,6 +70,14 @@ function App() {
               element={
                 <Dashboard>
                   <DashboardHome />
+                </Dashboard>
+              }
+            />
+            <Route
+              path={"/user/loanmaster"}
+              element={
+                <Dashboard ForceSidebarClose={true}>
+                  <UserLoanMaster />
                 </Dashboard>
               }
             />

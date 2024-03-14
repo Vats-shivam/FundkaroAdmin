@@ -30,6 +30,7 @@ function NameNavbar(props) {
         </svg>)
       }
       <img src={logo} className="w-32 h-9 ml-4" alt="Logo" />
+      {/* <div className="mx-auto text-[24px] font-semibold text-white">Empower Your Journey, Fund Your Tomorrow - Choose FundKa₹o</div> */}
     </header>
   );
 }

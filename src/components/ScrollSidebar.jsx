@@ -4,10 +4,12 @@ import VectorTools from "../assets/VectorTools.svg"
 import VectorResources from "../assets/VectorResources.svg"
 import VectorLoanMaster from "../assets/VectorLoanMaster.svg"
 import VectorRefferal from "../assets/VectorRef.svg"
-import { Link as ScrollLink } from "react-scroll";
+import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+import { useNavigate } from 'react-router-dom';
 
 
 function ScrollSidebar() {
+  const navigate = useNavigate();
   const items = [
     { label: "Home", id: "d-home", link: "", img: VectorHome },
     { label: "Loan Master", id: "d-loanmaster", link: "/loanmaster", img: VectorTools },
@@ -21,6 +23,11 @@ function ScrollSidebar() {
         return (
           <div key={index} className="flex flex-wrap nav-item overflow-x-hidden relative cursor-pointer w-full text-left font-primaryFont font-semibold border-b border-[#7BADF9] hover:bg-[#E4EAFA] transition duration-1000 ease-out-in">
             <ScrollLink
+              onClick={() => { 
+                if(window.location.pathname!='/user/dashboard') {
+                  navigate(`/user/dashboard#${item.id}`);
+                }
+               }}
               className="w-[100%] h-[100%] p-4"
               key={item.id}
               activeClass="active"
