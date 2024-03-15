@@ -44,16 +44,25 @@ function Login(props) {
       console.log(error);
     }
   };
-const login = useGoogleLogin({
-  onSuccess: async (credentialResponse) => {
-    const {data: {given_name, family_name, picture, email, email_verified}} = await axios.get("https://openidconnect.googleapis.com/v1/userinfo", {
-      params: {
-       access_token: credentialResponse.access_token,
-      }
-    })
-    console.log(data);
-  },
-});
+  const login = async () => {
+    try {
+      const googleUrl = "http://localhost:8000/user/auth/google";
+      window.location.replace(googleUrl);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+// const login = useGoogleLogin({
+//   onSuccess: async (credentialResponse) => {
+//     // const {data: {given_name, family_name, picture, email, email_verified}} = await axios.get("https://openidconnect.googleapis.com/v1/userinfo", {
+//     //   params: {
+//     //    access_token: credentialResponse.access_token,
+//     //   }
+//     // })
+//     console.log(credentialResponse);
+//   },
+// });
   // useEffect(autoLogin,[])
   return (
     <div className={`flex flex-col w-full h-full ${props.loginStyles}`}>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 const EmiCalculator = () => {
-  const [loanAmount, setLoanAmount] = useState(0);
-  const [interestRate, setInterestRate] = useState(0);
-  const [tenure, setTenure] = useState(0);
+  const [loanAmount, setLoanAmount] = useState();
+  const [interestRate, setInterestRate] = useState();
+  const [tenure, setTenure] = useState();
   const [weeklyEmi, setweeklyEmi] = useState(0);
   const [monthlyEmi, setMonthlyEmi] = useState(0);
   const [dailyEmi, setDailyEmi] = useState(0);
@@ -38,7 +38,7 @@ const EmiCalculator = () => {
     setLoanAmount(prevValue => {
       const newValue = Number(e.target.value); 
       calculateEmi(newValue, interestRate, tenure); 
-      return newValue;
+      return String(newValue);
     });
   }
   
@@ -46,7 +46,7 @@ const EmiCalculator = () => {
     setInterestRate(prevValue => {
       const newValue = Number(e.target.value); 
       calculateEmi(loanAmount, newValue, tenure);
-      return newValue;
+      return String(newValue);
     });
   }
   
@@ -54,7 +54,7 @@ const EmiCalculator = () => {
     setTenure(prevValue => {
       const newValue = Number(e.target.value); 
       calculateEmi(loanAmount, interestRate, newValue); 
-      return newValue;
+      return String(newValue);
     });
   }
 
