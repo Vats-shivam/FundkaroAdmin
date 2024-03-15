@@ -1,47 +1,72 @@
 import LoanMaster from "../assets/LoanMaster.svg"
 import CBI from "../assets/CBI.svg"
-import Offer from "../assets/Offer.svg";
-import DownArrow from "../assets/DownArrow.svg";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import LoanMasterCard from './LoanMasterCard';
 
 function UserLoanMaster() {
     const [preferredBanks, setPreferredBanks] = useState('');
     const [amount, setAmount] = useState('');
     const [minimumRate, setMinimumRate] = useState('');
     const [loanTenure, setLoanTenure] = useState('');
+    const [selectedBanks, setSelectedBanks] = useState([]);
     const BankInfo = [
-        { img: CBI, name: "State Bank of India", rates_min: 5, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 5000, offers: [] },
-        { img: CBI, name: "Bank of Baroda", rates_min: 8.2, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 25000, offers: [] },
-        { img: CBI, name: "UCO Bank", rates_min: 7, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 50000, offers: [] },
-        { img: CBI, name: "Kotak Bank", rates_min: 2, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 500000, offers: [] },
+        { img: CBI, name: "State Bank of India", rates_min: 5, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 5000, offers: [], features: { "Approval Durations": "Upto 24 Hours", "Feature 2": "Feature", "Feature 3": "Feature" }, document: { "Approval Durations": "Upto 24 Hours", "Doc 2": "Doc", "Doc 3": "Doc" }, fees: { "Approval Durations": "Upto 24 Hours", "Fees 2": "Fees", "Fees 3": "Fees" } },
+        { img: CBI, name: "Bank of Baroda", rates_min: 8.2, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 25000, offers: [], features: { "Approval Durations": "Upto 24 Hours", "Feature 2": "Feature", "Feature 3": "Feature" }, document: { "Approval Durations": "Upto 24 Hours", "Doc 2": "Doc", "Doc 3": "Doc" }, fees: { "Approval Durations": "Upto 24 Hours", "Fees 2": "Fees", "Fees 3": "Fees" } },
+        { img: CBI, name: "UCO Bank", rates_min: 7, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 50000, offers: [], features: { "Approval Durations": "Upto 24 Hours", "Feature 2": "Feature", "Feature 3": "Feature" }, document: { "Approval Durations": "Upto 24 Hours", "Doc 2": "Doc", "Doc 3": "Doc" }, fees: { "Approval Durations": "Upto 24 Hours", "Fees 2": "Fees", "Fees 3": "Fees" } },
+        { img: CBI, name: "Kotak Bank", rates_min: 2, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 500000, offers: [], features: { "Approval Durations": "Upto 24 Hours", "Feature 2": "Feature", "Feature 3": "Feature" }, document: { "Approval Durations": "Upto 24 Hours", "Doc 2": "Doc", "Doc 3": "Doc" }, fees: { "Approval Durations": "Upto 24 Hours", "Fees 2": "Fees", "Fees 3": "Fees" } },
     ]
     const [filteredBanks, setFilteredBanks] = useState(BankInfo);
 
-    const previousData = [
-        { stage: 1, name: 'Stage 1', completed: true },
-        { stage: 2, name: 'Stage 2', completed: true },
-        { stage: 3, name: 'Stage 3', completed: false },
-        { stage: 4, name: 'Stage 4', completed: false },
-    ]
+    const previousData = {
+        "BankInfo": { img: CBI, name: "State Bank of India", rates_min: 5, rates_max: 9.25, tenure_min: 1, tenure_max: 2, cibil: 650, min_amount: 5000, offers: [], features: { "Approval Durations": "Upto 24 Hours", "Feature 2": "Feature", "Feature 3": "Feature" }, document: { "Approval Durations": "Upto 24 Hours", "Doc 2": "Doc", "Doc 3": "Doc" }, fees: { "Approval Durations": "Upto 24 Hours", "Fees 2": "Fees", "Fees 3": "Fees" } },
+        "FormInfo": [
+            { stage: 1, name: 'Stage 1', completed: true },
+            { stage: 2, name: 'Stage 2', completed: true },
+            { stage: 3, name: 'Stage 3', completed: false },
+            { stage: 4, name: 'Stage 4', completed: false },
+        ]
+    }
+
     const handleFilter = () => {
         var filtered = BankInfo.filter(bank => {
-            const amnt = amount!=''?Number(amount):99999999999
-            const rate = minimumRate!=''?parseInt(minimumRate.replace('%', '')):0
-            const yr = loanTenure!=''?parseInt(loanTenure):99999999999999;
+            const amnt = amount != '' ? Number(amount) : 99999999999
+            const rate = minimumRate != '' ? parseInt(minimumRate.replace('%', '')) : 0
+            const yr = loanTenure != '' ? parseInt(loanTenure) : 99999999999999;
             return (bank.min_amount <= (amnt)) &&
-            (bank.rates_min >= (rate)) && (bank.tenure_min <= yr)
+                (bank.rates_min >= (rate)) && (bank.tenure_min <= yr)
 
         });
-        if(filtered.length==0) {
+        if (filtered.length == 0) {
             setFilteredBanks(BankInfo);
             toast.error("No Banks meets Filtered Data");
             return;
         }
         console.log(filtered);
         setFilteredBanks(filtered);
-        
+
     };
+
+    const handleSelectBank = (bankName) => {
+        setSelectedBanks((prevSelectedBanks) => {
+            if (prevSelectedBanks.includes(bankName)) {
+                return prevSelectedBanks.filter((name) => name !== bankName);
+            } else {
+                return [...prevSelectedBanks, bankName];
+            }
+        });
+    };
+
+    const HandleLoan = () => {
+        if (selectedBanks.length == 0) {
+            toast.error("No Banks Selected")
+            return;
+        }
+        const bankdata = BankInfo.filter(bank => {
+            return selectedBanks.includes(bank.name);
+        })
+        console.log(bankdata);
+    }
 
     const clearFilters = () => {
         setPreferredBanks('');
@@ -111,15 +136,15 @@ function UserLoanMaster() {
                 <div className="font-[22px]">Previously Left on</div>
                 <div className="border-[1px] rounded-[5px] border-[#4169E1] p-4">
                     <div className="flex gap-x-2">
-                        <img className="h-[36px] w-auto" src={CBI}></img>
-                        <div className="font-[28px] leading-[36px]">Central Bank of India</div>
+                        <img className="h-[36px] w-auto" src={previousData["BankInfo"].img}></img>
+                        <div className="font-[28px] leading-[36px]">{previousData["BankInfo"].name}</div>
                     </div>
                     <div className="pl-6 font-normal">
                         <div className="pt-5 font-normal text-[18px]">
                             Process Overview
                         </div>
                         <div className="pt-3">
-                            {previousData.map((stage, index) => {
+                            {previousData['FormInfo'].map((stage, index) => {
                                 return (
                                     <div>
                                         {index > 0 ? <div className={"w-[4px] ml-[8.5px] h-5 bg-[#4169E1] " + (stage.completed ? "bg-[#4169E1]" : "bg-[#B1B1B1]")}></div> : ''}
@@ -142,48 +167,14 @@ function UserLoanMaster() {
             {/* Loans for you */}
             <div className="flex flex-col gap-y-3 font-semibold pl-6 pt-6 pb-6">
                 <div>Loans For You</div>
-                    {filteredBanks.map((bank) => {
-                        return (
-                            <div className="rounded-[5px] border-[1.5px] border-[#4169E1] font-normal">
-                                <div className="flex flex-wrap gap-x-3 p-4 items-center">
-                                    <div>
-                                        <input type="radio"></input>
-                                    </div>
-                                    <div className="flex flex-wrap gap-x-1 gap-y-4">
-                                        <div><img className="h-[50px] w-[50px]" src={bank.img}></img></div>
-                                        <div className="w-[90px]">{bank.name}</div>
-                                        <div className="h-auto w-[1px] mx-2 bg-[#4169E1]"></div>
-                                        <div>
-                                            <div>Rates</div>
-                                            <div>{`${bank.rates_min}-${bank.rates_max}%`}</div>
-                                        </div>
-                                        <div className="h-auto w-[1px] mx-2 bg-[#4169E1]"></div>
-                                        <div>
-                                            <div>Loan Tenure</div>
-                                            <div>{`${bank.tenure_min}-${bank.tenure_max} Years`}</div>
-                                        </div>
-                                        <div className="h-auto w-[1px] mx-2 bg-[#4169E1]"></div>
-                                        <div>
-                                            <div>Minimum CIBIL Score</div>
-                                            <div>{`>${bank.cibil}`}</div>
-                                        </div>
-                                        <div className="h-auto w-[1px] mx-2 bg-[#4169E1]"></div>
-                                        <div>
-                                            <div>Minimum Amount</div>
-                                            <div>{`₹ ${bank.min_amount}`}</div>
-                                        </div>
-                                        <div className="h-auto w-[1px] mx-2 bg-[#4169E1]"></div>
-                                        <div className="float-right my-auto h-fit cursor-pointer w-fit hover:bg-[#EAEAEA] px-2 border text-[14px] font-semibold rounded-[5px] border-black p-1" onClick={() => { }}><img className="inline-block pr-1" src={Offer}></img>Offers</div>
-                                    </div>
-                                </div>
-                                <div className="pt-2 pb-3 flex flex-col justify-center items-center text-[14px] font-bold text-[#676767]">
-                                    View More
-                                    <img className="h-[6.6px] w-[12.5px]" src={DownArrow}></img>
-                                </div>
-                            </div>
-                        )
-                    })
+                {filteredBanks.map((bank) => {
+                    return (<LoanMasterCard bank={bank} isSelected={selectedBanks.includes(bank.name)}
+                        onSelect={() => handleSelectBank(bank.name)} />)
+                })
                 }
+            </div>
+            <div className="float-right mb-3">
+                <button onClick={HandleLoan} className='mt-4 w-fit text-white bg-[#4169E1] border-[1.5px] border-[#4169E1] cursor-pointer px-5 py-1 rounded'>Apply For Loan</button>
             </div>
         </div>
     </div>)
