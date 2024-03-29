@@ -5,14 +5,27 @@ import hidden from "../assets/hidden.svg";
 import google from "../assets/google.png";
 import axios from 'axios';
 import { toast } from 'react-hot-toast'
+import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
+import { useEffect } from 'react';
 
 function Register(props) {
   const navigate = useNavigate()
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ name: "",email: "", phone: "", password: "", confPass: "", referrer: "" })
   const {setCurrentUserDetail, setCurrentUser} =useContext(UserContext);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const value=queryParams.get('ref');
+    if(value) {
+      setUser((prev) => { return { ...prev, referrer: value } })
+    }
+  }, [location]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log("hi");
@@ -66,6 +79,9 @@ function Register(props) {
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
           <input type="text" placeholder="Confirm Password" value={user.confPass} onChange={(e) => { setUser((prev) => { return { ...prev, confPass: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
         </div>
+        <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
+          <input type="text" placeholder="Refferal code (optional)" value={user.referrer} onChange={(e) => { setUser((prev) => { return { ...prev, referrer: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none' />
+        </div>
         <div className='flex justify-between m-2'>
           <div className="w-[40%]">
             <input type="checkbox" id="rememberMe" className="m-1" />
@@ -77,7 +93,7 @@ function Register(props) {
           <p className="mr-2">Already registered?</p>
           <Link to='../user/login' className='text-blue-500'>Login now</Link>
         </div>
-        <button type='submit' className=' m-2 border border-blue-500 rounded-xl p-3 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary'>REGISTER</button>
+        <button type='submit' className=' m-2 border border-blue-500 rounded-xl p-3 hover:bg-lightPrimary hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary'>REGISTER</button>
         <span className='m-2 '>Or</span>
         <div className='border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center'>
           <img src={google} alt="google-sign-in" width={'8%'} />
