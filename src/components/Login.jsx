@@ -7,63 +7,85 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-// import { GoogleLogin } from '@react-oauth/google';
-import { useGoogleLogin } from '@react-oauth/google';
+import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { app } from '../config/firebase';
 
 function Login(props) {
+  const auth = getAuth(app)
   const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })
-  const {currentUser, setCurrentUserDetail, setCurrentUser } = useContext(UserContext);
+  const { setCurrentUser } = useContext(UserContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log("hi");
     const { email, password } = user;
     try {
-      const { data } = await axios.post('/user/login', {
+
+      const { data } = await axios.post('/api/auth/signin', {
         email,
         password
       })
-      if (data.error) {
-        toast.error(data.error);
+      if (!data.success) {
+        toast.error(data.message);
       }
       else {
+        toast.success("User login successful")
+
+        
+        const { success, ...rest } = data;
+        setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id ,isVerified:rest.isVerified});
         setUser({ email: "", password: "" })
-      }
-      if (data.status) {
-        toast.success("Login Successful");
-        //if emailVerified
-        setCurrentUser(data['user']);
-        setCurrentUserDetail(data['userdetail']);
-        console.log(data);
-        navigate('/user/dashboard');
-        //else
-        //navigate(/user/email/verify-otp)
+        localStorage.setItem('token', rest.token);
+        if (rest.role == 'User' && rest.isVerified) {
+          navigate('/user/dashboard')
+        }
+        else if (rest.role == 'User') {
+          navigate('/user/register/verify-otp')
+        }
+        if(rest.role== 'Admin'){
+          navigate('/admin');
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
   const login = async () => {
+    const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({ prompt: 'select_account' })
     try {
-      const googleUrl = "http://localhost:8000/user/auth/google";
-      window.location.replace(googleUrl);
+      const resultsFromGoogle = await signInWithPopup(auth, provider);
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: resultsFromGoogle.user.displayName,
+          email: resultsFromGoogle.user.email,
+          googlePhotoUrl: resultsFromGoogle.user.photoURL,
+          accessToken: resultsFromGoogle.user.uid
+        }),
+      })
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("User is registered");
+        setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data._id ,isVerified:data.isVerified});
+        localStorage.setItem('token', data.token);
+        if (data.role == 'User' && data.isVerified) {
+          navigate('/user/dashboard')
+        }
+        else if (data.role == 'User') {
+          navigate('/user/register/verify-otp')
+        }
+        if(data.role=='Admin'){
+          navigate('/admin');
+        }
+      }
     } catch (err) {
       console.log(err);
     }
   };
-  
-// const login = useGoogleLogin({
-//   onSuccess: async (credentialResponse) => {
-//     // const {data: {given_name, family_name, picture, email, email_verified}} = await axios.get("https://openidconnect.googleapis.com/v1/userinfo", {
-//     //   params: {
-//     //    access_token: credentialResponse.access_token,
-//     //   }
-//     // })
-//     console.log(credentialResponse);
-//   },
-// });
-  // useEffect(autoLogin,[])
+
   return (
     <div className={`flex flex-col w-full h-full ${props.loginStyles}`}>
       <div className="p-2 bg-transparent">
@@ -137,15 +159,6 @@ function Login(props) {
           <img src={google} alt="google-sign-in" width={"8%"} />
           Sign in with Google
         </div>
-        {/* <GoogleLogin
-          onSuccess={credentialResponse => {
-            console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-          useOneTap
-        />; */}
       </form>
     </div>
   );

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import heroImg from "../assets/heroImg.png"
 import {Toaster} from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
@@ -11,39 +11,14 @@ import axios from 'axios';
 
 function AuthPage({ children }) {
   const navigate = useNavigate();
-  const {setCurrentUserDetail} =useContext(UserContext);
-  const autoLogin = async () => {
-    try{
-      const {data} = await axios.get('/profile');
-      // console.log(data);
-      if(data){
-        console.log(data);
-        setCurrentUserDetail(data);
-        if(data.role==='user')
-        navigate('/user/dashboard');
-      if(data.role==='admin')
-      navigate('/admin');
-      }
-    }catch(error){
-      console.log(error);
-    }
-  }
-  
-  const getUser = async () => {
-		try {
-			
-			const { data } = await axios.get('/auth/login/success', { withCredentials: true });
-			// setUser(data.user._json);
-      console.log(data);
-		} catch (err) {
-			console.log(err);
-		}
-	};
-  autoLogin();
-  useEffect(() => {
-    autoLogin();
-		//getUser();
-	}, []);
+  const { currentuser,setCurrentUser} = useContext(UserContext);
+  const[authorised,setAuthorised]= useState(false);
+
+useEffect(()=>{
+if(currentuser.email&&currentuser.isVerified){
+  navigate('/user/dashboard');
+}
+},[currentuser])
   return (
     <div className="w-full h-full relative">
       <div className="w-full flex flex-col bg-gradient-to-r from-darkPrimary to-lightPrimary pb-[16rem] relative px-16 pt-6">

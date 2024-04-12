@@ -2,17 +2,38 @@ import NameNavbar from '../components/NameNavbar';
 import ScrollSidebar from '../components/ScrollSidebar';
 import SideDashboard from '../components/SideDashboard';
 import { useState } from 'react';
+import { useContext } from 'react';
 import { Toaster } from 'react-hot-toast'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
-
+import { UserContext } from '../context/userContext';
+import axios from 'axios';
+import BlockedModal from '../components/BlockedModal';
 function Dashboard(props) {
-  const [Open, setOpen] = useState((window.innerWidth > 600) ? (props.ForceSidebarClose ? false : true) : false);
-
+  const [Open, setOpen] = useState((window.innerWidth > 700) ? (props.ForceSidebarClose ? false : true) : false);
+  const { currentuser,setCurrentUser} = useContext(UserContext);
   const location = useLocation();
-
+  const navigate = useNavigate();
+  const checkUserToken = async (token) => {
+    const {data} = await axios.post('/api/user/verify', {
+      token, id:currentuser.id
+    })
+    console.log(data);
+    if(data.success){
+      setCurrentUser({email:data.email,profilePicture:data.profilePicture,role:data.role,refCode:data.refCode,id:data.id})
+      return true;
+    }
+    return false;
+  }
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    const authorised = checkUserToken(token)
+
+    if (!authorised) {
+      navigate('/user/login');
+    }
+
     const { hash } = location;
     if (hash) {
       const id = hash.replace('#', '');
@@ -27,17 +48,23 @@ function Dashboard(props) {
         });
       }
     }
-  }, [location]);
+  }, []);
+
+  const closeModal = ()=>{
+    console.log("hello");
+  }
 
   return (
     <div>
-
       <Toaster position="top-center" />
       <NameNavbar Open={Open} setOpen={setOpen} ShowBackarrow={props.ShowBackarrow ? true : false} />
       <SideDashboard Open={Open}>
         <ScrollSidebar />
       </SideDashboard>
-      <div className={'mt-20 font-primaryFont transition-all duration-1000 ' + (Open && (window.innerWidth > 600) ? 'ml-64 slide-in' : 'slide-out')}>
+
+      <div className={'mt-20 font-primaryFont transition-all duration-1000 ' + (Open && (window.innerWidth > 700) ? 'ml-64 slide-in' : 'slide-out')}>
+      <BlockedModal closeModal={closeModal} />
+
         {props.children}
       </div>
     </div>

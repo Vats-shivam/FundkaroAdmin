@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useRef } from "react";
+import axios from "axios";
 
 function CreateBlog(props) {
     const [bold, SetBold] = useState(false);
@@ -39,14 +40,46 @@ function CreateBlog(props) {
         props.SetBlog({ ...props.blog, content: props.blog.content + '::[BR]::' + "\n" })
         contentRef.current.focus();
     }
-    function HandleIMG(e) {
-        const img = URL.createObjectURL(e.target.files[0]);
-        props.SetBlog({ ...props.blog, content: props.blog.content + `::[IMG <src>${img}<src> <height>500px<height> <width>500px<width>]::` + "\n" })
-        const contentphotos=props.contentPhotos
-        contentphotos.push({id:img,photo:e.target.files[0]});
-        props.SetContentPhotos(contentphotos);
-        console.log(props.contentPhotos);
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+    const handleCoverIMG = async (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        const img = URL.createObjectURL(file);
+        const data = new FormData();
+        data.append('file', file);
+        axios.post("/upload", data)
+            .then(res => {
+                console.log(res.statusText)
+            })
+        props.SetBlog({ ...props.blog, coverPhoto: {preview:img,name:file.name} })
         contentRef.current.focus();
+    }
+    const handleIMG = async (event) => {
+        const file = event.target.files[0];
+        const data = new FormData();
+        data.append('file', file);
+        axios.post("/upload", data)
+            .then(res => {
+                console.log(res.statusText)
+            })
+        const img = URL.createObjectURL(file);
+        const photos = [...props.blog.blogPhotos];
+        photos.push({preview:img,name:file.name});
+        console.log(photos);
+        props.SetBlog({ ...props.blog, blogPhotos: photos, content: props.blog.content + `::[IMG <src>${img}<src> <height>500px<height> <width>500px<width>]::` + "\n" });
     }
     return (
         <div className="flex flex-wrap flex-col justify-center items-center max-w-full">
@@ -59,11 +92,7 @@ function CreateBlog(props) {
                             id="photo"
                             name="photo"
                             accept="image/*"
-                            onChange={(e) => {
-                                props.SetBlog((prev) => {
-                                    return { ...prev, photosrc: URL.createObjectURL(e.target.files[0]), photo:e.target.files[0] }
-                                })
-                            }}
+                            onChange={handleCoverIMG}
                             className="fileInput my-2 p-1 border-[2px] rounded-xl border-blue-500"
                         />
                     </div>
@@ -118,7 +147,7 @@ function CreateBlog(props) {
                     <button className="my-2 p-1 hover:bg-blue-500 hover:text-white border-[2px] font-semibold rounded-xl border-blue-500 text-blue-500" onClick={HandleH2}>{!h2 ? 'Start H2' : 'Stop H2'}</button>
                     <div className="hover:bg-blue-500 hover:text-white inputWrapper font-semibold my-2 p-1 border-[2px] rounded-xl border-blue-500 text-blue-500">
                         IMG
-                        <input type="file" accept="image/*" className="fileInput my-2 p-1 border-[2px] rounded-xl" onChange={HandleIMG}></input>
+                        <input type="file" accept="image/*" className="fileInput my-2 p-1 border-[2px] rounded-xl" onChange={handleIMG}></input>
                     </div>
                     <button className="my-2 p-1 hover:bg-blue-500 hover:text-white font-semibold border-[2px] rounded-xl border-blue-500 text-blue-500" onClick={HandleBR}>Break Line</button>
                 </div>

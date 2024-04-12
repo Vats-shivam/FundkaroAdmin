@@ -6,12 +6,14 @@ import axios from "axios";
 
 function TopProfileBar() {
     const navigate = useNavigate();
-    const { currentuser, setCurrentUser, currentuserdetail } = useContext(UserContext)
+    const { currentuser, setCurrentUser, currentuserdetail ,setCurrentUserDetail} = useContext(UserContext)
     const Logout = async () => {
         try {
             // Send logout request to backend
             await axios.get('/logout');
-            setCurrentUser({ email: "", phone: "", referrer: "", refferal_code: "" });
+            setCurrentUser();
+            setCurrentUserDetail();
+            localStorage.removeItem('data');
             // Clear token from local storage or cookies if needed (optional)
             // localStorage.removeItem('token');
             // Redirect to login page or any other page
@@ -20,6 +22,7 @@ function TopProfileBar() {
             console.error('Logout error:', error);
         }
     };
+    // console.log(currentuserdetail);
 
     return (<div className="pt-16">
         <div>

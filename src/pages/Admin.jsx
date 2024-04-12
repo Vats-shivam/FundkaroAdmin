@@ -18,18 +18,7 @@ function Admin(props) {
   const navigate = useNavigate();
   // const { currentuser } = useContext(UserContext)
   const autoLogin = async () => {
-    try{
-      const {data} = await axios.get('/profile');
-      // console.log(data);
-      if(data){
-        console.log(data);
-        // setCurrentUserDetail(data);
-        if(data.role==='user')
-        navigate('/user/dashboard');
-      }
-    }catch(error){
-      console.log(error);
-    }
+    
   }
   useEffect(()=>{autoLogin()},[]);
 

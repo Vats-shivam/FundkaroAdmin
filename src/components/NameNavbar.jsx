@@ -13,8 +13,6 @@ function NameNavbar(props) {
     navigate('/user/dashboard');
   }
 
-  console.log(props.ShowBackarrow);
-
   return (
     <header className="z-20 fixed top-0 w-full bg-gradient-to-r from-darkPrimary to-lightPrimary flex h-16 items-center">
 

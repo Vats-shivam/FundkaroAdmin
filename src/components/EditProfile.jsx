@@ -11,7 +11,7 @@ function EditProfile() {
     Chart.register(ArcElement);
     const navigate = useNavigate();
     const [user, setUser] = useState({ panNo: "", aadharNo: "", dob: "22-02-1999" })
-    const { currentuser, currentuserdetail, setCurrentUserDetail } = useContext(UserContext);
+    const { currentuser} = useContext(UserContext);
 
     var completed = 0;
     var imcompleted = 0;

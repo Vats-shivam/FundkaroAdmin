@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
 import AuthPage from './pages/AuthPage'
 import Login from './components/Login';
@@ -15,17 +15,17 @@ import Admin from './pages/Admin'
 import AdminBlogs from './components/AdminBlogs';
 import VerifyOtp from './components/VerifyOtp';
 import axios from 'axios';
-import { UserContextProvider } from './context/userContext';
+import { UserContext, UserContextProvider } from './context/userContext';
 import AdminLoanMaster from './components/AdminLoanMaster';
 import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
 import UserLoanMaster from './components/UserLoanMaster';
-axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
+import {useNavigate} from 'react-router-dom';
 
 
 function App() {
+  
   return (
     <>
       <UserContextProvider>

@@ -4,7 +4,6 @@ function PreviewBlog(props) {
     { props.blog.pw > 0 ? pw = `${props.blog.pw.toString()}px` : pw = 'auto' }
     return (
         <div className="ml-5">
-                {props.blog.photosrc ? <img style={{ height: ph, width: pw }} src={props.blog.photosrc}></img> : ''}
             <div className="flex flex-wrap flex-col">
                 <div className="text-[35px] font-bold"><h1>{props.blog.title}</h1></div>
                 <div className="text-[15px] font-semibold">
@@ -16,6 +15,8 @@ function PreviewBlog(props) {
                     Description: {props.blog.description}
                 </div>
             </div>
+            {props.blog.coverPhoto.preview ? <img style={{ height: ph, width: pw }} src={props.blog.coverPhoto.preview}></img> : ''}
+
             <div className="pt-5">
                 {props.blog.content.split('::').map((text, index) => {
                     if (text.startsWith("[BOLD]")) {
