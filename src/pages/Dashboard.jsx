@@ -9,19 +9,19 @@ import { useEffect } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
 import { UserContext } from '../context/userContext';
 import axios from 'axios';
-import BlockedModal from '../components/BlockedModal';
+
 function Dashboard(props) {
   const [Open, setOpen] = useState((window.innerWidth > 700) ? (props.ForceSidebarClose ? false : true) : false);
-  const { currentuser,setCurrentUser} = useContext(UserContext);
+  const { currentuser, setCurrentUser } = useContext(UserContext);
   const location = useLocation();
   const navigate = useNavigate();
   const checkUserToken = async (token) => {
-    const {data} = await axios.post('/api/user/verify', {
-      token, id:currentuser.id
+    const { data } = await axios.post('/api/user/verify', {
+      token, id: currentuser.id
     })
     console.log(data);
-    if(data.success){
-      setCurrentUser({email:data.email,profilePicture:data.profilePicture,role:data.role,refCode:data.refCode,id:data.id})
+    if (data.success) {
+      setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data.id })
       return true;
     }
     return false;
@@ -50,7 +50,7 @@ function Dashboard(props) {
     }
   }, []);
 
-  const closeModal = ()=>{
+  const closeModal = () => {
     console.log("hello");
   }
 
@@ -61,10 +61,7 @@ function Dashboard(props) {
       <SideDashboard Open={Open}>
         <ScrollSidebar />
       </SideDashboard>
-
       <div className={'mt-20 font-primaryFont transition-all duration-1000 ' + (Open && (window.innerWidth > 700) ? 'ml-64 slide-in' : 'slide-out')}>
-      <BlockedModal closeModal={closeModal} />
-
         {props.children}
       </div>
     </div>

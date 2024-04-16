@@ -1,4 +1,3 @@
-import { useContext, useEffect, useState } from 'react'
 import './App.css'
 import AuthPage from './pages/AuthPage'
 import Login from './components/Login';
@@ -9,20 +8,19 @@ import Forget from './components/Forget';
 import Dashboard from './pages/Dashboard';
 import DashboardHome from './components/DashboardHome';
 import Profile from './pages/Profile';
-import ShowProfile from './components/ShowProfile';
-import EditProfile from './components/EditProfile';
 import Admin from './pages/Admin'
 import AdminBlogs from './components/AdminBlogs';
 import VerifyOtp from './components/VerifyOtp';
 import axios from 'axios';
-import { UserContext, UserContextProvider } from './context/userContext';
+import { UserContextProvider } from './context/userContext';
 import AdminLoanMaster from './components/AdminLoanMaster';
 import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
 import UserLoanMaster from './components/UserLoanMaster';
-import {useNavigate} from 'react-router-dom';
 
+
+axios.defaults.baseURL = 'https://newbackend-production-4bfc.up.railway.app';
 
 function App() {
   
@@ -84,19 +82,17 @@ function App() {
             <Route
               path={"/user/profile"}
               element={
-                <Profile ShowBackarrow={true}>
-                  <ShowProfile />
-                </Profile>
+                <Profile ShowBackarrow={true}/>
               }
             />
-            <Route
+            {/* <Route
               path={"/user/profile/edit"}
               element={
                 <Profile ShowBackarrow={true}>
                   <EditProfile />
                 </Profile>
               }
-            />
+            /> */}
             <Route
               path={"/admin"}
               element={

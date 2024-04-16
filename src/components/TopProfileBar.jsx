@@ -1,50 +1,37 @@
-import VectorLogout from "../assets/VectorLogout.svg";
+import Edit from "../assets/Edit.svg";
+import VectorAppliedLoans from "../assets/VectorAppliedLoans.svg"
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-function TopProfileBar() {
-    const navigate = useNavigate();
-    const { currentuser, setCurrentUser, currentuserdetail ,setCurrentUserDetail} = useContext(UserContext)
-    const Logout = async () => {
-        try {
-            // Send logout request to backend
-            await axios.get('/logout');
-            setCurrentUser();
-            setCurrentUserDetail();
-            localStorage.removeItem('data');
-            // Clear token from local storage or cookies if needed (optional)
-            // localStorage.removeItem('token');
-            // Redirect to login page or any other page
-            navigate('/user/login');
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
-    };
+
+function TopProfileBar({ data, setEditProfile }) {
+    const { currentuser } = useContext(UserContext)
     // console.log(currentuserdetail);
 
-    return (<div className="pt-16">
-        <div>
-            <div className="mr-5 absolute right-2 text-[#4169E1] border-[1.5px] border-[#4169E1] cursor-pointer w-fit hover:bg-[#EAEAEA] px-2 text-[14px] font-semibold rounded-[5px] leading-[16.8px] p-1" onClick={Logout}><img className="inline-block pl-1 pr-1" src={VectorLogout}></img> Logout</div>
-            <div className="mt-4 max-sm:pt-12 pt-4 flex items-center max-sm:gap-x-1 gap-x-10 m-auto justify-center">
-                <div className="max-sm:w-[5%] w-[20%] h-[1.5px] bg-[#4169E1]"></div>
-                <div className="shadow-blogshadow rounded-[30px] z-10 flex flex-wrap justify-center py-1 px-12 bg-white w-fit gap-x-10">
-                    <img className="rounded-full h-[90px] w-[90px]" src="https://res.cloudinary.com/drfokf5ix/image/upload/v1709286872/profile_placeholder.png"></img>
-                    <div className="flex flex-wrap flex-col line-[36px]">
-                        <div className="text-[30px] font-semibold">
-                            {currentuserdetail.name?currentuserdetail.name:'Full name'}
-                        </div>
-                        <div className="text-[14px] line-[16.8px]">
-                            <p>+91 {currentuser.phone?currentuser.phone:'xxxxxxxxxx'}</p>
-                            <p>{currentuser.email?currentuser.email:'xxxxxxxxxx@xxxxx.xxx'}</p>
-                        </div>
+    return (
+        <div className="pt-32 pb-16 md:px-12 lg:px-48 flex flex-col gap-16 md:flex-row items-center justify-between">
+            <div className="flex gap-4">
+                <img className="rounded-full h-[90px] w-[90px]" src={currentuser.profilePicture}></img>
+                <div className="flex flex-col justify-center">
+                    <div className="text-2xl font-bold">
+                        {data.name || 'Full name'}
+                    </div>
+                    <div className="text-lg font-medium">
+                        <p>{currentuser.email || 'xxxxxxxxxx@xxxxx.xxx'}</p>
                     </div>
                 </div>
-                <div className="max-sm:w-[5%] w-[20%] h-[1.5px] bg-[#4169E1]"></div>
+            </div>
+            <div className="flex gap-8">
+            <div className="cursor-pointer text-white border border-blue-600 p-4 rounded-lg bg-lightPrimary">
+                <img className="inline-block pl-1 pr-1" src={VectorAppliedLoans}></img> Applied Loans
+            </div>
+            <div className="cursor-pointer text-darkPrimary border border-blue-600 p-4 rounded-lg bg-white" onClick={()=>setEditProfile(true)}>
+                <img className="inline-block pl-1 pr-1" src={Edit}></img> Edit Profile
+            </div>
+            
             </div>
         </div>
-    </div>)
+    )
 }
 
 export default TopProfileBar;

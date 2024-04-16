@@ -5,6 +5,7 @@ import InsurancePolicy from '../assets/InsurancePolicy.svg';
 import EmiCalculator from './EmiCalculator';
 import DashboardBlogs from './DashboardBlogs';
 import DashboardReferals from './DashBoardReferals';
+import CompleteProfile from './CompleteProfile';
 
 function DashboardHome() {
 
@@ -24,8 +25,10 @@ function DashboardHome() {
   }
   return (
     <div className='sm:ml-2 sm:mr-2 mr-6'>
-      <section id="d-home">
-      <h2 className="mt-4 mb-3 text-2xl bg-clip-text flex justify-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Home</h2>
+      <section id="d-home" className='flex justify-center flex-col items-center w-full'>
+      <h2 className="mt-4 mb-3 text-2xl bg-clip-text flex justify-center bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Home</h2>
+      <CompleteProfile classes={"w-96 md:w-3/4"}/>
+      {/* <WelcomeSection> */}
       </section>
       <section id="d-loanmaster" className='pt-24'>
       <h2 className="flex mb-3 justify-center text-2xl bg-clip-text text-center inline-block bg-gradient-to-r from-darkPrimary to-lightPrimary font-bold text-transparent">Loan Master</h2>

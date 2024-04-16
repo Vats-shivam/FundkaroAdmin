@@ -1,23 +1,28 @@
 import logo from "../assets/fundkaro.svg";
 import back from "../assets/Back.svg";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/userContext";
 
 function NameNavbar(props) {
-  const navigate=useNavigate();
-
+  const navigate = useNavigate();
+  const { currentuser } = useContext(UserContext);
   function UpdateOpen() {
     props.setOpen(!props.Open);
   }
 
   function HandleBack() {
-    navigate('/user/dashboard');
+    if (currentuser.role == 'User')
+      navigate('/user/dashboard');
+    else
+    navigate('/admin');
   }
 
   return (
     <header className="z-20 fixed top-0 w-full bg-gradient-to-r from-darkPrimary to-lightPrimary flex h-16 items-center">
 
       {props.ShowBackarrow === true ?
-        (<img  className="ml-4 cursor-pointer block h-5 w-5 hover:animate-pulse" onClick={HandleBack} src={back}></img>)
+        (<img className="ml-4 cursor-pointer block h-5 w-5 hover:animate-pulse" onClick={HandleBack} src={back}></img>)
         :
         (<svg
           className={"ml-4 cursor-pointer block h-7 w-7 fill-white " + (props.Open ? "animate-pulse" : "")}

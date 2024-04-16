@@ -1,90 +1,64 @@
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import { useNavigate } from "react-router-dom";
-import Edit from "../assets/Edit.svg";
-import Settings from "../assets/Settings.svg";
-import moment from 'moment-timezone';
+import Logout from '../components/Logout'
 
-function ShowProfile() {
+
+function ShowProfile({ data }) {
     const navigate = useNavigate();
-    const { currentuser, currentuserdetail } = useContext(UserContext);
+    const { currentuser } = useContext(UserContext);
 
-    function EditInfo() {
-        navigate('/user/profile/edit');
-    }
-
-    function HandleDate(dob) {
-        if (!dob) {
-            return "not-set";
-        }
-        const formattedDate = moment(dob).format('DD-MM-YYYY');
-        if (!moment(formattedDate, 'DD-MM-YYYY', true).isValid()) {
-            return "not-set";
-        }
-        return formattedDate;
-    }
-
-    return (<div>
-        <div className='flex flex-wrap justify-center gap-x-2 pt-12 font-semibold text-[16px] line-[19.2px]'>
-            <div className='text-[#4169E1] border-[1.5px] border-[#4169E1] cursor-pointer px-3 py-2 rounded'>Settings <img className="inline-block pl-1" src={Settings}></img></div>
-            <div onClick={EditInfo} className='text-white bg-[#4169E1] border-[1.5px] border-[#4169E1] cursor-pointer px-3 py-2 rounded'>Edit Profile <img className="inline-block pl-1" src={Edit}></img></div>
-        </div>
-        <div className='max-md:p-4 max-md:gap-x-[0px] max-md:mx-3 mt-9 p-7 rounded-[10px] w-fit mx-auto  flex flex-wrap justify-center gap-x-4 bg-white shadow-profileshadow mb-5'>
-            <div className='flex flex-col'>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        Name :
+    return (
+        <div className='flex flex-col items-end justify-evenly'>
+            <div className='px-24 w-full flex flex-col md:flex-row md:justify-around'>
+                <div className='w-full md:w-2/5 flex flex-col justify-around h-[50vh]'>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Name:</div>
+                        <div className='text-2xl'>{data.name || 'Not Set Yet'}</div>
                     </div>
-                    <div className='float-right'>
-                        {currentuserdetail.name && currentuserdetail.name != '' ? currentuserdetail.name : "not set"}
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Email ID:</div>
+                        <div className='text-2xl'>{currentuser.email || 'Not Set Yet'}</div>
+                    </div>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Date of Birth:</div>
+                        <div className='text-2xl'>{data.dob || 'Not Set Yet'}</div>
+                    </div>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>City:</div>
+                        <div className='text-2xl'>{data.address.city || 'Not Set Yet'}</div>
+                    </div>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>State :</div>
+                        <div className='text-2xl'>{data.address.state || 'Not Set Yet'}</div>
                     </div>
                 </div>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        Phone No :
+                <div className='w-full md:w-2/5 flex flex-col justify-around h-[50vh]'>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Phone Number:</div>
+                        <div className='text-2xl'>{currentuser.phoneNo || 'Not Set Yet'}</div>
                     </div>
-                    <div className='float-right'>
-                        {currentuser.phone && currentuser.phone != '' ? currentuser.phone : "not set"}
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Aadhar No:</div>
+                        <div className='text-2xl' >{data.aadharNo || 'Not Set Yet'}</div>
                     </div>
-                </div>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        Email ID :
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Pan No:</div>
+                        <div className='text-2xl'>{data.panNo || 'Not Set Yet'}</div>
                     </div>
-                    <div className='float-right'>
-                        {currentuser.email && currentuser.email != '' ? currentuser.email : "not set"}
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Referal Count:</div>
+                        <div className='text-2xl'>{data.refCount || 'Not Set Yet'}</div>
+                    </div>
+                    <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
+                        <div className='text-blue-500 text-xl'>Pin Code :</div>
+                        <div className='text-2xl'>{data.address.pincode || 'Not Set Yet'}</div>
                     </div>
                 </div>
             </div>
-            <div className='max-md:w-[0px] w-[0.5px] h-auto bg-[#D0D0D0]'></div>
-            <div className='flex flex-col'>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        Aadhar card number :
-                    </div>
-                    <div className='float-right'>
-                        {currentuserdetail.aadharNo && currentuserdetail.aadharNo != '' ? currentuserdetail.aadharNo : "not set"}
-                    </div>
-                </div>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        PAN card number :
-                    </div>
-                    <div className='float-right'>
-                        {currentuserdetail.panNo && currentuserdetail.panNo != '' ? currentuserdetail.panNo : "not set"}
-                    </div>
-                </div>
-                <div className='w-[350px] md:w-[300px] max-md:w-[250px] text-[18px] line-[21.px] font-normal border-b-[1px] border-[#D0D0D0] pb-1 mb-3'>
-                    <div className='float-left text-[#4169E1]'>
-                        Date of Birth :
-                    </div>
-                    <div className='float-right'>
-                        {currentuserdetail.dob && currentuserdetail.dob != '' ? HandleDate(currentuserdetail.dob) : "not set"}
-                    </div>
-                </div>
-            </div>
+            <Logout className={"mt-16 px-4 m-auto lg:w-1/6 md:right-48 md:bottom-4"} />
         </div>
-    </div>)
+    )
 }
 
 export default ShowProfile;

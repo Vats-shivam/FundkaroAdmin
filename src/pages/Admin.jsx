@@ -4,11 +4,7 @@ import SideDashboard from '../components/SideDashboard';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast'
 import { useContext } from 'react';
-import VectorHome from "../assets/Vectorhome.svg";
-import VectorTools from "../assets/VectorTools.svg"
-import VectorResources from "../assets/VectorResources.svg"
-import VectorLoanMaster from "../assets/VectorLoanMaster.svg"
-import VectorRefferal from "../assets/VectorRef.svg"
+import { UserContext } from '../context/userContext';
 import AdminNavbar from '../components/AdminNavbar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -16,11 +12,15 @@ import { useNavigate } from 'react-router-dom';
 function Admin(props) {
   const [Open, setOpen] = useState((window.innerWidth > 600) ? true : false);
   const navigate = useNavigate();
-  // const { currentuser } = useContext(UserContext)
-  const autoLogin = async () => {
+  const { currentuser} = useContext(UserContext)
+  const autoLogin = () => {
+console.log(currentuser);
+    if(currentuser.role!='Admin'){
+        navigate('/user/login');
+    }
     
   }
-  useEffect(()=>{autoLogin()},[]);
+  useEffect(autoLogin,[]);
 
   return (
     <div>
