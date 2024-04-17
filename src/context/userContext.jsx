@@ -5,6 +5,7 @@ export const UserContext = createContext({})
 
 export function UserContextProvider({ children }) {
   const [currentuser, setCurrentUser] = useState({ email: "", profilePicture: "", role: "", refCode: "", id: "" ,isVerified:false});
+  const userData={ name: "xxxx", referCount: "xx", address: { state: "xxxxx", city: "xxxxx", pincode: "xxxxxxx" }, panNo: "xxxxxxxx", aadharNo: "xxxxx", dob: "xx-xx-xxxx" }
   useEffect(() => {
     async function fetchUser() {
       const token = localStorage.getItem('token')
@@ -24,7 +25,7 @@ export function UserContextProvider({ children }) {
     fetchUser();
   }, [])
   return (
-    <UserContext.Provider value={{ currentuser, setCurrentUser }}>
+    <UserContext.Provider value={{ currentuser, setCurrentUser,userData }}>
       {children}
     </UserContext.Provider>
   )

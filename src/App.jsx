@@ -18,6 +18,8 @@ import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
 import UserLoanMaster from './components/UserLoanMaster';
+import EditProfile from './components/EditProfile';
+import ShowProfile from './components/ShowProfile';
 
 
 axios.defaults.baseURL = 'https://newbackend-production-4bfc.up.railway.app';
@@ -82,17 +84,19 @@ function App() {
             <Route
               path={"/user/profile"}
               element={
-                <Profile ShowBackarrow={true}/>
+                <Profile ShowBackarrow={true}>
+                  <ShowProfile/>
+                </Profile>
               }
             />
-            {/* <Route
+            <Route
               path={"/user/profile/edit"}
               element={
                 <Profile ShowBackarrow={true}>
                   <EditProfile />
                 </Profile>
               }
-            /> */}
+            />
             <Route
               path={"/admin"}
               element={

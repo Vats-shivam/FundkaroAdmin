@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Logout from '../components/Logout'
 
 
-function ShowProfile({ data }) {
+function ShowProfile() {
     const navigate = useNavigate();
-    const { currentuser } = useContext(UserContext);
+    const { currentuser,userData } = useContext(UserContext);
 
     return (
         <div className='flex flex-col items-end justify-evenly'>
@@ -14,7 +14,7 @@ function ShowProfile({ data }) {
                 <div className='w-full md:w-2/5 flex flex-col justify-around h-[50vh]'>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Name:</div>
-                        <div className='text-2xl'>{data.name || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.name || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Email ID:</div>
@@ -22,15 +22,15 @@ function ShowProfile({ data }) {
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Date of Birth:</div>
-                        <div className='text-2xl'>{data.dob || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.dob || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>City:</div>
-                        <div className='text-2xl'>{data.address.city || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.address.city || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>State :</div>
-                        <div className='text-2xl'>{data.address.state || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.address.state || 'Not Set Yet'}</div>
                     </div>
                 </div>
                 <div className='w-full md:w-2/5 flex flex-col justify-around h-[50vh]'>
@@ -40,19 +40,19 @@ function ShowProfile({ data }) {
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Aadhar No:</div>
-                        <div className='text-2xl' >{data.aadharNo || 'Not Set Yet'}</div>
+                        <div className='text-2xl' >{userData.aadharNo || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Pan No:</div>
-                        <div className='text-2xl'>{data.panNo || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.panNo || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Referal Count:</div>
-                        <div className='text-2xl'>{data.refCount || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.refCount || 'Not Set Yet'}</div>
                     </div>
                     <div className='border-b-4 border-gray-200 flex justify-between w-full lg:w-4/5'>
                         <div className='text-blue-500 text-xl'>Pin Code :</div>
-                        <div className='text-2xl'>{data.address.pincode || 'Not Set Yet'}</div>
+                        <div className='text-2xl'>{userData.address.pincode || 'Not Set Yet'}</div>
                     </div>
                 </div>
             </div>
