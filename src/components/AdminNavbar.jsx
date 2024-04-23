@@ -12,7 +12,7 @@ function AdminNavbar() {
   const items = [
     { label: "Home", id: "d-home", link: "/admin", img: VectorHome },
     { label: "Loan Master", id: "d-loanmaster", link: "/admin/loanmaster", img: VectorTools },
-    { label: "Blogs", id: "d-blogs", link: "/admin/blogs", img: VectorResources },
+    { label: "Applications", id: "d-application", link: "/admin/applications", img: VectorResources },
     { label: "Staff", id: "d-staff", link: "/admin/staff", img: VectorRefferal },
     { label: "Clients", id: "d-clients", link: "/admin/clients", img: VectorLoanMaster }
   ];

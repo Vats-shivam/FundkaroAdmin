@@ -19,7 +19,6 @@ function Profile(props) {
           {props.children}
         </div>
       </div>
-
     </div>
   );
 }

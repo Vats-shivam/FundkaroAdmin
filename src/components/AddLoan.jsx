@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
-function AddLoan({ nextStep, handleInputData, loanData }) {
+function AddLoan() {
   const [formData, setFormData] = useState({
     loanVendor: '',
     interestRate: '',
@@ -14,16 +14,14 @@ function AddLoan({ nextStep, handleInputData, loanData }) {
 
   // Sample offers array
   const offers = ["Offer 1", "Offer 2", "Offer 3"];
-  const [category, setCategory] = useState('');
+  // const {category,setCategory} =useContext(Categor)
   // List of available categories
-  const [categories, setCategories] = useState(["Category A", "Category B", "Category C"]);
+  const categories=["Category A", "Category B", "Category C"];
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     // Handle form submission here, you can send the data to your backend or do something else with it
     console.log(formData);
-    handleInputData(formData);
-    nextStep();
   };
 
   const handleInputChange = (e) => {
@@ -34,26 +32,12 @@ function AddLoan({ nextStep, handleInputData, loanData }) {
     }
   };
 
-  const handleNewCategoryChange = (e) => {
-    setCategory(e.target.value);
-  };
+
 
   const handleCategoryChange = (e) => {
-    const selectedCategory = e.target.value;
-    if (selectedCategory === 'newCategory') {
-      setFormData({ ...formData, category: 'newCategory' });
-    } else {
-      setFormData({ ...formData, category: selectedCategory });
-    }
+      setFormData({ ...formData, category: e.target.value });
   };
 
-  const handleNewCategorySubmit = () => {
-    if (category.trim() !== '') {
-      const newCategoryList = [...categories, category];
-      setCategories(newCategoryList);
-      setFormData({ ...formData, category: category });
-    }
-  };
 
   return (
     <div className="bg-gray-100 p-8 rounded-lg shadow-md">
@@ -159,30 +143,8 @@ function AddLoan({ nextStep, handleInputData, loanData }) {
             {categories.map((category, index) => (
               <option key={index} value={category}>{category}</option>
             ))}
-            <option value="newCategory">Create New Category</option>
           </select>
         </div>
-        {formData.category === 'newCategory' && (
-          <div className="mb-4 col-span-2">
-            <label htmlFor="newCategory" className="block text-gray-700 font-semibold mb-2">New Category:</label>
-            <input
-              type="text"
-              id="newCategory"
-              name="newCategory"
-              value={formData.newCategory}
-              onChange={handleNewCategoryChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <button
-              type="button"
-              onClick={handleNewCategorySubmit}
-              className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300"
-            >
-              Add Category
-            </button>
-          </div>
-        )}
         <div className="col-span-2 text-center">
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">Submit</button>
         </div>

@@ -5,7 +5,7 @@ const Input = ({type,value,onChange,placeholder,className,px}) => {
   const renderInput=()=>{
     return (
       <>
-      <input value={value} onChange={onChange} type={type} placeholder={placeholder} className={classes}/>
+      <input value={value} onChange={onChange} type={type} placeholder={placeholder} className={classes} required/>
       </>
     )
   }
