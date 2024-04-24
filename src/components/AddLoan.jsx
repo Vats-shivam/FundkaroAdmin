@@ -1,25 +1,55 @@
-import React, { useContext, useState } from 'react'
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
+import { UserContext } from '../context/userContext';
 
 function AddLoan() {
   const [formData, setFormData] = useState({
-    loanVendor: '',
-    interestRate: '',
-    minCibilScore: '',
+    code:0,
+    vendor: '',
+    ratesMin: '',
+    ratesMax: '',
+    minScoreRequired: '',
     maxLoanAmount: '',
-    tenure: '',
-    selectedOffer: '',
-    category: '',
+    tenureMin: '',
+    tenureMax: '',
+    offerId: '',
+    categoryId: '',
     imageOrSvg: null,
   });
 
-  // Sample offers array
-  const offers = ["Offer 1", "Offer 2", "Offer 3"];
-  // const {category,setCategory} =useContext(Categor)
-  // List of available categories
-  const categories=["Category A", "Category B", "Category C"];
+  const {currentuser} = useContext(UserContext);
 
-  const handleFormSubmit = (e) => {
+  const [offers,setOffers] = useState([]);
+  const [categories,setCategories] = useState([]);
+
+  const handleFormSubmit =async (e) => {
     e.preventDefault();
+    const request = new FormData();
+    // request.append('image',formData.imageOrSvg)
+    Object.entries(formData).forEach(([key, value]) => {
+        request.append(key, value);
+    });
+
+    request.append("userId",currentuser.id);
+
+    try{
+      const response = await axios.post('/api/loan/create',request,{
+        headers:{
+          'Content-Type':'multipart/form-data'
+        }
+      });
+      if(response.data.success){
+        toast.success("Loan created Successfully");
+      }
+      else{
+        throw response;
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast.error("Error occured during addition of loan");
+    }
     // Handle form submission here, you can send the data to your backend or do something else with it
     console.log(formData);
   };
@@ -32,17 +62,42 @@ function AddLoan() {
     }
   };
 
+  const fetchAll = async()=>{
+    try{
+      const data = await axios.post('/api/admin/getdetails',{userId:currentuser.id});
+      console.log(data.data);
+      if(data.data.status){
+        setOffers(data.data.offers);
+        setCategories(data.data.categories)
+      }
 
+    }
+    catch(error){
+      console.log(error);
+      toast.error('Failed to fetch Data');
+    }
+  }
 
-  const handleCategoryChange = (e) => {
-      setFormData({ ...formData, category: e.target.value });
-  };
+  useEffect(()=>{
+    fetchAll();
+  },[])
 
 
   return (
     <div className="bg-gray-100 p-8 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Details Form</h2>
       <form className="w-full max-w-lg mx-auto grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
+      <div className="mb-4">
+          <label htmlFor="code" className="block text-gray-700 font-semibold mb-2">code</label>
+          <input
+            type="Number"
+            id="code"
+            name="code"
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="imageOrSvg" className="block text-gray-700 font-semibold mb-2">Image or SVG:</label>
           <input
@@ -52,6 +107,7 @@ function AddLoan() {
             accept="image/*,.svg"
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
           />
         </div>
         <div className="mb-4">
@@ -59,20 +115,32 @@ function AddLoan() {
           <input
             type="text"
             id="loanVendor"
-            name="loanVendor"
-            value={formData.loanVendor}
+            name="vendor"
+            value={formData.vendor}
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="interestRate" className="block text-gray-700 font-semibold mb-2">Interest Rate (%):</label>
+          <label htmlFor="interestRateMin" className="block text-gray-700 font-semibold mb-2">Interest Rate Min(%):</label>
           <input
             type="number"
-            id="interestRate"
-            name="interestRate"
-            value={formData.interestRate}
+            id="interestRateMin"
+            name="ratesMin"
+            value={formData.ratesMin}
+            onChange={handleInputChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="interestRateMax" className="block text-gray-700 font-semibold mb-2">Interest Rate Max(%):</label>
+          <input
+            type="number"
+            id="interestRateMax"
+            name="ratesMax"
+            value={formData.ratesMax}
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -83,8 +151,8 @@ function AddLoan() {
           <input
             type="number"
             id="minCibilScore"
-            name="minCibilScore"
-            value={formData.minCibilScore}
+            name="minScoreRequired"
+            value={formData.minScoreRequired}
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -103,12 +171,24 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="tenure" className="block text-gray-700 font-semibold mb-2">Tenure (months):</label>
+          <label htmlFor="tenureMin" className="block text-gray-700 font-semibold mb-2">Tenure Min(months):</label>
           <input
             type="number"
-            id="tenure"
-            name="tenure"
-            value={formData.tenure}
+            id="tenureMin"
+            name="tenureMin"
+            value={formData.tenureMin}
+            onChange={handleInputChange}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="tenureMin" className="block text-gray-700 font-semibold mb-2">Tenure Max (months):</label>
+          <input
+            type="number"
+            id="tenureMin"
+            name="tenureMax"
+            value={formData.tenureMax}
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -118,15 +198,15 @@ function AddLoan() {
           <label htmlFor="selectedOffer" className="block text-gray-700 font-semibold mb-2">Select Offer:</label>
           <select
             id="selectedOffer"
-            name="selectedOffer"
-            value={formData.selectedOffer}
+            name="offerId"
+            value={formData.offerId}
             onChange={handleInputChange}
             required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="">-- Select Offer --</option>
             {offers.map((offer, index) => (
-              <option key={index} value={offer}>{offer}</option>
+              <option key={index} value={offer._id}>{offer.offerMsg+'('+offer.offerCode+')'}</option>
             ))}
           </select>
         </div>
@@ -134,14 +214,15 @@ function AddLoan() {
           <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category:</label>
           <select
             id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleCategoryChange}
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required
           >
             <option value="">-- Select Category --</option>
             {categories.map((category, index) => (
-              <option key={index} value={category}>{category}</option>
+              <option key={index} value={category._id}>{category.category}</option>
             ))}
           </select>
         </div>

@@ -25,7 +25,7 @@ function ScrollSidebar() {
             <ScrollLink
               onClick={() => { 
                 if(window.location.pathname!='/user/dashboard') {
-                  navigate(`/user/dashboard#${item.id}`);
+                  navigate(`/user/dashboard`);
                 }
                }}
               className="w-[100%] h-[100%] p-4"

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import Input from "./Input";
-
+import { UserContext } from '../context/userContext';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 function AddCategory() {
+  const {currentuser} = useContext(UserContext);
   const [formFields, setFormFields] = useState([]);
   const [fieldName, setFieldName] = useState('');
   const [fieldType, setFieldType] = useState('text');
@@ -27,9 +30,22 @@ function AddCategory() {
     setFormFields(updatedFields);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Do something with formFields, like sending them to a backend for processing
+    try{
+      const response = await axios.post('/api/category/create',{userId:currentuser.id,category,formFields});
+      if(response.data.success){
+        toast.success('Category added successfully')
+      }
+      else{
+        throw response.data.message
+      }
+    }
+    catch(error){
+      console.log(error);
+      toast.error("Failed to add new Category");
+    }
     console.log(formFields);
   };
 

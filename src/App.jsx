@@ -20,7 +20,8 @@ import AdminClients from './components/AdminClients';
 import UserLoanMaster from './components/UserLoanMaster';
 import EditProfile from './components/EditProfile';
 import ShowProfile from './components/ShowProfile';
-import { CategoryContext, CategoryContextProvider } from './context/categoryContext';
+import UserApplication from './components/UserApplication';
+
 
 
 axios.defaults.baseURL = 'https://newbackend-production-4bfc.up.railway.app';
@@ -30,7 +31,7 @@ function App() {
   return (
     <>
       <UserContextProvider>
-        <CategoryContextProvider>
+        {/* <CategoryContextProvider> */}
           <BrowserRouter>
             <Routes>
               <Route
@@ -139,10 +140,18 @@ function App() {
                   </Admin>
                 }
               />
+              <Route
+                path={"/user/application"}
+                element={
+                  <Dashboard>
+                    <UserApplication/>
+                  </Dashboard>
+                }
+              />
               <Route path="*" element={<NoPage />} />
             </Routes>
           </BrowserRouter>
-        </CategoryContextProvider>
+        {/* </CategoryContextProvider> */}
       </UserContextProvider>
     </>
   );

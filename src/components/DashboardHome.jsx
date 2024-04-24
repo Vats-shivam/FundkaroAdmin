@@ -6,22 +6,33 @@ import EmiCalculator from './EmiCalculator';
 import DashboardBlogs from './DashboardBlogs';
 import DashboardReferals from './DashBoardReferals';
 import CompleteProfile from './CompleteProfile';
+import { useContext, useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function DashboardHome() {
+  const navigate = useNavigate();
 
-  const items = [
-    { label: "Education Loan", img: EduLoan },
-    { label: "Home Loan", img: HomeLoan },
-    { label: "Personal Loan", img: PersonalLoan },
-    { label: "Insurance Policy", img: InsurancePolicy },
-    { label: "Insurance Policy", img: InsurancePolicy },
-    { label: "Insurance Policy", img: InsurancePolicy },
-    { label: "Insurance Policy", img: InsurancePolicy },
-    { label: "Insurance Policy", img: InsurancePolicy },
-  ];
+  const [items,setItems]= useState([]);
+  const getCategories= async()=>{
+    try{
+      const data =await axios.get('/api/category/findall');
+      if(data.status!=200){
+        throw data;
+      }
+      setItems(data.data);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
-  function SelectCategory(e) {
-    return;
+  useEffect(()=>{
+    getCategories();
+  },[])
+
+  function SelectCategory(index) {
+    navigate('/user/loanmaster',{state:items[index]})
   }
   return (
     <div className='sm:ml-2 sm:mr-2 mr-6'>
@@ -38,7 +49,7 @@ function DashboardHome() {
         </div>
         <div className='flex flex-wrap justify-center pt-8'>
           {items.map((item, index) => {
-            return (<div key={index} onClick={SelectCategory} className='p-4 mb-4 ml-2 mr-2 rounded-md w-56 shadow-dashboardshadow cursor-pointer'><img src={item.img} className='h-12 w-12 pr-2 inline-block'></img>{item.label}</div>)
+            return (<div key={index} onClick={()=>{SelectCategory(index)}} className='p-4 mb-4 ml-2 mr-2 rounded-md w-56 shadow-dashboardshadow cursor-pointer'><img src={item.logo} className='h-12 w-12 pr-2 inline-block'></img>{item.category}</div>)
           })}
         </div>
       </section>

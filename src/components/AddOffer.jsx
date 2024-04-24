@@ -1,10 +1,27 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Input from './Input';
+import axios from 'axios';
+import { UserContext } from '../context/userContext';
+import toast from 'react-hot-toast';
 function AddOffer() {
-  const [offer, setOffer] = useState({ msg: '', code: '' });
-  const handleSubmit = (e) => {
+  const {currentuser} = useContext(UserContext)
+  const [offer, setOffer] = useState({ offerMsg: '', offerCode: '' });
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(offer);
+    try{
+      const response = await axios.post('/api/offer/create',{userId:currentuser.id,...offer});
+      if(response.data.success){
+        toast.success("Offer Created");
+        setOffer({ offerMsg: '', offerCode: '' });
+      }
+      else{
+        throw response;
+      }
+    }
+    catch(error){
+      console.log(error);
+      toast.error("An error Ocurred while adding Offer");
+    }
   }
   return (
     <div className='p-8 rounded-lg shadow-md bg-gray-100'>
@@ -15,8 +32,8 @@ function AddOffer() {
           <input
             type="text"
             id="msg"
-            value={offer.msg}
-            onChange={(e) => setOffer((prev)=>({...prev,msg:e.target.value}))}
+            value={offer.offerMsg}
+            onChange={(e) => setOffer((prev)=>({...prev,offerMsg:e.target.value}))}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
           />
         </div>
@@ -25,8 +42,8 @@ function AddOffer() {
           <input
             type="Number"
             id="code"
-            value={offer.code}
-            onChange={(e) => setOffer((prev)=>({...prev,code:e.target.value}))}
+            value={offer.offerCode}
+            onChange={(e) => setOffer((prev)=>({...prev,offerCode:e.target.value}))}
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
           />
         </div>

@@ -11,6 +11,7 @@ function SideDashboard(props) {
     const [isResponsive, setIsResponsive] = useState(false);
 
     useEffect(() => {
+        
         const handleResize = () => {
             setIsResponsive(window.innerWidth <= 768); // Set isResponsive based on window width
         };

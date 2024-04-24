@@ -19,9 +19,8 @@ function Dashboard(props) {
     const { data } = await axios.post('/api/user/verify', {
       token, id: currentuser.id
     })
-    console.log(data);
     if (data.success) {
-      setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data.id })
+      // setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data.id })
       return true;
     }
     return false;
