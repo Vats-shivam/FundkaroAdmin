@@ -26,7 +26,7 @@ function UserLoanMaster() {
             // console.log(data);
             setBankInfo(() => {
                 const newBanks=data.loans.map((loan, index) => {
-                    return { img: loan.logo.url, name: loan.vendor, cibil: loan.minScoreRequired, min_amount: loan.maxLoanAmount,rates_min: loan.ratesMin, rates_max: loan.ratesMax, tenure_min: loan.tenureMin, tenure_max: loan.tenureMax,offer:loan.offer }
+                    return { img: loan.logo, name: loan.vendor, cibil: loan.minScoreRequired, min_amount: loan.maxLoanAmount,rates_min: loan.ratesMin, rates_max: loan.ratesMax, tenure_min: loan.tenureMin, tenure_max: loan.tenureMax,offer:loan.offer }
                 })
                 return newBanks
             });
@@ -36,6 +36,7 @@ function UserLoanMaster() {
         }
     }
     useEffect(() => {
+        console.log(BankInfo);
         setFilteredBanks(BankInfo);
       }, [BankInfo]);
     
