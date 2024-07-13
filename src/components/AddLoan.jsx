@@ -50,8 +50,6 @@ function AddLoan() {
       console.log(err);
       toast.error("Error occured during addition of loan");
     }
-    // Handle form submission here, you can send the data to your backend or do something else with it
-    console.log(formData);
   };
 
   const handleInputChange = (e) => {
@@ -227,7 +225,7 @@ function AddLoan() {
           </select>
         </div>
         <div className="col-span-2 text-center">
-          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">Submit</button>
+          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Submit</button>
         </div>
       </form>
     </div>

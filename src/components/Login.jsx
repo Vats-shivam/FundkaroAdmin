@@ -33,18 +33,10 @@ function Login(props) {
 
         
         const { success, ...rest } = data;
-        setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id ,isVerified:rest.isVerified});
+        setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id ,isVerified:rest.isVerified,isProfileCompleted:rest.isProfileCompleted,isKYCVerified:rest.isKYCVerified});
         setUser({ email: "", password: "" })
         localStorage.setItem('token', rest.token);
-        if (rest.role == 'User' && rest.isVerified) {
-          navigate('/user/dashboard')
-        }
-        else if (rest.role == 'User') {
-          navigate('/user/register/verify-otp')
-        }
-        if(rest.role== 'Admin'){
-          navigate('/admin');
-        }
+        rest.role=='User'?navigate('/user/dashboard'):navigate('/admin');
       }
     } catch (error) {
       console.log(error);
@@ -75,7 +67,7 @@ function Login(props) {
           navigate('/user/dashboard')
         }
         else if (data.role == 'User') {
-          navigate('/user/register/verify-otp')
+          navigate('/user/register/verify-otp',{state:{phoneNo,email}})
         }
         if(data.role=='Admin'){
           navigate('/admin');

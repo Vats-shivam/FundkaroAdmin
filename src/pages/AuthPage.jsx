@@ -15,7 +15,7 @@ function AuthPage({ children }) {
   const[authorised,setAuthorised]= useState(false);
 
 useEffect(()=>{
-if(currentuser.email&&currentuser.isVerified){
+if(currentuser.email&&currentuser.isVerified&&currentuser.isKyc){
   navigate('/user/dashboard');
 }
 },[currentuser])

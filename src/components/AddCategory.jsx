@@ -1,14 +1,15 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Input from "./Input";
 import { UserContext } from '../context/userContext';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 function AddCategory() {
-  const {currentuser} = useContext(UserContext);
+  const { currentuser } = useContext(UserContext);
   const [formFields, setFormFields] = useState([]);
   const [fieldName, setFieldName] = useState('');
   const [fieldType, setFieldType] = useState('text');
   const [category, setCategory] = useState('');
+  const [categoryLogo, setCategoryLogo] = useState('');
 
   const addField = () => {
     if (!fieldName.trim()) {
@@ -30,38 +31,60 @@ function AddCategory() {
     setFormFields(updatedFields);
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const data = new FormData();
+    data.append('logo', categoryLogo);
+    data.append('userId', currentuser.id);
+    data.append('category', category);
+
+    formFields.forEach((field, index) => {
+      Object.entries(field).forEach(([key, value]) => {
+        data.append(`formFields[${index}][${key}]`, value);
+      });
+    });
     // Do something with formFields, like sending them to a backend for processing
-    try{
-      const response = await axios.post('/api/category/create',{userId:currentuser.id,category,formFields});
-      if(response.data.success){
+    try {
+      const response = await axios.post('/api/category/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (response.data.success) {
         toast.success('Category added successfully')
       }
-      else{
+      else {
         throw response.data.message
       }
     }
-    catch(error){
+    catch (error) {
       console.log(error);
       toast.error("Failed to add new Category");
     }
-    console.log(formFields);
   };
 
   return (
     <div className='p-8 rounded-lg shadow-md bg-gray-100'>
       <form onSubmit={handleSubmit} className='flex flex-col px-16'>
-      <div className="mb-4">
-              <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category :</label>
-              <input
-                type="text"
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              />
-            </div>
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category :</label>
+          <input
+            type="text"
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Logo :</label>
+          <input
+            type="file"
+            id="category"
+            onChange={(e) => setCategoryLogo(e.target.files[0])}
+            className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
+          />
+        </div>
         <div className='flex justify-between'>
           <div className='p-4 border-r-4 w-1/2'>
             <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Admin Form Builder</h2>
@@ -107,7 +130,9 @@ function AddCategory() {
             ))}
           </div>
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Create Form</button>
+        <div className='px-4'>
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Create Form</button>
+        </div>
       </form>
     </div>
   );

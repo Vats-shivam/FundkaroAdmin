@@ -25,8 +25,8 @@ function UserLoanMaster() {
             })
             // console.log(data);
             setBankInfo(() => {
-                const newBanks=data.loans.map((loan, index) => {
-                    return { img: loan.logo, name: loan.vendor, cibil: loan.minScoreRequired, min_amount: loan.maxLoanAmount,rates_min: loan.ratesMin, rates_max: loan.ratesMax, tenure_min: loan.tenureMin, tenure_max: loan.tenureMax,offer:loan.offer }
+                const newBanks = data.loans.map((loan, index) => {
+                    return { id: loan._id, img: loan.logo, name: loan.vendor, cibil: loan.minScoreRequired, min_amount: loan.maxLoanAmount, rates_min: loan.ratesMin, rates_max: loan.ratesMax, tenure_min: loan.tenureMin, tenure_max: loan.tenureMax, offer: loan.offer }
                 })
                 return newBanks
             });
@@ -36,10 +36,9 @@ function UserLoanMaster() {
         }
     }
     useEffect(() => {
-        console.log(BankInfo);
         setFilteredBanks(BankInfo);
-      }, [BankInfo]);
-    
+    }, [BankInfo]);
+
 
     useEffect(() => {
         fetchLoans();
@@ -93,7 +92,11 @@ function UserLoanMaster() {
         const bankdata = BankInfo.filter(bank => {
             return selectedBanks.includes(bank.name);
         })
-        console.log(bankdata);
+        const loans = bankdata.map((bank) => {
+            return bank.id;
+        })
+        console.log(loans);
+        navigate('/user/application', { state: {category:location.state._id,loans} })
     }
 
     const clearFilters = () => {
@@ -104,8 +107,8 @@ function UserLoanMaster() {
         setFilteredBanks(BankInfo);
     };
     useEffect(() => {
-        console.log(currentuser);
-        if (!currentuser.isProfileCompleted) {
+        // console.log(currentuser);
+        if (currentuser.id && !currentuser.isProfileCompleted) {
             toast.custom((t) => (
                 <div
                     className={`${t.visible ? 'animate-enter' : 'animate-leave'
@@ -123,7 +126,10 @@ function UserLoanMaster() {
                     </div>
                 </div>
             ))
-            navigate('/user/profile/edit')
+            navigate('/user/profile/edit');
+        }
+        if(!location.state){
+            navigate('/user/dashboard');
         }
 
     }, [])

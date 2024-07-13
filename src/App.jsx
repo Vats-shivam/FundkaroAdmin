@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import './App.css'
 import AuthPage from './pages/AuthPage'
 import Login from './components/Login';
@@ -5,8 +6,6 @@ import Register from './components/Register';
 import NoPage from './pages/NoPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Forget from './components/Forget';
-import Dashboard from './pages/Dashboard';
-import DashboardHome from './components/DashboardHome';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import Applications from './components/Applications';
@@ -17,10 +16,15 @@ import AdminLoanMaster from './components/AdminLoanMaster';
 import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
-import UserLoanMaster from './components/UserLoanMaster';
-import EditProfile from './components/EditProfile';
-import ShowProfile from './components/ShowProfile';
-import UserApplication from './components/UserApplication';
+import UserKYCForm from './components/UserKYCForm';
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const DashboardHome = lazy(() => import('./components/DashboardHome'))
+const UserLoanMaster = lazy(() => import('./components/UserLoanMaster'))
+const EditProfile = lazy(() => import('./components/EditProfile'))
+const ShowProfile = lazy(() => import('./components/ShowProfile'))
+const UserApplication = lazy(() => import('./components/UserApplication'))
+import Loader from './assets/loader.svg'
+
 
 
 
@@ -30,8 +34,11 @@ function App() {
 
   return (
     <>
-      <UserContextProvider>
-        {/* <CategoryContextProvider> */}
+      <Suspense fallback={(<div className={`w-screen h-screen flex items-center justify-center bg-primary z-20`}>
+      <img src={Loader} alt="Loading..." className=" h-16" />
+    </div>)}>
+        <UserContextProvider>
+          {/* <CategoryContextProvider> */}
           <BrowserRouter>
             <Routes>
               <Route
@@ -57,6 +64,14 @@ function App() {
                 element={
                   <AuthPage>
                     <VerifyOtp />
+                  </AuthPage>
+                }
+              />
+              <Route
+                path={"/user/kyc-form"}
+                element={
+                  <AuthPage>
+                    <UserKYCForm />
                   </AuthPage>
                 }
               />
@@ -144,15 +159,16 @@ function App() {
                 path={"/user/application"}
                 element={
                   <Dashboard>
-                    <UserApplication/>
+                    <UserApplication />
                   </Dashboard>
                 }
               />
               <Route path="*" element={<NoPage />} />
             </Routes>
           </BrowserRouter>
-        {/* </CategoryContextProvider> */}
-      </UserContextProvider>
+          {/* </CategoryContextProvider> */}
+        </UserContextProvider>
+      </Suspense>
     </>
   );
 }

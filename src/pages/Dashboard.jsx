@@ -9,6 +9,8 @@ import { useEffect } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
 import { UserContext } from '../context/userContext';
 import axios from 'axios';
+import Profile from './Profile';
+import ProfileSurvey from '../components/ProfileSurvey';
 
 function Dashboard(props) {
   const [Open, setOpen] = useState((window.innerWidth > 700) ? (props.ForceSidebarClose ? false : true) : false);
@@ -52,7 +54,10 @@ function Dashboard(props) {
   const closeModal = () => {
     console.log("hello");
   }
-
+  // console.log(currentuser);
+ if(!currentuser.isProfileCompleted){
+  return <ProfileSurvey/>
+ }
   return (
     <div>
       <Toaster position="top-center" />

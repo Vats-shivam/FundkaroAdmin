@@ -16,7 +16,7 @@ function Register(props) {
   const auth = getAuth(app);
   const navigate = useNavigate()
   const [hidePassword, setHidePassword] = useState(true);
-  const [user, setUser] = useState({  email: "",  password: "", confPass: "", referrer: "" })
+  const [user, setUser] = useState({  email: "",phoneNo:"",  password: "", confPass: "", referrer: "" })
   const {currentuser, setCurrentUser } = useContext(UserContext);
   const location = useLocation();
 
@@ -51,7 +51,7 @@ function Register(props) {
 }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { email, password, confPass, referrer } = user;
+    const { email,phoneNo,password, confPass, referrer } = user;
 
     const msg=validatePassword(password);
     if(msg){
@@ -63,7 +63,7 @@ function Register(props) {
     try {
       
       const {data} = await axios.post('/api/auth/signup', {
-         email, password, referrer
+         email,phoneNo:"+91"+phoneNo, password, referrer
       })
       if (!data.success) {
         toast.error(data.message);
@@ -71,9 +71,10 @@ function Register(props) {
       else {
         toast.success("User is registered");
         const {success,...rest}=data;
+        setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data._id ,isVerified:data.isVerified, isProfileCompleted:data.isProfileCompleted})
         setUser({  email: "",  password: "", confPass: "", referrer: "" });
         localStorage.setItem('token',rest.token);
-        navigate('/user/register/verify-otp');
+        navigate('/user/register/verify-otp',{state:{phoneNo,email}});
       }
     } catch (error) {
       toast.error("Internal Error");
@@ -105,7 +106,7 @@ function Register(props) {
           navigate('/user/dashboard')
         }
         else if (data.role == 'User') {
-          navigate('/user/register/verify-otp')
+          navigate('/user/register/verify-otp',{state:{phoneNo:'',email:''}})
         }
         if(data.role=='Admin'){
           navigate('/admin');
@@ -129,6 +130,10 @@ function Register(props) {
           <input type="email" placeholder="Email" value={user.email} onChange={(e) => { setUser((prev) => { return { ...prev, email: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none'/>
         </div>
         <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
+          <div className='py-4 text-blue-500 border-r-2 pr-2'>+91</div>
+          <input type="number" placeholder="Phone No" value={user.phoneNo} onChange={(e) => { setUser((prev) => { return { ...prev, phoneNo: e.target.value } }) }} className='py-4 px-3 w-full  placeholder-blue-500 focus:outline-none'/>
+        </div>
+        <div className='flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2'>
           <input type={hidePassword ? "password" : "text"} placeholder="Password" value={user.password} onChange={(e) => { setUser((prev) => { return { ...prev, password: e.target.value } }) }} className='w-[90%] py-4 px-3 placeholder-blue-500 focus:outline-none' required />
           <img src={`${hidePassword ? hidden : view}`} className='p-1' width={"8%"} alt="showPasswordIcon" onClick={() => { setHidePassword((prev) => { return !prev }) }} />
         </div>
@@ -143,7 +148,6 @@ function Register(props) {
             <input type="checkbox" id="rememberMe" className="m-1" />
             <label htmlFor="rememberMe">Remember me</label>
           </div>
-          <Link to='../user/forget' className='text-blue-500'>Forget Password</Link>
         </div>
         <div className='flex text-lg m-2'>
           <p className="mr-2">Already registered?</p>

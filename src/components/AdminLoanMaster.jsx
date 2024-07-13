@@ -27,9 +27,9 @@ function AdminLoanMaster() {
   return (
     <div className='w-full h-full p-4 container relative'>
       <div className='flex justify-between mb-4'>
-      <button className='bg-lightPrimary rounded-xl p-4 ' onClick={showLoanModal}>Add Service</button>
-      <button className='bg-lightPrimary rounded-xl p-4 ' onClick={showCategoryModal}>Add Category</button>
-      <button className='bg-lightPrimary rounded-xl p-4 ' onClick={showOfferModal}>Add Offer</button>
+      <button className='bg-lightPrimary rounded-xl p-4 text-white' onClick={showLoanModal}>Add Service</button>
+      <button className='bg-lightPrimary rounded-xl p-4 text-white' onClick={showCategoryModal}>Add Category</button>
+      <button className='bg-lightPrimary rounded-xl p-4 text-white' onClick={showOfferModal}>Add Offer</button>
       </div>
       {loanModalVisible &&
         (

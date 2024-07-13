@@ -1,0 +1,116 @@
+ private int calculateInningsScore(InningsInfo inningsInfo, InningScore inningScore, int inning) {
+
+        System.out.println("calculateInningsScore start InningScore"+inningScore.toString());
+        System.out.println("calculateInningsScore start inningsInfo"+inningsInfo.toString());
+
+        int score = 0;
+        if(inningsInfo.getSpecial().equalsIgnoreCase("GP")){
+            return 450;
+        }
+        int correctPrediction = 0;
+        if(inningsInfo.getSpecial().equalsIgnoreCase("WF")){
+
+            score = score + getWicketPoints(inningScore.getWickets(),inning);
+            correctPrediction++;
+        }else {
+            if (inningsInfo.getWickets() == inningScore.getWickets()) {
+                score = score + getWicketPoints(inningScore.getWickets(),inning);
+                correctPrediction++;
+            }
+        }
+        if(inningScore.getBoundaries()>=inningsInfo.getBoundary() && inningScore.getBoundaries()<=(inningsInfo.getBoundary()+2)){
+            score = score+250;
+            correctPrediction++;
+        }
+
+        if(inningScore.getRuns()>=inningsInfo.getMinScore() && inningScore.getRuns()<(inningsInfo.getMinScore()+inningsInfo.getWindow())){
+            score = score + getRunsPoints(inningsInfo.getWindow());
+            correctPrediction++;
+        }
+        int safeZoneValue = inningsInfo.getWindow() /2;
+        if(!inningsInfo.getSpecial().equalsIgnoreCase("NN")) {
+            if (inningScore.getRuns() > (inningsInfo.getMinScore()+inningsInfo.getWindow() + safeZoneValue-1)) {
+                score = score - 200;
+            }
+            if (inningScore.getRuns() < (inningsInfo.getMinScore() - safeZoneValue)) {
+                score = score - 200;
+            }
+        }
+
+        if(inningsInfo.getSpecial().equalsIgnoreCase("ANY2")){
+            if(correctPrediction>=2){
+                score = (int) (score * 1.5);
+            }
+        }
+        if(inningsInfo.getSpecial().equalsIgnoreCase("DYS")){
+            score = (int) (score * 2);
+        }
+        if(correctPrediction==3){
+            score = score+300;
+        }
+        System.out.println("calculateInningsScore end "+score);
+        return score;
+
+    }
+    private int getWicketPoints(int wickets, int inning) {
+        if(inning==1)
+            return getWicketPointsPowerPlay(wickets);
+        if(inning==2)
+            return getWicketPointsMiddle(wickets);
+        return getWicketPointsDeath(wickets);
+    }
+
+    private int getRunsPoints(int window) {
+        switch (window){
+            case 1: return 3250;
+            case 5: return 825;
+            case 10: return 410;
+            case 15: return 275;
+            case 20: return 200;
+            case 25: return 160;
+            case 30: return 135;
+            case 35: return 115;
+            case 40: return 100;
+            default: return 300;
+        }
+    }
+
+    private int getWicketPointsPowerPlay(int wickets) {
+        switch (wickets){
+            case 0: return 350;
+            case 1: return 250;
+            case 2: return 300;
+            case 3: return 425;
+            case 4: return 875;
+            case 5: return 1800;
+            case 6: return 1800;
+            default: return 1800;
+        }
+    }
+
+    private int getWicketPointsMiddle(int wickets) {
+        switch (wickets){
+            case 0: return 575;
+            case 1: return 375;
+            case 2: return 275;
+            case 3: return 350;
+            case 4: return 500;
+            case 5: return 1050;
+            case 6: return 1800;
+            default: return 1800;
+        }
+    }
+
+    private int getWicketPointsDeath(int wickets) {
+        switch (wickets){
+            case 0: return 625;
+            case 1: return 425;
+            case 2: return 300;
+            case 3: return 325;
+            case 4: return 425;
+            case 5: return 900;
+            case 6: return 1250;
+            default: return 1800;
+        }
+    }
+}
