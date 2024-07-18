@@ -63,12 +63,6 @@ function Login(props) {
         toast.success("User is registered");
         setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data._id ,isVerified:data.isVerified});
         localStorage.setItem('token', data.token);
-        if (data.role == 'User' && data.isVerified) {
-          navigate('/user/dashboard')
-        }
-        else if (data.role == 'User') {
-          navigate('/user/register/verify-otp',{state:{phoneNo,email}})
-        }
         if(data.role=='Admin'){
           navigate('/admin');
         }
@@ -82,11 +76,11 @@ function Login(props) {
     <div className={`flex flex-col w-full h-full ${props.loginStyles}`}>
       <div className="p-2 bg-transparent">
         <h1 className="text-white font-extrabold text-4xl">Welcome</h1>
-        <p className="text-white font-normal text-2xl">Login to your Account</p>
+        <p className="text-white font-normal text-2xl">Admin Login</p>
       </div>
       <form
         onSubmit={handleSubmit}
-        className="bg-white border-solid border-black shadow-2xl py-12 px-8 flex flex-col justify-around h-full rounded-3xl"
+        className="bg-white border-solid border-black shadow-2xl py-12 px-8 flex flex-col rounded-3xl"
       >
         <div className="flex border border-blue-500 rounded-lg focus:border-primaryStart px-3 m-2">
           <input
@@ -125,7 +119,7 @@ function Login(props) {
             }}
           />
         </div>
-        <div className="flex justify-between m-2">
+        {/* <div className="flex justify-between m-2">
           <div className="w-[40%]">
             <input type="checkbox" id="rememberMe" className="m-1" />
             <label htmlFor="rememberMe">Remember me</label>
@@ -133,24 +127,24 @@ function Login(props) {
           <Link to="../user/forget" className="text-blue-500">
             Forget Password?
           </Link>
-        </div>
-        <div className="flex text-lg m-2">
+        </div> */}
+        {/* <div className="flex text-lg m-2">
           <p className="mr-2">New Here?</p>
           <Link to="../user/register" className="text-blue-500">
             Register now
           </Link>
-        </div>
+        </div> */}
         <button
           type="submit"
           className=" m-2 border border-blue-500 rounded-xl p-3 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary"
         >
           LOGIN
         </button>
-        <span className="m-2 ">Or</span>
-        <div className="border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center" onClick={login}>
+        {/* <span className="m-2 ">Or</span> */}
+        {/* <div className="border m-2 border-blue-500 h-14 rounded-xl p-2 hover:bg-lightPrimary focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 active:bg-darkPrimary text-center flex items-center justify-center" onClick={login}>
           <img src={google} alt="google-sign-in" width={"8%"} />
           Sign in with Google
-        </div>
+        </div> */}
       </form>
     </div>
   );

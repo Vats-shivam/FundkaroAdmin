@@ -1,28 +1,28 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UserContext } from '../context/userContext';
 
-function AddLoan() {
+function EditLoan({ loan, goback }) {
   const [formData, setFormData] = useState({
-    code: 0,
-    vendor: '',
-    ratesMin: '',
-    ratesMax: '',
-    minScoreRequired: '',
-    maxLoanAmount: '',
-    tenureMin: '',
-    tenureMax: '',
-    offerId: '',
-    categoryId: '',
-    imageOrSvg: null,
+    loanId: loan._id,
+    code: loan.code || 0,
+    vendor: loan.vendor || '',
+    ratesMin: loan.ratesMin || '',
+    ratesMax: loan.ratesMax || '',
+    minScoreRequired: loan.minScoreRequired || '',
+    maxLoanAmount: loan.maxLoanAmount || '',
+    tenureMin: loan.tenureMin || '',
+    tenureMax: loan.tenureMax || '',
+    offerId: loan.offer?._id || '',
+    categoryId: loan.category?._id || '',
   });
 
   const { currentuser } = useContext(UserContext);
 
   const [offers, setOffers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [formFields, setFormFields] = useState([]);
+  const [formFields, setFormFields] = useState(loan.formFields || []);
   const [fieldName, setFieldName] = useState('');
   const [fieldType, setFieldType] = useState('text');
 
@@ -49,9 +49,13 @@ function AddLoan() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const request = new FormData();
-    // request.append('image',formData.imageOrSvg)
+    if (formData.imageOrSvg) {
+      request.append('image', formData.imageOrSvg);
+    }
     Object.entries(formData).forEach(([key, value]) => {
-      request.append(key, value);
+      if (key !== 'imageOrSvg') {
+        request.append(key, value);
+      }
     });
 
     request.append("userId", currentuser.id);
@@ -63,21 +67,20 @@ function AddLoan() {
     });
 
     try {
-      const response = await axios.post('/api/loan/create', request, {
+      const response = await axios.post(`/api/loan/update`, request, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       if (response.data.success) {
-        toast.success("Loan created Successfully");
-      }
-      else {
+        toast.success("Loan updated Successfully");
+        goback();
+      } else {
         throw response;
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
-      toast.error("Error occured during addition of loan");
+      toast.error("Error occurred during update of loan");
     }
   };
 
@@ -92,34 +95,31 @@ function AddLoan() {
   const fetchAll = async () => {
     try {
       const data = await axios.post('/api/admin/getdetails', { userId: currentuser.id });
-      console.log(data.data);
       if (data.data.status) {
         setOffers(data.data.offers);
-        setCategories(data.data.categories)
+        setCategories(data.data.categories);
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       toast.error('Failed to fetch Data');
     }
-  }
+  };
 
   useEffect(() => {
     fetchAll();
-  }, [])
-
+  }, []);
 
   return (
     <div className="bg-gray-100 p-2 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Details Form</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Edit Loan Details Form</h2>
       <form className="w-full p-4 mx-auto grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
         <div className="mb-4">
-          <label htmlFor="code" className="block text-gray-700 font-semibold mb-2">code</label>
+          <label htmlFor="code" className="block text-gray-700 font-semibold mb-2">Code</label>
           <input
-            type="Number"
+            type="number"
             id="code"
             name="code"
+            value={formData.code}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             required
@@ -134,7 +134,6 @@ function AddLoan() {
             accept="image/*,.svg"
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
           />
         </div>
         <div className="mb-4">
@@ -210,10 +209,10 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="tenureMin" className="block text-gray-700 font-semibold mb-2">Tenure Max (months):</label>
+          <label htmlFor="tenureMax" className="block text-gray-700 font-semibold mb-2">Tenure Max (months):</label>
           <input
             type="number"
-            id="tenureMin"
+            id="tenureMax"
             name="tenureMax"
             value={formData.tenureMax}
             onChange={handleInputChange}
@@ -299,11 +298,11 @@ function AddLoan() {
           </div>
         </div>
         <div className="col-span-2 text-center">
-          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Submit</button>
+          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Update</button>
         </div>
       </form>
     </div>
   );
 }
 
-export default AddLoan
+export default EditLoan;

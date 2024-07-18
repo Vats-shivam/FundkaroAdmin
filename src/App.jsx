@@ -25,10 +25,8 @@ const ShowProfile = lazy(() => import('./components/ShowProfile'))
 const UserApplication = lazy(() => import('./components/UserApplication'))
 import Loader from './assets/loader.svg'
 
-
-
-
-axios.defaults.baseURL = 'https://newbackend-production-4bfc.up.railway.app';
+axios.defaults.baseURL = 'https://newbackend-ww8t.onrender.com';
+axios.defaults.baseURL = 'http://localhost:8000/';
 
 function App() {
 
@@ -42,77 +40,11 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route
-                path={"/user/login"}
+                path={"/login"}
                 element={
                   <AuthPage>
                     <Login loginStyles={""} />
                   </AuthPage>
-                }
-              />
-              <Route
-                path={"/user/register"}
-                element={
-                  <AuthPage>
-                    <Register
-                      loginStyles={""}
-                    />
-                  </AuthPage>
-                }
-              />
-              <Route
-                path={"/user/register/verify-otp"}
-                element={
-                  <AuthPage>
-                    <VerifyOtp />
-                  </AuthPage>
-                }
-              />
-              <Route
-                path={"/user/kyc-form"}
-                element={
-                  <AuthPage>
-                    <UserKYCForm />
-                  </AuthPage>
-                }
-              />
-              <Route
-                path={"/user/forget"}
-                element={
-                  <AuthPage>
-                    <Forget loginStyles={"relative bottom-[14rem] right-[15rem]"} />
-                  </AuthPage>
-                }
-              />
-              <Route
-                path={"/user/dashboard"}
-                element={
-                  <Dashboard>
-                    <DashboardHome />
-                  </Dashboard>
-                }
-              />
-              <Route
-                path={"/user/loanmaster"}
-                element={
-                  <Dashboard ForceSidebarClose={true}>
-                    <UserLoanMaster />
-                  </Dashboard>
-                }
-              />
-              <Route
-                path={"/user/profile"}
-                element={
-                  <Profile ShowBackarrow={true}>
-                    <ShowProfile />
-                  </Profile>
-                }
-              />
-              <Route
-                path={"/user/profile/edit"}
-                element={
-                  <Profile ShowBackarrow={true}>
-                    <EditProfile />
-                  </Profile>
                 }
               />
               <Route

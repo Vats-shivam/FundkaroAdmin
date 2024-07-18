@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import Input from './Input';
 import axios from 'axios';
 import { UserContext } from '../context/userContext';
 import toast from 'react-hot-toast';
