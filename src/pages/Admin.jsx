@@ -17,7 +17,7 @@ function Admin(props) {
   const autoLogin = () => {
     console.log(currentuser);
     if (currentuser.role != 'Admin') {
-      navigate('/user/login');
+      navigate('/login');
     }
   }
   useEffect(() => {
