@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
+import Papa from 'papaparse';
 
 function AdminClients() {
     const { currentuser } = useContext(UserContext);
@@ -148,6 +149,29 @@ function AdminClients() {
         navigate(`/admin/clients/${client.user._id}`); // Navigate to the UserProfile component with the client ID
     };
 
+    const exportToCSV = () => {
+        const csvData = clients.map(client => ({
+            Name: client.fullName,
+            Email: client.user.email,
+            Phone: client.user.phoneNo,
+            PAN: client.panNo,
+            Aadhar: client.aadharNo,
+            InternalRating: client.internalRating,
+        }));
+
+        const csv = Papa.unparse(csvData);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'clients.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Clients exported to CSV successfully!");
+    };
+
     useEffect(() => {
         fetchAllClients();
     }, []);
@@ -163,11 +187,15 @@ function AdminClients() {
                 onChange={handleSearch}
                 className="p-2 border rounded mb-4 w-full"
             />
+            <div className='flex gap-x-4'>
+                <button onClick={() => setIsFormVisible(!isFormVisible)} className="bg-lightPrimary p-2 rounded text-white mb-4">
+                    {isFormVisible ? 'Hide Form' : 'Create New Client'}
+                </button>
 
-            <button onClick={() => setIsFormVisible(!isFormVisible)} className="bg-lightPrimary p-2 rounded text-white mb-4">
-                {isFormVisible ? 'Hide Form' : 'Create New Client'}
-            </button>
-
+                <button onClick={exportToCSV} className="bg-lightPrimary p-2 rounded text-white mb-4">
+                    Export Clients
+                </button>
+            </div>
             {isFormVisible && (
                 <form onSubmit={handleFormSubmit} className="mb-4">
                     <label className="block mb-1">Email:</label>
@@ -260,6 +288,16 @@ function AdminClients() {
                         required
                         className="p-2 border rounded mb-2 w-full"
                     />
+                    <label className="block mb-1">Internal Rating:</label>
+                    <input
+                        type="number"
+                        name="internalRating"
+                        placeholder="Internal Rating"
+                        value={formData.internalRating}
+                        onChange={(e) => setFormData({ ...formData, internalRating: e.target.value })}
+                        required
+                        className="p-2 border rounded mb-2 w-full"
+                    />
                     <div className='flex items-center mb-4'>
                         <input
                             type="checkbox"
@@ -296,16 +334,6 @@ function AdminClients() {
                         />
                         <label className="block mb-1">Is Survey Completed</label>
                     </div>
-                    <label className="block mb-1">Internal Rating:</label>
-                    <input
-                        type="number"
-                        name="internalRating"
-                        placeholder="Internal Rating"
-                        value={formData.internalRating}
-                        onChange={(e) => setFormData({ ...formData, internalRating: e.target.value })}
-                        required
-                        className="p-2 border rounded mb-2 w-full"
-                    />
                     <button type="submit" className="bg-lightPrimary p-2 rounded text-white">
                         {editClientId ? 'Update Client' : 'Add Client'}
                     </button>

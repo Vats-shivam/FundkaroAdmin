@@ -13,6 +13,7 @@ import AdminStaff from './components/AdminStaff';
 import AdminHome from './components/AdminHome';
 import AdminClients from './components/AdminClients';
 import UserProfile from './components/UserProfile';
+import ViewApplication from './components/ViewApplication';
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const UserApplication = lazy(() => import('./components/UserApplication'))
 import Loader from './assets/loader.svg'
@@ -84,6 +85,14 @@ function App() {
                 element={
                   <Admin>
                     <UserProfile />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/application/:applicationId'}
+                element={
+                  <Admin>
+                    <ViewApplication />
                   </Admin>
                 }
               />

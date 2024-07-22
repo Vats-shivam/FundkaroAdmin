@@ -52,7 +52,7 @@ function UserProfile() {
                     <p><strong>Phone:</strong> {userDetails.user.phoneNo || 'Not Set'}</p>
                     <p><strong>PAN:</strong> {userDetails.userdetail.panNo || 'Not Set'}</p>
                     <p><strong>Aadhar:</strong> {userDetails.userdetail.aadharNo || 'Not Set'}</p>
-                    <p><strong>Address:</strong> 
+                    <p><strong>Address:</strong>
                         {userDetails.userdetail.address ? (
                             <span>
                                 {userDetails.userdetail.address.city}, {userDetails.userdetail.address.state}, {userDetails.userdetail.address.pincode}
@@ -74,7 +74,6 @@ function UserProfile() {
                 {userDetails.applications.length > 0 ? (
                     userDetails.applications.map((application) => (
                         <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-                            <h4 className="text-lg font-bold mb-2">Application ID: {application._id}</h4>
                             <div className="grid grid-cols-3 gap-4 mb-4">
                                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                                 <p><strong>Is Verified:</strong> {application.isVerified ? 'Yes' : 'No'}</p>
@@ -85,7 +84,6 @@ function UserProfile() {
                             {application.loans.length > 0 ? (
                                 application.loans.map((loan) => (
                                     <div key={loan._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                                        <p><strong>Loan ID:</strong> {loan._id}</p>
                                         <p><strong>Vendor:</strong> {loan.vendor}</p>
                                         <p><strong>Min Loan Amount:</strong> {loan.maxLoanAmount}</p>
                                         <p><strong>Max Loan Amount:</strong> {loan.maxLoanAmount}</p>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UserContext } from '../context/userContext';
+import Papa from 'papaparse';
 
 function AdminStaff() {
   const { currentuser } = useContext(UserContext);
@@ -23,6 +24,7 @@ function AdminStaff() {
     isProfileCompleted: false,
     isKYCVerified: false,
     isSurveyCompleted: false,
+    role: ''
   });
   const [editStaffId, setEditStaffId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -139,6 +141,29 @@ function AdminStaff() {
     setFilteredStaffs(filtered);
   };
 
+  const exportToCSV = () => {
+    const csvData = staffs.map(staff => ({
+      Name: staff.fullName,
+      Email: staff.user.email,
+      Phone: staff.user.phoneNo,
+      PAN: staff.panNo,
+      Aadhar: staff.aadharNo,
+      role: staff.user.role,
+    }));
+
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'staffs.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("staffs exported to CSV successfully!");
+  };
+
   useEffect(() => {
     fetchAllStaffs();
   }, []);
@@ -155,9 +180,15 @@ function AdminStaff() {
         className="p-2 border rounded mb-4 w-full"
       />
 
-      <button onClick={() => setIsFormVisible(!isFormVisible)} className="bg-lightPrimary p-2 rounded text-white mb-4">
-        {isFormVisible ? 'Hide Form' : 'Create New Staff'}
-      </button>
+      <div className='flex gap-x-4'>
+        <button onClick={() => setIsFormVisible(!isFormVisible)} className="bg-lightPrimary p-2 rounded text-white mb-4">
+          {isFormVisible ? 'Hide Form' : 'Create New Staff'}
+        </button>
+
+        <button onClick={exportToCSV} className="bg-lightPrimary p-2 rounded text-white mb-4">
+          Export Staffs
+        </button>
+      </div>
 
       {isFormVisible && (
         <form onSubmit={handleFormSubmit} className="mb-4">
@@ -251,6 +282,19 @@ function AdminStaff() {
             required
             className="p-2 border rounded mb-2 w-full"
           />
+          <label className="block mb-1">Role:</label>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+            required
+            className="p-2 border rounded mb-2 w-full"
+          >
+            <option value="">Select Role</option>
+            <option value="Admin">Admin</option>
+            <option value="Verifier">Verifier</option>
+            <option value="Preparer">Preparer</option>
+          </select>
           <div className='flex flex-cols gap-x-2'>
             <label className="block mb-1">Is Verified:</label>
             <input
@@ -301,6 +345,7 @@ function AdminStaff() {
             <p>Phone: {staff.user.phoneNo || 'not set'}</p>
             <p>PAN: {staff.panNo || 'not set'}</p>
             <p>Aadhar: {staff.aadharNo || 'not set'}</p>
+            <p>Role: {staff.user.role}</p>
             <div className="flex gap-x-2">
               <button onClick={() => handleEdit(staff)} className="text-blue-500">Edit</button>
               <button onClick={() => handleDelete(staff._id)} className="text-red-500">Delete</button>

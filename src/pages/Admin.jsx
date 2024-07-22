@@ -16,7 +16,7 @@ function Admin(props) {
   const { currentuser } = useContext(UserContext)
   const autoLogin = () => {
     console.log(currentuser);
-    if (currentuser.role != 'Admin') {
+    if (currentuser.role == 'User'||!currentuser.role) {
       navigate('/login');
     }
   }

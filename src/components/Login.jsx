@@ -29,14 +29,11 @@ function Login(props) {
         toast.error(data.message);
       }
       else {
-        toast.success("User login successful")
-
-        
         const { success, ...rest } = data;
         setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id ,isVerified:rest.isVerified,isProfileCompleted:rest.isProfileCompleted,isKYCVerified:rest.isKYCVerified});
         setUser({ email: "", password: "" })
         localStorage.setItem('token', rest.token);
-        rest.role=='User'?navigate('/user/dashboard'):navigate('/admin');
+        !rest.role||rest.role=='User'?toast.error("Not Authorised"):navigate('/admin');toast.success("Admin login successful");
       }
     } catch (error) {
       console.log(error);
