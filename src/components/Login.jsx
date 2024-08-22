@@ -2,16 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import view from "../assets/view.svg";
 import hidden from "../assets/hidden.svg";
-import google from "../assets/google.png";
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
-import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
-import { app } from '../config/firebase';
 
 function Login(props) {
-  const auth = getAuth(app)
   const navigate = useNavigate();
   const [hidePassword, setHidePassword] = useState(true);
   const [user, setUser] = useState({ email: "", password: "" })

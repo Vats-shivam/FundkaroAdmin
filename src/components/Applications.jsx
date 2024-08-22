@@ -17,6 +17,7 @@ function Applications() {
       });
       if (response.data.status) {
         setApplications(response.data.applications);
+        console.log(response.data.applications);
       }
     } catch (error) {
       console.error(error);
@@ -32,14 +33,15 @@ function Applications() {
 
   const categorizeApplications = () => {
     const unassignedApplications = applications.filter(app => !app.assignedAdmin);
-    const assignedNotVerifiedApplications = applications.filter(app => app.assignedAdmin && !app.isVerified);
-    const verifiedNotAppliedApplications = applications.filter(app => app.isVerified && !app.isApplied);
-    const appliedVerifiedApplications = applications.filter(app => app.isApplied && app.isVerified);
+    const assignedNotVerifiedApplications = applications.filter(app => app.assignedAdmin != null && app.status == 'Pending');
+    const verifiedNotAppliedApplications = applications.filter(app => app.status == 'Verified');
+    const RejectedApplications = applications.filter(app => app.status == 'Rejected');
+    const appliedVerifiedApplications = applications.filter(app => app.status == 'Applied');
 
-    return { unassignedApplications, assignedNotVerifiedApplications, verifiedNotAppliedApplications, appliedVerifiedApplications };
+    return { unassignedApplications, assignedNotVerifiedApplications, verifiedNotAppliedApplications, appliedVerifiedApplications, RejectedApplications };
   };
 
-  const { unassignedApplications, assignedNotVerifiedApplications, verifiedNotAppliedApplications, appliedVerifiedApplications } = categorizeApplications();
+  const { unassignedApplications, assignedNotVerifiedApplications, verifiedNotAppliedApplications, appliedVerifiedApplications, RejectedApplications } = categorizeApplications();
 
   if (loading) {
     return (
@@ -60,17 +62,15 @@ function Applications() {
             <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
-                <p><strong>Is Verified:</strong> {application.isVerified ? 'Yes' : 'No'}</p>
-                <p><strong>Is Applied:</strong> {application.isApplied ? 'Yes' : 'No'}</p>
+                <p><strong>Status:</strong> {application.status}</p>
               </div>
-
               <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
-                {application.usersId.length > 0 ? (
-                  application.usersId.map((user) => (
-                    <div key={user._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                      <p><strong>Email:</strong> {user.email}</p>
-                      <p><strong>Phone:</strong> {user.phoneNo}</p>
+                {application.profilesId.length > 0 ? (
+                  application.profilesId.map((profile) => (
+                    <div key={profile._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                      <p><strong>Name:</strong> {profile.fullName}</p>
+                      <p><strong>Phone:</strong> {profile.phoneNo}</p>
                     </div>
                   ))
                 ) : (
@@ -92,17 +92,17 @@ function Applications() {
             <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
-                <p><strong>Is Verified:</strong> {application.isVerified ? 'Yes' : 'No'}</p>
-                <p><strong>Is Applied:</strong> {application.isApplied ? 'Yes' : 'No'}</p>
+                <p><strong>Status:</strong> {application.status}</p>
+                
               </div>
 
               <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
-                {application.usersId.length > 0 ? (
-                  application.usersId.map((user) => (
-                    <div key={user._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                      <p><strong>Email:</strong> {user.email}</p>
-                      <p><strong>Phone:</strong> {user.phoneNo}</p>
+                {application.profilesId.length > 0 ? (
+                  application.profilesId.map((profile) => (
+                    <div key={profile._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                      <p><strong>Name:</strong> {profile.fullName}</p>
+                      <p><strong>Phone:</strong> {profile.phoneNo}</p>
                     </div>
                   ))
                 ) : (
@@ -124,17 +124,17 @@ function Applications() {
             <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
-                <p><strong>Is Verified:</strong> {application.isVerified ? 'Yes' : 'No'}</p>
-                <p><strong>Is Applied:</strong> {application.isApplied ? 'Yes' : 'No'}</p>
+                <p><strong>Status:</strong> {application.status}</p>
+                
               </div>
 
               <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
-                {application.usersId.length > 0 ? (
-                  application.usersId.map((user) => (
-                    <div key={user._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                      <p><strong>Email:</strong> {user.email}</p>
-                      <p><strong>Phone:</strong> {user.phoneNo}</p>
+                {application.profilesId.length > 0 ? (
+                  application.profilesId.map((profile) => (
+                    <div key={profile._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                      <p><strong>Name:</strong> {profile.fullName}</p>
+                      <p><strong>Phone:</strong> {profile.phoneNo}</p>
                     </div>
                   ))
                 ) : (
@@ -150,24 +150,55 @@ function Applications() {
           <p>No verified and not applied applications found.</p>
         )}
 
-        {/* Applied Forms */}
+        <h3 className="text-xl font-bold mt-8 mb-4">Rejected Forms</h3>
+        {RejectedApplications.length > 0 ? (
+          RejectedApplications.map(application => (
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
+                <p><strong>Status:</strong> {application.status}</p>
+                
+              </div>
+
+              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <div className='flex flex-cols flex-wrap gap-x-2'>
+                {application.profilesId.length > 0 ? (
+                  application.profilesId.map((profile) => (
+                    <div key={profile._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                      <p><strong>Name:</strong> {profile.fullName}</p>
+                      <p><strong>Phone:</strong> {profile.phoneNo}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No users applied for this application.</p>
+                )}
+              </div>
+              <button onClick={() => navigate(`/admin/application/${application._id}`)} className="mt-2 text-blue-500">
+                Show Full Form
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No applied applications found.</p>
+        )}
+
         <h3 className="text-xl font-bold mt-8 mb-4">Applied Forms</h3>
         {appliedVerifiedApplications.length > 0 ? (
           appliedVerifiedApplications.map(application => (
             <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
-                <p><strong>Is Verified:</strong> {application.isVerified ? 'Yes' : 'No'}</p>
-                <p><strong>Is Applied:</strong> {application.isApplied ? 'Yes' : 'No'}</p>
+                <p><strong>Status:</strong> {application.status}</p>
+                
               </div>
 
               <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
-                {application.usersId.length > 0 ? (
-                  application.usersId.map((user) => (
-                    <div key={user._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                      <p><strong>Email:</strong> {user.email}</p>
-                      <p><strong>Phone:</strong> {user.phoneNo}</p>
+                {application.profilesId.length > 0 ? (
+                  application.profilesId.map((profile) => (
+                    <div key={profile._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                      <p><strong>Name:</strong> {profile.fullName}</p>
+                      <p><strong>Phone:</strong> {profile.phoneNo}</p>
                     </div>
                   ))
                 ) : (
