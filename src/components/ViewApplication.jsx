@@ -163,19 +163,30 @@ function ViewApplication() {
     };
 
     const handleUpdateApplicationStatus = async (status) => {
-        if (status == true) {
+        if (status == 'Verified') {
             for (let field of application.formFields) {
-                if (field.isVerified != 'Verified') {
+                if (field.status != 'Verified') {
                     toast.error('All form fields must be verified to verify the form');
                     return;
                 }
             }
+        } else if(status=='Rejected'&&application.isSelectionDone) {
+            toast.error("You cannot Reject Application at current stage")
+            return;
+        } else if(status=='Applied') {
+            for (let field of application.loans) {
+                if (field.isSelected &&  field.status != 'Applied') {
+                    toast.error('All loans need to mentioned Applied to complete Application as applied');
+                    return;
+                }
+            } 
+
         }
         try {
             const response = await axios.post('/api/application/update', {
                 userId: currentuser.id,
                 applicationId: applicationId,
-                isVerified: status,
+                status: status,
             });
             if (response.data.status) {
                 toast.success(`Application marked as ${status}`);
@@ -186,30 +197,6 @@ function ViewApplication() {
             toast.error('Failed to update application status');
         }
     };
-
-    const handleUpdateApplicationAppliedStatus = async (status) => {
-        if (status == true) {
-            if (application.isVerified == false) {
-                toast.error('Application needs to Verifed First');
-                return;
-            }
-        }
-        try {
-            const response = await axios.post('/api/application/update', {
-                userId: currentuser.id,
-                applicationId: applicationId,
-                isApplied: status,
-            });
-            if (response.data.status) {
-                toast.success(`Application marked as ${status}`);
-                fetchApplication(); // Refresh application data
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error('Failed to update application status');
-        }
-    };
-
     const handleDeleteApplication = async () => {
         try {
             const response = await axios.post('/api/application/delete', { userId: currentuser.id, applicationId: applicationId });
