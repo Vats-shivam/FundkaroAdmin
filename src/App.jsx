@@ -15,6 +15,7 @@ import AdminClients from './components/AdminClients';
 import UserProfile from './components/UserProfile';
 import ViewApplication from './components/ViewApplication';
 import Notifications from './components/Notifications';
+import EmailSender from './components/EmailSender';
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const UserApplication = lazy(() => import('./components/UserApplication'))
 import Loader from './assets/loader.svg'
@@ -86,6 +87,14 @@ function App() {
                 element={
                   <Admin>
                     <Notifications />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/emails'}
+                element={
+                  <Admin>
+                    <EmailSender />
                   </Admin>
                 }
               />

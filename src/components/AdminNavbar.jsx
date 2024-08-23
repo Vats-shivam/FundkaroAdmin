@@ -19,7 +19,8 @@ function AdminNavbar() {
       { label: "Applications", id: "d-application", link: "/admin/applications", img: VectorResources },
       { label: "Staff", id: "d-staff", link: "/admin/staff", img: VectorRefferal },
       { label: "Clients", id: "d-clients", link: "/admin/clients", img: VectorLoanMaster },
-      { label: "Device Notifications", id: "d-notify", link: "/admin/notifications", img: VectorLoanMaster }
+      { label: "Device Notifications", id: "d-notify", link: "/admin/notifications", img: VectorLoanMaster },
+      { label: "Email Sender", id: "d-email", link: "/admin/emails", img: VectorLoanMaster }
     ];
   } else if(currentuser.role =='Verifier'|| currentuser.role =='Preparer') {
     items = [
