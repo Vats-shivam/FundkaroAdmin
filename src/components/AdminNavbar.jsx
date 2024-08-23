@@ -18,7 +18,8 @@ function AdminNavbar() {
       { label: "Loan Master", id: "d-loanmaster", link: "/admin/loanmaster", img: VectorTools },
       { label: "Applications", id: "d-application", link: "/admin/applications", img: VectorResources },
       { label: "Staff", id: "d-staff", link: "/admin/staff", img: VectorRefferal },
-      { label: "Clients", id: "d-clients", link: "/admin/clients", img: VectorLoanMaster }
+      { label: "Clients", id: "d-clients", link: "/admin/clients", img: VectorLoanMaster },
+      { label: "Device Notifications", id: "d-notify", link: "/admin/notifications", img: VectorLoanMaster }
     ];
   } else if(currentuser.role =='Verifier'|| currentuser.role =='Preparer') {
     items = [
