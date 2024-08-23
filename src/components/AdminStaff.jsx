@@ -34,6 +34,7 @@ function AdminStaff() {
     try {
       const response = await axios.post('/api/admin/findallstaffs', { userId: currentuser.id });
       if (response.data.status) {
+        console.log(response.data.data);
         setStaffs(response.data.data);
         setFilteredStaffs(response.data.data);
       }
@@ -45,6 +46,14 @@ function AdminStaff() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if(formData.panNo.length!=10) {
+      toast.error('Invalid PAN Card')
+      return;
+    }
+    if(formData.aadharNo.length!=12) {
+      toast.error('Invalid Aadhar Card')
+      return;
+    }
     try {
       if (editStaffId) {
         const response = await axios.put(`/api/admin/updatestaff`, { staffId: editStaffId, ...formData, userId: currentuser.id });
@@ -53,8 +62,11 @@ function AdminStaff() {
         }
       } else {
         const response = await axios.post('/api/admin/createstaff', { ...formData, userId: currentuser.id });
+        console.log(response.data);
         if (response.data.status) {
           toast.success("Staff created successfully");
+        } else {
+          toast.error(response.data.message);
         }
       }
       fetchAllStaffs();

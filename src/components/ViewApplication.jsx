@@ -114,7 +114,7 @@ function ViewApplication() {
             });
             if (response.data.status) {
                 toast.success('Assigned Preparer updated successfully');
-                fetchApplication(); // Refresh application data
+                fetchApplication();
             }
         } catch (error) {
             console.error(error);
@@ -136,7 +136,7 @@ function ViewApplication() {
             });
             if (response.data.status) {
                 toast.success('Verifier assigned successfully');
-                fetchApplication(); // Refresh application data
+                fetchApplication();
             }
         } catch (error) {
             console.error(error);
@@ -154,7 +154,7 @@ function ViewApplication() {
             console.log(response.data);
             if (response.data.status) {
                 toast.success(`Form field marked as ${status}`);
-                fetchApplication(); // Refresh application data
+                fetchApplication();
             }
         } catch (error) {
             console.error(error);
@@ -170,16 +170,16 @@ function ViewApplication() {
                     return;
                 }
             }
-        } else if(status=='Rejected'&&application.isSelectionDone) {
+        } else if (status == 'Rejected' && application.isSelectionDone) {
             toast.error("You cannot Reject Application at current stage")
             return;
-        } else if(status=='Applied') {
+        } else if (status == 'Applied') {
             for (let field of application.loans) {
-                if (field.isSelected &&  field.status != 'Applied') {
+                if (field.isSelected && field.status != 'Applied') {
                     toast.error('All loans need to mentioned Applied to complete Application as applied');
                     return;
                 }
-            } 
+            }
 
         }
         try {
@@ -190,7 +190,7 @@ function ViewApplication() {
             });
             if (response.data.status) {
                 toast.success(`Application marked as ${status}`);
-                fetchApplication(); // Refresh application data
+                fetchApplication();
             }
         } catch (error) {
             console.error(error);
@@ -249,13 +249,23 @@ function ViewApplication() {
             });
             if (response.data.status) {
                 toast.success('Message updated successfully');
-                fetchApplication(); // Refresh application data
+                fetchApplication();
             }
         } catch (error) {
             console.error(error);
             toast.error('Failed to update message');
         }
     };
+
+    const checkformFieldPermission = (form) => {
+        if (currentuser.role != "Verifier") {
+            return true;
+        }
+        if (form.assignedStaff == currentuser.id) {
+            return true;
+        }
+        return false;
+    }
 
     if (loading) {
         return (
@@ -276,43 +286,46 @@ function ViewApplication() {
                     <button onClick={() => navigate(-1)} className="bg-gray-300 text-black p-2 rounded mb-4">
                         Back
                     </button>
-                    <button onClick={handleDeleteApplication} className="bg-red-700 text-white p-2 rounded mb-4">
+
+                    {currentuser.role=="Admin"&&<button onClick={handleDeleteApplication} className="bg-red-700 text-white p-2 rounded mb-4">
                         Delete
-                    </button>
+                    </button>}
                 </div>
                 <h2 className="text-2xl font-bold mb-4 text-center">Application Details</h2>
 
                 <h3 className="text-xl font-bold mt-4 mb-2 ">Assigned Preparer</h3>
                 {application.assignedAdmin && (
-                    <div className="border rounded p-2 mb-2 bg-white shadow-sm">
+                    <div className="flex flex-row border rounded p-2 mb-2 bg-white shadow-sm gap-x-4">
                         <img src={assignedAdmin.user.profilePicture} className='h-16 w-16 rounded-full'></img>
-                        <p><strong>Full Name:</strong> {assignedAdmin.fullName}</p>
-                        <p><strong>Email:</strong> {assignedAdmin.user.email}</p>
-                        <p><strong>Phone:</strong> {assignedAdmin.user.phoneNo}</p>
+                        <div>
+                            <p><strong>Full Name:</strong> {assignedAdmin.fullName}</p>
+                            <p><strong>Email:</strong> {assignedAdmin.user.email}</p>
+                            <p><strong>Phone:</strong> {assignedAdmin.user.phoneNo}</p>
+                        </div>
                     </div>
                 )}
                 <div>
-                    <p>No assigned Preparer for this application.</p>
-                    <select onChange={(e) => setSelectedAdminId(e.target.value)} className="border rounded p-2 mt-2 mr-2">
-                        <option value="">Select Preparer</option>
-                        {admins.map(admin => (
-                            <option key={admin._id} value={admin.user._id}>{admin.fullName}</option>
-                        ))}
-                    </select>
-                    <button onClick={handleAssignAdmin} className="bg-blue-500 text-white p-2 rounded mt-2">
-                        Assign Preparer
-                    </button>
+                    {!application.assignedAdmin && <p>No assigned Preparer for this application.</p>}
+                    {currentuser.role == "Admin" &&
+                        <div>
+                            <select onChange={(e) => setSelectedAdminId(e.target.value)} className="border rounded p-2 mt-2 mr-2">
+                                <option value="">Select Preparer</option>
+                                {admins.map(admin => (
+                                    <option key={admin._id} value={admin.user._id}>{admin.fullName}</option>
+                                ))}
+                            </select>
+                            <button onClick={handleAssignAdmin} className="bg-blue-500 text-white p-2 rounded mt-2">
+                                Assign Preparer
+                            </button>
+                        </div>}
                 </div>
 
-
-                {/* Category */}
                 <h3 className="text-xl font-bold mt-4 mb-2">Category</h3>
-                <div className="border rounded p-2 mb-2 bg-white shadow-sm">
+                <div className="flex flex-row gap-x-4 items-center border rounded p-2 mb-2 bg-white shadow-sm">
                     <img src={application.categoryId.logo} alt="Category Logo" className="inline-block h-16 w-16 rounded" />
                     <p><strong>Name:</strong> {application.categoryId.category}</p>
                 </div>
 
-                {/* Loans Applied */}
                 <h3 className="text-xl font-bold mt-4 mb-2">Loans Applied</h3>
                 <p><strong>Loan Selection Status:</strong> {application.isSelectionDone ? 'Done' : 'Pending'}</p>
                 {application.loans.length > 0 ? (
@@ -325,30 +338,31 @@ function ViewApplication() {
                             <p><strong>Min Cibil Score:</strong> {loan.loan.minScoreRequired}</p>
                             <p><strong>Is Selected:</strong> {loan.isSelected ? 'True' : 'False'}</p>
                             <p><strong>Tenure:</strong> {loan.loan.tenureMin} - {loan.loan.tenureMax} months</p>
-                            <div className="flex justify-end">
-                                {!application.isSelectionDone &&
-                                    <div>
+                            {currentuser.role != 'Verifier' &&
+                                <div className="flex justify-end mt-2">
+                                    {!application.isSelectionDone &&
+                                        <div>
+                                            <button
+                                                onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Verified')}
+                                                className="bg-green-500 text-white p-2 rounded mr-2"
+                                            >
+                                                Mark as Verified
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Rejected')}
+                                                className="bg-red-500 text-white p-2 rounded mr-2"
+                                            >
+                                                Mark as Rejected
+                                            </button>
+                                        </div>}
+                                    {loan.isSelected &&
                                         <button
-                                            onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Verified')}
-                                            className="bg-green-500 text-white p-2 rounded mr-2"
+                                            onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Applied')}
+                                            className="bg-blue-500 text-white p-2 rounded"
                                         >
-                                            Mark as Verified
-                                        </button>
-                                        <button
-                                            onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Rejected')}
-                                            className="bg-red-500 text-white p-2 rounded mr-2"
-                                        >
-                                            Mark as Rejected
-                                        </button>
-                                    </div>}
-                                {loan.isSelected &&
-                                    <button
-                                        onClick={() => handleUpdateLoanStatus(loan.loan._id, 'Applied')}
-                                        className="bg-blue-500 text-white p-2 rounded"
-                                    >
-                                        Mark as Applied
-                                    </button>}
-                            </div>
+                                            Mark as Applied
+                                        </button>}
+                                </div>}
                         </div>
                     ))
                 ) : (
@@ -371,54 +385,55 @@ function ViewApplication() {
 
                 <h3 className="text-xl font-bold mt-4 mb-2">Form Fields</h3>
                 {application.formFields.map(field => (
-                    <div key={field._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
-                        <div className='flex justify-between'>
-                            <div className='w-3/5'>
-                                <p><strong>Name:</strong> {field.name}</p>
-                                <p><strong>Value:</strong> {field.value}</p>
-                                <p><strong>Status:</strong> {field.isVerified}</p>
-                                <div className="flex justify-start">
-                                    <select onChange={(e) => handleStaffChange(field._id, e.target.value)} className="border rounded p-2 mt-2 mr-2">
-                                        <option value="">Select Verifier</option>
-                                        {staffs.map(staff => (
-                                            <option key={staff._id} value={staff.user._id}>{staff.fullName}</option>
-                                        ))}
-                                    </select>
-                                    <button onClick={() => handleAssignVerifier(field._id)} className="bg-blue-500 text-white p-2 rounded mt-2 mr-2">
-                                        Assign Verifier
-                                    </button>
+                    <div>
+                        {checkformFieldPermission(field) && <div key={field._id} className="border rounded p-2 mb-2 bg-white shadow-sm">
+                            <div className='flex justify-between'>
+                                <div className='w-3/5'>
+                                    <p><strong>Name:</strong> {field.name}</p>
+                                    <p><strong>Value:</strong> {field.value}</p>
+                                    <p><strong>Status:</strong> {field.isVerified}</p>
+                                    {currentuser.role!="Verifier"&&<div className="flex justify-start">
+                                        <select onChange={(e) => handleStaffChange(field._id, e.target.value)} className="border rounded p-2 mt-2 mr-2">
+                                            <option value="">Select Verifier</option>
+                                            {staffs.map(staff => (
+                                                <option key={staff._id} value={staff.user._id}>{staff.fullName}</option>
+                                            ))}
+                                        </select>
+                                        <button onClick={() => handleAssignVerifier(field._id)} className="bg-blue-500 text-white p-2 rounded mt-2 mr-2">
+                                            Assign Verifier
+                                        </button>
+                                    </div>}
                                 </div>
-                            </div>
-                            {assignedStaffs[field._id] ? (
-                                <div className='w-2/5 flex justify-center flex-col'>
-                                    <p className='text-center'><strong>Assigned to</strong></p>
-                                    <div className="border rounded p-2 mt-2 mb-2 bg-white shadow-sm flex flex-row items-center">
-                                        <img src={assignedStaffs[field._id].user.profilePicture} className='h-[80px] w-[80px] rounded-full pr-1'></img>
-                                        <div>
-                                            <p><strong>Full Name:</strong> {assignedStaffs[field._id].fullName}</p>
-                                            <p><strong>Email:</strong> {assignedStaffs[field._id].user.email}</p>
-                                            <p><strong>Phone:</strong> {assignedStaffs[field._id].user.phoneNo}</p>
+                                {currentuser.role != "Verifier" && (assignedStaffs[field._id] ? (
+                                    <div className='w-2/5 flex justify-center flex-col'>
+                                        <p className='text-center'><strong>Assigned to</strong></p>
+                                        <div className="border rounded p-2 mt-2 mb-2 bg-white shadow-sm flex flex-row items-center">
+                                            <img src={assignedStaffs[field._id].user.profilePicture} className='h-[80px] w-[80px] rounded-full pr-1'></img>
+                                            <div>
+                                                <p><strong>Full Name:</strong> {assignedStaffs[field._id].fullName}</p>
+                                                <p><strong>Email:</strong> {assignedStaffs[field._id].user.email}</p>
+                                                <p><strong>Phone:</strong> {assignedStaffs[field._id].user.phoneNo}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (<p><strong>Verfier: Not Assigned</strong> </p>)}
-                        </div>
-                        <div className='flex w-full justify-center bg-gray-200 p-2 rounded-lg'>
-                            <button
-                                onClick={() => handleUpdateFieldStatus(field._id, 'Verified')}
-                                className="bg-blue-500 text-white p-2 rounded  mr-2 max-h-[100px]"
-                            >
-                                Mark as Verified
-                            </button>
-                            <button
-                                onClick={() => handleUpdateFieldStatus(field._id, 'Rejected')}
-                                className="bg-blue-500 text-white p-2 rounded max-h-[100px]"
-                            >
-                                Mark as Rejected
-                            </button>
-                        </div>
+                                ) : (<p><strong>Verfier: Not Assigned</strong> </p>))}
+                            </div>
+                            <div className='flex w-full mt-2 justify-center bg-gray-200 p-2 rounded-lg'>
+                                <button
+                                    onClick={() => handleUpdateFieldStatus(field._id, 'Verified')}
+                                    className="bg-blue-500 text-white p-2 rounded  mr-2 max-h-[100px]"
+                                >
+                                    Mark as Verified
+                                </button>
+                                <button
+                                    onClick={() => handleUpdateFieldStatus(field._id, 'Rejected')}
+                                    className="bg-blue-500 text-white p-2 rounded max-h-[100px]"
+                                >
+                                    Mark as Rejected
+                                </button>
+                            </div>
+                        </div>}
                     </div>
-
                 ))}
 
                 <h3 className="text-xl font-bold mt-4 mb-2">Message</h3>
@@ -432,7 +447,7 @@ function ViewApplication() {
                     Update Message
                 </button>
 
-                <div className='flex justify-center align-center gap-x-2 mt-4'>
+                {currentuser.role != "Verifier" && <div className='flex justify-center align-center gap-x-2 mt-4'>
                     <div className='border w-full rounded p-2 mb-2 bg-white shadow-sm mx-auto'>
                         <p className='text-center'><strong>Application Status Update</strong></p>
                         <div className='flex gap-x-2 items-center justify-center my-2'>
@@ -448,7 +463,7 @@ function ViewApplication() {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
         </div>
     );

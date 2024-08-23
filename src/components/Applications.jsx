@@ -10,14 +10,29 @@ function Applications() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const checkisApplicationAssigned = (application) => {
+    for(let form of application.formFields) {
+      if(form.assignedStaff && form.assignedStaff == currentuser.id) {
+        console.log(form);
+        return true;
+      }
+    }
+    return false;
+  }
+
   const fetchApplications = async () => {
     try {
       const response = await axios.post('/api/application/find', {
         userId: currentuser.id
       });
       if (response.data.status) {
-        setApplications(response.data.applications);
-        console.log(response.data.applications);
+        let filterapplications=response.data.applications;
+        if(currentuser.role=="Preparer") {
+          filterapplications=response.data.applications.filter(app => app.assignedAdmin && app.assignedAdmin === currentuser.id)
+        } else if(currentuser.role=="Verifier") {
+          filterapplications=response.data.applications.filter(app => checkisApplicationAssigned(app))
+        }
+        setApplications(filterapplications);
       }
     } catch (error) {
       console.error(error);
