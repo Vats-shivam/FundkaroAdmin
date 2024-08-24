@@ -74,12 +74,12 @@ function Applications() {
         <h3 className="text-xl font-bold mt-8 mb-4">Unassigned Forms</h3>
         {unassignedApplications.length > 0 ? (
           unassignedApplications.map(application => (
-            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-              <div className="grid grid-cols-3 gap-4 mb-4">
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-1 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-1">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                 <p><strong>Status:</strong> {application.status}</p>
               </div>
-              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <h5 className="text-md font-bold">User: {application.userId.email}</h5><h5 className="text-md font-bold mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
                 {application.profilesId.length > 0 ? (
                   application.profilesId.map((profile) => (
@@ -104,14 +104,12 @@ function Applications() {
         <h3 className="text-xl font-bold mt-8 mb-4">Assigned and Not Verified Applications</h3>
         {assignedNotVerifiedApplications.length > 0 ? (
           assignedNotVerifiedApplications.map(application => (
-            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-              <div className="grid grid-cols-3 gap-4 mb-4">
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-1 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-1">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                 <p><strong>Status:</strong> {application.status}</p>
-                
               </div>
-
-              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <h5 className="text-md font-bold">User: {application.userId.email}</h5><h5 className="text-md font-bold mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
                 {application.profilesId.length > 0 ? (
                   application.profilesId.map((profile) => (
@@ -136,14 +134,14 @@ function Applications() {
         <h3 className="text-xl font-bold mt-8 mb-4">Verified and Not Applied Applications</h3>
         {verifiedNotAppliedApplications.length > 0 ? (
           verifiedNotAppliedApplications.map(application => (
-            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-              <div className="grid grid-cols-3 gap-4 mb-4">
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-1 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-1">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                 <p><strong>Status:</strong> {application.status}</p>
                 
               </div>
 
-              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <h5 className="text-md font-bold">User: {application.userId.email}</h5><h5 className="text-md font-bold mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
                 {application.profilesId.length > 0 ? (
                   application.profilesId.map((profile) => (
@@ -168,14 +166,14 @@ function Applications() {
         <h3 className="text-xl font-bold mt-8 mb-4">Rejected Forms</h3>
         {RejectedApplications.length > 0 ? (
           RejectedApplications.map(application => (
-            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-              <div className="grid grid-cols-3 gap-4 mb-4">
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-1 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-1">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                 <p><strong>Status:</strong> {application.status}</p>
                 
               </div>
 
-              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <h5 className="text-md font-bold">User: {application.userId.email}</h5><h5 className="text-md font-bold mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
                 {application.profilesId.length > 0 ? (
                   application.profilesId.map((profile) => (
@@ -200,14 +198,14 @@ function Applications() {
         <h3 className="text-xl font-bold mt-8 mb-4">Applied Forms</h3>
         {appliedVerifiedApplications.length > 0 ? (
           appliedVerifiedApplications.map(application => (
-            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-4 bg-gray-50">
-              <div className="grid grid-cols-3 gap-4 mb-4">
+            <div key={application._id} className="border rounded-lg shadow-md p-4 mb-1 bg-gray-50">
+              <div className="grid grid-cols-3 gap-4 mb-1">
                 <p><strong>Category:</strong> {application.categoryId ? application.categoryId.category : 'Not Available'}</p>
                 <p><strong>Status:</strong> {application.status}</p>
                 
               </div>
 
-              <h5 className="text-md font-bold mt-4 mb-2">Users Applied</h5>
+              <h5 className="text-md font-bold">User: {application.userId.email}</h5><h5 className="text-md font-bold mb-2">Users Applied</h5>
               <div className='flex flex-cols flex-wrap gap-x-2'>
                 {application.profilesId.length > 0 ? (
                   application.profilesId.map((profile) => (

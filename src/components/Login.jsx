@@ -26,10 +26,12 @@ function Login(props) {
       }
       else {
         const { success, ...rest } = data;
-        setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id ,isVerified:rest.isVerified,isProfileCompleted:rest.isProfileCompleted,isKYCVerified:rest.isKYCVerified});
+        setCurrentUser({ email: rest.email, profilePicture: rest.profilePicture, role: rest.role, refCode: rest.refCode, id: rest._id, isVerified: rest.isVerified, isProfileCompleted: rest.isProfileCompleted, isKYCVerified: rest.isKYCVerified });
         setUser({ email: "", password: "" })
         localStorage.setItem('token', rest.token);
-        !rest.role||rest.role=='User'?toast.error("Not Authorised"):navigate('/admin');toast.success("Admin login successful");
+        (!rest.role || rest.role == 'User') && toast.error("Not Authorised");
+        (rest.role == 'Admin') && navigate('/admin'); toast.success("Admin login successful");
+        (rest.role == 'Verifier' || rest.role == "Preparer") && navigate('/admin/mytasks'); toast.success("login successful");
       }
     } catch (error) {
       console.log(error);
@@ -54,9 +56,9 @@ function Login(props) {
 
       if (res.ok) {
         toast.success("User is registered");
-        setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data._id ,isVerified:data.isVerified});
+        setCurrentUser({ email: data.email, profilePicture: data.profilePicture, role: data.role, refCode: data.refCode, id: data._id, isVerified: data.isVerified });
         localStorage.setItem('token', data.token);
-        if(data.role=='Admin'){
+        if (data.role == 'Admin') {
           navigate('/admin');
         }
       }

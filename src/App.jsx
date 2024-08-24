@@ -15,7 +15,9 @@ import AdminClients from './components/AdminClients';
 import UserProfile from './components/UserProfile';
 import ViewApplication from './components/ViewApplication';
 import Notifications from './components/Notifications';
-import EmailSender from './components/EmailSender';
+import EmailSender from './components/Emailsender';
+import MyTasks from './components/MyTasks';
+import AdminTasks from './components/AdminTasks';
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const UserApplication = lazy(() => import('./components/UserApplication'))
 import Loader from './assets/loader.svg'
@@ -95,6 +97,22 @@ function App() {
                 element={
                   <Admin>
                     <EmailSender />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/tasks'}
+                element={
+                  <Admin>
+                    <AdminTasks />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/mytasks'}
+                element={
+                  <Admin>
+                    <MyTasks />
                   </Admin>
                 }
               />
