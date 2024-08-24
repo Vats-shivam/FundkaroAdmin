@@ -165,7 +165,7 @@ function ViewApplication() {
     const handleUpdateApplicationStatus = async (status) => {
         if (status == 'Verified') {
             for (let field of application.formFields) {
-                if (field.status != 'Verified') {
+                if (field.isVerified !== 'Verified') {
                     toast.error('All form fields must be verified to verify the form');
                     return;
                 }
@@ -390,7 +390,7 @@ function ViewApplication() {
                             <div className='flex justify-between'>
                                 <div className='w-3/5'>
                                     <p><strong>Name:</strong> {field.name}</p>
-                                    <p><strong>Value:</strong> {field.value}</p>
+                                    {field.type!='file'?<p><strong>Value:</strong> {field.value}</p>:<div className='my-2'><a href={`https://fundkaro-webapp-bucket.s3.eu-north-1.amazonaws.com/${field.value}`} className='text-white bg-blue-500 p-1 mb-2 rounded-lg' >Download File</a></div>}
                                     <p><strong>Status:</strong> {field.isVerified}</p>
                                     {currentuser.role!="Verifier"&&<div className="flex justify-start">
                                         <select onChange={(e) => handleStaffChange(field._id, e.target.value)} className="border rounded p-2 mt-2 mr-2">
