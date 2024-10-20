@@ -24,7 +24,7 @@ const UserApplication = lazy(() => import('./components/UserApplication'))
 import Loader from './assets/loader.svg'
 
 // axios.defaults.baseURL = 'https://newbackend-ww8t.onrender.com';
-axios.defaults.baseURL = 'http://52.66.164.95:8000/';
+axios.defaults.baseURL = 'http://localhost:8000';
 
 function App() {
 

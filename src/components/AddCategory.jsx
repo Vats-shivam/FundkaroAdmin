@@ -3,13 +3,26 @@ import Input from "./Input";
 import { UserContext } from '../context/userContext';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import FormBuilder from "./FormBuilder";
+
+const initialNodes = [
+  {
+    id: "1",
+    type: "input",
+    data: { label: "Start" },
+    position: { x: 5, y: 5 },
+  },
+];
+
 function AddCategory() {
   const { currentuser } = useContext(UserContext);
   const [formFields, setFormFields] = useState([]);
-  const [fieldName, setFieldName] = useState('');
-  const [fieldType, setFieldType] = useState('text');
   const [category, setCategory] = useState('');
   const [categoryLogo, setCategoryLogo] = useState('');
+  const [template, setTemplate] = useState();
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [fieldName, setFieldName] = useState("");
+  const [fieldType, setFieldType] = useState("text");
 
   const addField = () => {
     if (!fieldName.trim()) {
@@ -33,16 +46,29 @@ function AddCategory() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append('logo', categoryLogo);
-    data.append('userId', currentuser.id);
-    data.append('category', category);
+    // const data = new FormData();
+    // data.append('logo', categoryLogo);
+    // data.append('userId', currentuser.id);
+    // data.append('category', category);
+    // data.append('formFields',template);
+    const data = {
+      logo:categoryLogo,
+      userId:currentuser.id,
+      category:category,
+      formFields:template
+    }
 
-    formFields.forEach((field, index) => {
-      Object.entries(field).forEach(([key, value]) => {
-        data.append(`formFields[${index}][${key}]`, value);
-      });
-    });
+    console.log(data);
+    
+
+    // formFields.forEach((field, index) => {
+    //   Object.entries(field).forEach(([key, value]) => {
+    //     // data.append(`formFields[${index}][${key}]`, value);
+
+    //   });
+    // });
+    // console.log(template);
+    // return;
     // Do something with formFields, like sending them to a backend for processing
     try {
       const response = await axios.post('/api/category/create', data, {
@@ -85,50 +111,8 @@ function AddCategory() {
             className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className='flex justify-between'>
-          <div className='p-4 border-r-4 w-1/2'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Admin Form Builder</h2>
-            <div className="mb-4">
-              <label htmlFor="fieldName" className="block text-gray-700 font-semibold mb-2">Field Name:</label>
-              <input
-                type="text"
-                id="fieldName"
-                value={fieldName}
-                onChange={(e) => setFieldName(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="fieldType" className="block text-gray-700 font-semibold mb-2">Field Type:</label>
-              <select
-                id="fieldType"
-                value={fieldType}
-                onChange={(e) => setFieldType(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              >
-                <option value="text">Text</option>
-                <option value="email">Email</option>
-                <option value="number">Number</option>
-                <option value="file">File</option>
-              </select>
-            </div>
-            <button type="button" onClick={addField} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Field</button>
-          </div>
-          <div className='p-4 border-l-4 w-1/2'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Form Preview</h2>
-            {formFields.map((field, index) => (
-              <div key={index} className="mb-4">
-                <label htmlFor={field.name} className="block text-gray-700 font-semibold mb-2">{field.name}</label>
-                <input
-                  type={field.type}
-                  id={field.name}
-                  name={field.name}
-                  className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-                />
-                <button type="button" onClick={() => removeField(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2">Remove</button>
-              </div>
-            ))}
-          </div>
+        <div className="col-span-2">
+          <FormBuilder setTemplate={setTemplate} />
         </div>
         <div className='px-4'>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Create Form</button>

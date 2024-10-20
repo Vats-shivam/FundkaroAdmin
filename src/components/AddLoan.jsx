@@ -61,34 +61,38 @@ function AddLoan() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const request = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      request.append(key, value);
-    });
+    // const request = new FormData();
+    // Object.entries(formData).forEach(([key, value]) => {
+    //   request.append(key, value);
+    // });
   
-    request.append("userId", currentuser.id);
+    // request.append("userId", currentuser.id);
   
-    // Append the form structure
-    request.append("template", JSON.stringify(template));
+    // // Append the form structure
+    // request.append("formFields", template);
 
-    request.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-    // try {
-    //   const response = await axios.post('/api/loan/create', request, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data'
-    //     }
-    //   });
-    //   if (response.data.success) {
-    //     toast.success("Loan created Successfully");
-    //   } else {
-    //     throw response;
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error("Error occurred during addition of loan");
-    // }
+    // request.forEach((value, key) => {
+    //   console.log(`${key}: ${value}`);
+    // });
+    // console.log(request);
+    let data=formData;
+    data.userId=currentuser.id;
+    data.formFields=template;
+    try {
+      const response = await axios.post('/api/loan/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (response.data.success) {
+        toast.success("Loan created Successfully");
+      } else {
+        throw response;
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Error occurred during addition of loan");
+    }
   };
 
   const handleInputChange = (e) => {
