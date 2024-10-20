@@ -1,20 +1,31 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react'
-import toast from 'react-hot-toast';
-import { UserContext } from '../context/userContext';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import ReactFlow, { addEdge, Background, Controls, MiniMap } from "reactflow";
+import "reactflow/dist/style.css";
+import { UserContext } from "../context/userContext";
+import FormBuilder from "./FormBuilder";
+const initialNodes = [
+  {
+    id: "1",
+    type: "input",
+    data: { label: "Start" },
+    position: { x: 250, y: 5 },
+  },
+];
 
 function AddLoan() {
   const [formData, setFormData] = useState({
     code: 0,
-    vendor: '',
-    ratesMin: '',
-    ratesMax: '',
-    minScoreRequired: '',
-    maxLoanAmount: '',
-    tenureMin: '',
-    tenureMax: '',
-    offerId: '',
-    categoryId: '',
+    vendor: "",
+    ratesMin: "",
+    ratesMax: "",
+    minScoreRequired: "",
+    maxLoanAmount: "",
+    tenureMin: "",
+    tenureMax: "",
+    offerId: "",
+    categoryId: "",
     imageOrSvg: null,
   });
 
@@ -22,13 +33,15 @@ function AddLoan() {
 
   const [offers, setOffers] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [formFields, setFormFields] = useState([]);
-  const [fieldName, setFieldName] = useState('');
-  const [fieldType, setFieldType] = useState('text');
+  // const [formFields, setFormFields] = useState([]);
+  const [template,setTemplate] = useState();
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [fieldName, setFieldName] = useState("");
+  const [fieldType, setFieldType] = useState("text");
 
   const addField = () => {
     if (!fieldName.trim()) {
-      alert('Please enter a field name');
+      alert("Please enter a field name");
       return;
     }
     const newField = {
@@ -36,8 +49,8 @@ function AddLoan() {
       type: fieldType,
     };
     setFormFields([...formFields, newField]);
-    setFieldName('');
-    setFieldType('text');
+    setFieldName("");
+    setFieldType("text");
   };
 
   const removeField = (index) => {
@@ -49,40 +62,37 @@ function AddLoan() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const request = new FormData();
-    // request.append('image',formData.imageOrSvg)
     Object.entries(formData).forEach(([key, value]) => {
       request.append(key, value);
     });
-
+  
     request.append("userId", currentuser.id);
+  
+    // Append the form structure
+    request.append("template", JSON.stringify(template));
 
-    formFields.forEach((field, index) => {
-      Object.entries(field).forEach(([key, value]) => {
-        request.append(`formFields[${index}][${key}]`, value);
-      });
+    request.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
     });
-
-    try {
-      const response = await axios.post('/api/loan/create', request, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      if (response.data.success) {
-        toast.success("Loan created Successfully");
-      }
-      else {
-        throw response;
-      }
-    }
-    catch (err) {
-      console.log(err);
-      toast.error("Error occured during addition of loan");
-    }
+    // try {
+    //   const response = await axios.post('/api/loan/create', request, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   });
+    //   if (response.data.success) {
+    //     toast.success("Loan created Successfully");
+    //   } else {
+    //     throw response;
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   toast.error("Error occurred during addition of loan");
+    // }
   };
 
   const handleInputChange = (e) => {
-    if (e.target.name === 'imageOrSvg') {
+    if (e.target.name === "imageOrSvg") {
       setFormData({ ...formData, [e.target.name]: e.target.files[0] });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,31 +101,42 @@ function AddLoan() {
 
   const fetchAll = async () => {
     try {
-      const data = await axios.post('/api/admin/getdetails', { userId: currentuser.id });
+      const data = await axios.post("/api/admin/getdetails", {
+        userId: currentuser.id,
+      });
       console.log(data.data);
       if (data.data.status) {
         setOffers(data.data.offers);
-        setCategories(data.data.categories)
+        setCategories(data.data.categories);
       }
-
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
-      toast.error('Failed to fetch Data');
+      toast.error("Failed to fetch Data");
     }
-  }
+  };
 
   useEffect(() => {
     fetchAll();
-  }, [])
+  }, []);
+
 
 
   return (
     <div className="bg-gray-100 p-2 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Details Form</h2>
-      <form className="w-full p-4 mx-auto grid grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
+      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
+        Loan Details Form
+      </h2>
+      <form
+        className="w-full p-4 mx-auto grid grid-cols-2 gap-6"
+        onSubmit={handleFormSubmit}
+      >
         <div className="mb-4">
-          <label htmlFor="code" className="block text-gray-700 font-semibold mb-2">code</label>
+          <label
+            htmlFor="code"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            code
+          </label>
           <input
             type="Number"
             id="code"
@@ -126,7 +147,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="imageOrSvg" className="block text-gray-700 font-semibold mb-2">Image or SVG:</label>
+          <label
+            htmlFor="imageOrSvg"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Image or SVG:
+          </label>
           <input
             type="file"
             id="imageOrSvg"
@@ -138,7 +164,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="loanVendor" className="block text-gray-700 font-semibold mb-2">Loan Vendor:</label>
+          <label
+            htmlFor="loanVendor"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Loan Vendor:
+          </label>
           <input
             type="text"
             id="loanVendor"
@@ -150,7 +181,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="interestRateMin" className="block text-gray-700 font-semibold mb-2">Interest Rate Min(%):</label>
+          <label
+            htmlFor="interestRateMin"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Interest Rate Min(%):
+          </label>
           <input
             type="number"
             id="interestRateMin"
@@ -162,7 +198,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="interestRateMax" className="block text-gray-700 font-semibold mb-2">Interest Rate Max(%):</label>
+          <label
+            htmlFor="interestRateMax"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Interest Rate Max(%):
+          </label>
           <input
             type="number"
             id="interestRateMax"
@@ -174,7 +215,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="minCibilScore" className="block text-gray-700 font-semibold mb-2">Minimum Cibil Score Required:</label>
+          <label
+            htmlFor="minCibilScore"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Minimum Cibil Score Required:
+          </label>
           <input
             type="number"
             id="minCibilScore"
@@ -186,7 +232,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="maxLoanAmount" className="block text-gray-700 font-semibold mb-2">Maximum Loan Amount:</label>
+          <label
+            htmlFor="maxLoanAmount"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Maximum Loan Amount:
+          </label>
           <input
             type="number"
             id="maxLoanAmount"
@@ -198,7 +249,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="tenureMin" className="block text-gray-700 font-semibold mb-2">Tenure Min(months):</label>
+          <label
+            htmlFor="tenureMin"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Tenure Min(months):
+          </label>
           <input
             type="number"
             id="tenureMin"
@@ -210,7 +266,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="tenureMin" className="block text-gray-700 font-semibold mb-2">Tenure Max (months):</label>
+          <label
+            htmlFor="tenureMin"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Tenure Max (months):
+          </label>
           <input
             type="number"
             id="tenureMin"
@@ -222,7 +283,12 @@ function AddLoan() {
           />
         </div>
         <div className="mb-6 col-span-2">
-          <label htmlFor="selectedOffer" className="block text-gray-700 font-semibold mb-2">Select Offer:</label>
+          <label
+            htmlFor="selectedOffer"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Select Offer:
+          </label>
           <select
             id="selectedOffer"
             name="offerId"
@@ -233,12 +299,19 @@ function AddLoan() {
           >
             <option value="">-- Select Offer --</option>
             {offers.map((offer, index) => (
-              <option key={index} value={offer._id}>{offer.offerMsg + '(' + offer.offerCode + ')'}</option>
+              <option key={index} value={offer._id}>
+                {offer.offerMsg + "(" + offer.offerCode + ")"}
+              </option>
             ))}
           </select>
         </div>
         <div className="mb-4 col-span-2">
-          <label htmlFor="category" className="block text-gray-700 font-semibold mb-2">Category:</label>
+          <label
+            htmlFor="category"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Category:
+          </label>
           <select
             id="category"
             name="categoryId"
@@ -249,55 +322,16 @@ function AddLoan() {
           >
             <option value="">-- Select Category --</option>
             {categories.map((category, index) => (
-              <option key={index} value={category._id}>{category.category}</option>
+              <option key={index} value={category._id}>
+                {category.category}
+              </option>
             ))}
           </select>
         </div>
-        <div className='flex w-full justify-between'>
-          <div className='p-4 border-r-4 w-full'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Form</h2>
-            <div className="mb-4">
-              <label htmlFor="fieldName" className="block text-gray-700 font-semibold mb-2">Field Name:</label>
-              <input
-                type="text"
-                id="fieldName"
-                value={fieldName}
-                onChange={(e) => setFieldName(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="fieldType" className="block text-gray-700 font-semibold mb-2">Field Type:</label>
-              <select
-                id="fieldType"
-                value={fieldType}
-                onChange={(e) => setFieldType(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              >
-                <option value="text">Text</option>
-                <option value="email">Email</option>
-                <option value="number">Number</option>
-                <option value="file">File</option>
-              </select>
-            </div>
-            <button type="button" onClick={addField} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Field</button>
-          </div>
-          <div className='p-4 border-l-4 w-full'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Form Preview</h2>
-            {formFields.map((field, index) => (
-              <div key={index} className="mb-4">
-                <label htmlFor={field.name} className="block text-gray-700 font-semibold mb-2">{field.name}</label>
-                <input
-                  type={field.type}
-                  id={field.name}
-                  name={field.name}
-                  className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-                />
-                <button type="button" onClick={() => removeField(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2">Remove</button>
-              </div>
-            ))}
-          </div>
+       <div className="col-span-2">
+          <FormBuilder setTemplate={setTemplate} />
         </div>
+        
         <div className="col-span-2 text-center">
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Submit</button>
         </div>
@@ -306,4 +340,4 @@ function AddLoan() {
   );
 }
 
-export default AddLoan
+export default AddLoan;
