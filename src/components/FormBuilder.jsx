@@ -48,7 +48,7 @@ const CustomNode = ({ data }) => {
             <label className="block text-gray-700 text-sm font-bold mb-1">
               {field.name} ({field.type}) {field.required ? '*' : ''}
             </label>
-            
+
             {field.type === FIELD_TYPES.TEXT && (
               <input
                 type="text"
@@ -138,11 +138,22 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
-const FormBuilder = ({setTemplate}) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+const FormBuilder = ({ setTemplate, defaultNodes = [], defaultEdges = [] }) => {
+  let y = 5
+  for (let nd of defaultNodes) {
+    nd.position = { x: 250, y: y },
+      nd.data = { label: nd.label, fields: nd.fields, conditions: nd.conditions }
+    nd.type = 'custom'
+    y += 250;
+  }
+  if (defaultNodes.length == 0) {
+    defaultNodes = initialNodes;
+  }
+  //console.log(defaultNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
   const [selectedNode, setSelectedNode] = useState(null);
-  
+
   // Form field states
   const [newFieldName, setNewFieldName] = useState('');
   const [newFieldType, setNewFieldType] = useState(FIELD_TYPES.TEXT);
@@ -189,12 +200,12 @@ const FormBuilder = ({setTemplate}) => {
         nds.map((node) =>
           node.id === selectedNode.id
             ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  fields: [...node.data.fields, newField],
-                },
-              }
+              ...node,
+              data: {
+                ...node.data,
+                fields: [...node.data.fields, newField],
+              },
+            }
             : node
         )
       );
@@ -221,15 +232,15 @@ const FormBuilder = ({setTemplate}) => {
         nds.map((node) =>
           node.id === selectedNode.id
             ? {
-                ...node,
-                data: {
-                  ...node.data,
-                  conditions: [
-                    ...node.data.conditions,
-                    { field: fieldName, value: fieldValue, targetLabel: targetNode.data.label, targetId: targetNodeId },
-                  ],
-                },
-              }
+              ...node,
+              data: {
+                ...node.data,
+                conditions: [
+                  ...node.data.conditions,
+                  { field: fieldName, value: fieldValue, targetLabel: targetNode.data.label, targetId: targetNodeId },
+                ],
+              },
+            }
             : node
         )
       );
@@ -251,9 +262,9 @@ const FormBuilder = ({setTemplate}) => {
     console.log('Generated Template:', JSON.stringify(template, null, 2));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     generateTemplate();
-  },[nodes,edges])
+  }, [nodes, edges])
 
   return (
     <div className="flex w-full justify-between">
@@ -274,9 +285,9 @@ const FormBuilder = ({setTemplate}) => {
             <MiniMap />
           </ReactFlow>
         </div>
-        <button 
-          type="button" 
-          onClick={addNode} 
+        <button
+          type="button"
+          onClick={addNode}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
         >
           Add Node
@@ -358,7 +369,7 @@ const FormBuilder = ({setTemplate}) => {
             </div>
 
             <h3 className="font-semibold mt-4 mb-2">Add Conditional Edges:</h3>
-            <select 
+            <select
               id="conditionField"
               className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500 mb-2"
             >
@@ -381,7 +392,7 @@ const FormBuilder = ({setTemplate}) => {
                 .filter(node => node.id !== selectedNode.id)
                 .map(node => (
                   <option key={node.id} value={node.id}>{node.data.label}</option>
-              ))}
+                ))}
             </select>
             <button
               onClick={addDynamicCondition}

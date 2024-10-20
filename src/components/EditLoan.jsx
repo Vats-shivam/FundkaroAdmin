@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UserContext } from '../context/userContext';
+import FormBuilder from "./FormBuilder";
 
 function EditLoan({ loan, goback }) {
   const [formData, setFormData] = useState({
@@ -48,26 +49,35 @@ function EditLoan({ loan, goback }) {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const request = new FormData();
-    if (formData.imageOrSvg) {
-      request.append('image', formData.imageOrSvg);
-    }
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'imageOrSvg') {
-        request.append(key, value);
-      }
-    });
+    // const request = new FormData();
+    // if (formData.imageOrSvg) {
+    //   request.append('image', formData.imageOrSvg);
+    // }
+    // Object.entries(formData).forEach(([key, value]) => {
+    //   if (key !== 'imageOrSvg') {
+    //     request.append(key, value);
+    //   }
+    // });
 
-    request.append("userId", currentuser.id);
+    // request.append("userId", currentuser.id);
 
-    formFields.forEach((field, index) => {
-      Object.entries(field).forEach(([key, value]) => {
-        request.append(`formFields[${index}][${key}]`, value);
-      });
-    });
+    // formFields.forEach((field, index) => {
+    //   Object.entries(field).forEach(([key, value]) => {
+    //     request.append(`formFields[${index}][${key}]`, value);
+    //   });
+    // });
 
+    let data = formData;
+    data.userId = currentuser.id;
+    data.formFields = formFields;
+    // if (formData.imageOrSvg) {
+    //   data.image = formData.imageOrSvg;
+    //   delete data['imageOrSvg'];
+    // }
+    delete data['image'];
+    console.log(data);
     try {
-      const response = await axios.post(`/api/loan/update`, request, {
+      const response = await axios.post(`/api/loan/update`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -76,7 +86,7 @@ function EditLoan({ loan, goback }) {
         toast.success("Loan updated Successfully");
         goback();
       } else {
-        throw response;
+        throw response.data;
       }
     } catch (err) {
       console.log(err);
@@ -252,50 +262,8 @@ function EditLoan({ loan, goback }) {
             ))}
           </select>
         </div>
-        <div className='flex w-full justify-between'>
-          <div className='p-4 border-r-4 w-full'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Loan Form</h2>
-            <div className="mb-4">
-              <label htmlFor="fieldName" className="block text-gray-700 font-semibold mb-2">Field Name:</label>
-              <input
-                type="text"
-                id="fieldName"
-                value={fieldName}
-                onChange={(e) => setFieldName(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="fieldType" className="block text-gray-700 font-semibold mb-2">Field Type:</label>
-              <select
-                id="fieldType"
-                value={fieldType}
-                onChange={(e) => setFieldType(e.target.value)}
-                className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-              >
-                <option value="text">Text</option>
-                <option value="email">Email</option>
-                <option value="number">Number</option>
-                <option value="file">File</option>
-              </select>
-            </div>
-            <button type="button" onClick={addField} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Field</button>
-          </div>
-          <div className='p-4 border-l-4 w-full'>
-            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Form Preview</h2>
-            {formFields.map((field, index) => (
-              <div key={index} className="mb-4">
-                <label htmlFor={field.name} className="block text-gray-700 font-semibold mb-2">{field.name}</label>
-                <input
-                  type={field.type}
-                  id={field.name}
-                  name={field.name}
-                  className="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500"
-                />
-                <button type="button" onClick={() => removeField(index)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2">Remove</button>
-              </div>
-            ))}
-          </div>
+        <div className="col-span-2">
+          <FormBuilder setTemplate={setFormFields} defaultNodes={loan.formFields.nodes} defaultEdges={loan.formFields.edges} />
         </div>
         <div className="col-span-2 text-center">
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Update</button>
