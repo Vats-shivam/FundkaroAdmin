@@ -15,8 +15,8 @@ function EditLoan({ loan, goback }) {
     maxLoanAmount: loan.maxLoanAmount || '',
     tenureMin: loan.tenureMin || '',
     tenureMax: loan.tenureMax || '',
-    offerId: loan.offer?._id || '',
-    categoryId: loan.category?._id || '',
+    offerId: loan.offer || '',
+    categoryId: loan.category || '',
   });
 
   const { currentuser } = useContext(UserContext);
@@ -24,28 +24,10 @@ function EditLoan({ loan, goback }) {
   const [offers, setOffers] = useState([]);
   const [categories, setCategories] = useState([]);
   const [formFields, setFormFields] = useState(loan.formFields || []);
-  const [fieldName, setFieldName] = useState('');
-  const [fieldType, setFieldType] = useState('text');
+  // console.log(loan.formFields)
+  const [template,setTemplate] = useState(loan.formFields);
 
-  const addField = () => {
-    if (!fieldName.trim()) {
-      alert('Please enter a field name');
-      return;
-    }
-    const newField = {
-      name: fieldName.trim(),
-      type: fieldType,
-    };
-    setFormFields([...formFields, newField]);
-    setFieldName('');
-    setFieldType('text');
-  };
-
-  const removeField = (index) => {
-    const updatedFields = [...formFields];
-    updatedFields.splice(index, 1);
-    setFormFields(updatedFields);
-  };
+ 
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -75,23 +57,24 @@ function EditLoan({ loan, goback }) {
     //   delete data['imageOrSvg'];
     // }
     delete data['image'];
-    console.log(data);
-    try {
-      const response = await axios.post(`/api/loan/update`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      if (response.data.success) {
-        toast.success("Loan updated Successfully");
-        goback();
-      } else {
-        throw response.data;
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error("Error occurred during update of loan");
-    }
+    // console.log(data);
+    console.log(template);
+    // try {
+    //   const response = await axios.post(`/api/loan/update`, data, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   });
+    //   if (response.data.success) {
+    //     toast.success("Loan updated Successfully");
+    //     goback();
+    //   } else {
+    //     throw response.data;
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   toast.error("Error occurred during update of loan");
+    // }
   };
 
   const handleInputChange = (e) => {
@@ -114,7 +97,7 @@ function EditLoan({ loan, goback }) {
       toast.error('Failed to fetch Data');
     }
   };
-
+ 
   useEffect(() => {
     fetchAll();
   }, []);
@@ -258,12 +241,12 @@ function EditLoan({ loan, goback }) {
           >
             <option value="">-- Select Category --</option>
             {categories.map((category, index) => (
-              <option key={index} value={category._id}>{category.category}</option>
+              <option key={index} value={category._id} >{category.category}</option>
             ))}
           </select>
         </div>
         <div className="col-span-2">
-          <FormBuilder setTemplate={setFormFields} defaultNodes={loan.formFields.nodes} defaultEdges={loan.formFields.edges} />
+          <FormBuilder template={template} setTemplate={setTemplate} />
         </div>
         <div className="col-span-2 text-center">
           <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-16 rounded-md transition-colors duration-300">Update</button>

@@ -33,32 +33,8 @@ function AddLoan() {
 
   const [offers, setOffers] = useState([]);
   const [categories, setCategories] = useState([]);
-  // const [formFields, setFormFields] = useState([]);
   const [template,setTemplate] = useState();
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [fieldName, setFieldName] = useState("");
-  const [fieldType, setFieldType] = useState("text");
-
-  const addField = () => {
-    if (!fieldName.trim()) {
-      alert("Please enter a field name");
-      return;
-    }
-    const newField = {
-      name: fieldName.trim(),
-      type: fieldType,
-    };
-    setFormFields([...formFields, newField]);
-    setFieldName("");
-    setFieldType("text");
-  };
-
-  const removeField = (index) => {
-    const updatedFields = [...formFields];
-    updatedFields.splice(index, 1);
-    setFormFields(updatedFields);
-  };
-
+  
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     // const request = new FormData();
@@ -75,6 +51,7 @@ function AddLoan() {
     //   console.log(`${key}: ${value}`);
     // });
     // console.log(request);
+    console.log(template)
     let data=formData;
     data.userId=currentuser.id;
     data.formFields=template;
@@ -333,7 +310,7 @@ function AddLoan() {
           </select>
         </div>
        <div className="col-span-2">
-          <FormBuilder setTemplate={setTemplate} />
+          <FormBuilder setTemplate={setTemplate} template={template} />
         </div>
         
         <div className="col-span-2 text-center">
