@@ -5,14 +5,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import FormBuilder from "./FormBuilder";
 
-const initialNodes = [
-  {
-    id: "1",
-    type: "input",
-    data: { label: "Start" },
-    position: { x: 5, y: 5 },
-  },
-];
+
 
 function AddCategory() {
   const { currentuser } = useContext(UserContext);
@@ -112,7 +105,7 @@ function AddCategory() {
           />
         </div>
         <div className="col-span-2">
-          <FormBuilder setTemplate={setTemplate} />
+          <FormBuilder setTemplate={setTemplate} template={template} />
         </div>
         <div className='px-4'>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Create Form</button>

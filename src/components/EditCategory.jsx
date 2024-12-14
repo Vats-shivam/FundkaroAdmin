@@ -80,7 +80,7 @@ function EditCategory({ category, goBack }) {
             />
           </div> */}
         <div className="col-span-2">
-          <FormBuilder setTemplate={setFormFields} defaultNodes={category.formFields.nodes} defaultEdges={category.formFields.edges} />
+          <FormBuilder setTemplate={setFormFields} template={formFields} />
         </div>
         <div className='px-4'>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Update</button>
