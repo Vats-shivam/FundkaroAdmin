@@ -102,7 +102,7 @@ const AdminDashboard = () => {
           <tbody>
             {stats.recentApplications.map((application, index) => (
               <tr key={index}>
-                <td className="py-2 px-4 border-b border-gray-200">{application.userId.email}</td>
+                {/* <td className="py-2 px-4 border-b border-gray-200">{application.userId.email}</td> */}
                 <td className="py-2 px-4 border-b border-gray-200">{application.categoryId.category}</td>
                 <td className="py-2 px-4 border-b border-gray-200">{application.status}</td>
               </tr>
