@@ -38,14 +38,16 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route
-                path={"/login"}
-                element={
-                  <AuthPage>
-                    <Login loginStyles={""} />
-                  </AuthPage>
-                }
-              />
-              <Route
+            path="/login"
+            element={
+              <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-600 to-purple-700">
+                <div className="w-full max-w-md">
+                  <Login loginStyles="w-full" />
+                </div>
+              </div>
+            }
+          />
+               <Route
                 path={"/admin"}
                 element={
                   <Admin>
@@ -70,6 +72,14 @@ function App() {
                 }
               />
               <Route
+                path={'/admin/application/:applicationId'}
+                element={
+                  <Admin>
+                    <ViewApplication />
+                  </Admin>
+                }
+              />
+              <Route
                 path={'/admin/staff'}
                 element={
                   <Admin>
@@ -82,6 +92,22 @@ function App() {
                 element={
                   <Admin>
                     <AdminClients />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/clients/:userId'}
+                element={
+                  <Admin>
+                    <UserProfile />
+                  </Admin>
+                }
+              />
+              <Route
+                path={'/admin/tasks'}
+                element={
+                  <Admin>
+                    <AdminTasks />
                   </Admin>
                 }
               />
@@ -102,34 +128,10 @@ function App() {
                 }
               />
               <Route
-                path={'/admin/tasks'}
-                element={
-                  <Admin>
-                    <AdminTasks />
-                  </Admin>
-                }
-              />
-              <Route
                 path={'/admin/mytasks'}
                 element={
                   <Admin>
                     <MyTasks />
-                  </Admin>
-                }
-              />
-              <Route
-                path={'/admin/clients/:userId'}
-                element={
-                  <Admin>
-                    <UserProfile />
-                  </Admin>
-                }
-              />
-              <Route
-                path={'/admin/application/:applicationId'}
-                element={
-                  <Admin>
-                    <ViewApplication />
                   </Admin>
                 }
               />
@@ -141,6 +143,7 @@ function App() {
                   </Admin>
                 }
               />
+              
               <Route path="*" element={<NoPage />} />
             </Routes>
           </BrowserRouter>

@@ -19,9 +19,9 @@ function NameNavbar(props) {
   }
 
   return (
-    <header className="z-20 fixed top-0 w-full bg-gradient-to-r from-darkPrimary to-lightPrimary flex h-16 items-center">
+    <header className="z-20 top-0 w-full bg-gradient-to-r from-darkPrimary to-lightPrimary flex h-16 items-center">
 
-      {props.ShowBackarrow === true ?
+      {/* {props.ShowBackarrow === true ?
         (<img className="ml-4 cursor-pointer block h-5 w-5 hover:animate-pulse" onClick={HandleBack} src={back}></img>)
         :
         (<svg
@@ -31,7 +31,7 @@ function NameNavbar(props) {
           onClick={UpdateOpen}>)
           <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
         </svg>)
-      }
+      } */}
       <img src={logo} className="w-32 h-9 ml-4" alt="Logo" />
       {/* <div className="mx-auto text-[24px] font-semibold text-white">Empower Your Journey, Fund Your Tomorrow - Choose FundKa₹o</div> */}
     </header>

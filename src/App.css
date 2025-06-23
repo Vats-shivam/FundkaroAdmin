@@ -21,3 +21,13 @@
     -moz-opacity: 0;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
