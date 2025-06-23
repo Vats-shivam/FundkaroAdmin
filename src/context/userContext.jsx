@@ -9,7 +9,7 @@ export function UserContextProvider({ children }) {
   const [currentuser, setCurrentUser] = useState({
     email: "admin@example.com",
     profilePicture: "https://via.placeholder.com/150", // Dummy profile picture
-    role: "Verifier", // Change to 'Verifier' or 'Preparer' to test other roles
+    role: "Admin", // Change to 'Verifier' or 'Preparer' to test other roles
     refCode: "REF123",
     phoneNo: "9876543210",
     id: "user123admin", // Dummy ID
